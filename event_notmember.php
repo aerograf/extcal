@@ -1,13 +1,14 @@
 <?php
 
+use XoopsModules\Extcal;
+
 include __DIR__ . '/../../mainfile.php';
 
 require_once __DIR__ . '/include/constantes.php';
 require_once __DIR__ . '/include/mail_fnc.php';
-require_once __DIR__ . '/class/utility.php';
 
 /*
-ext_echoArray($_POST);
+Extcal\Utility::echoArray($_POST);
 exit;
     [mode] => add
     [event] => 3
@@ -27,8 +28,8 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
 if ($xoopsUser && $xoopsModuleConfig['whosnot_going']) {
     // If param are right
     if ((int)$_POST['event'] > 0 && ('add' === $_POST['mode'] || 'remove' === $_POST['mode'])) {
-        $eventHandler          = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
-        $eventNotMemberHandler = xoops_getModuleHandler(_EXTCAL_CLS_NOT_MEMBER, _EXTCAL_MODULE);
+        $eventHandler          = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+        $eventNotMemberHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_NOT_MEMBER);
 
         // If the user have to be added
         if ('add' === $_POST['mode']) {

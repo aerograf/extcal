@@ -20,9 +20,11 @@
  * que la classe correspondante de la table a été générées avec classGenerator
  **/
 
+use XoopsModules\Extcal;
+
 require_once __DIR__ . '/../../../class/uploader.php';
 require_once __DIR__ . '/../../../class/mail/phpmailer/class.phpmailer.php'; // First we require the PHPMailer libary in our script
-require_once __DIR__ . '/../class/utility.php';
+//require_once __DIR__ . '/../class/Utility.php';
 require_once __DIR__ . '/constantes.php';
 require_once __DIR__ . '/../../../class/template.php';
 
@@ -64,13 +66,13 @@ function sendMail2member($mode, $event_id, $member_uid, $subject, $tplMessage)
     //--------------------------------------------------------------
     //Recuperation des données event,user et member
     //Recuperation des données de l'evennement
-    $eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
+    $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
     $obj          = $eventHandler->getEvent($event_id);
     $event        = $eventHandler->objectToArray($obj);
     $eventHandler->formatEventDate($event, _MD_EXTCAL_FORMAT_DATE);
 
     $submiter_uid = $event['event_submitter'];
-    // ext_echoArray($event,'event');
+    // Extcal\Utility::echoArray($event,'event');
     //--------------------------------------------------------------
     //Recuperation des données du user createur de l'evennement
     $sql = <<<__sql__
@@ -82,7 +84,7 @@ __sql__;
     $rst      = $xoopsDB->query($sql);
     $submiter = $xoopsDB->fetchArray($rst);
     // echo "{$sql}<br>";
-    // ext_echoArray($submiter,'submiter');
+    // Extcal\Utility::echoArray($submiter,'submiter');
     //--------------------------------------------------------------
     //Recuperation des données du membre inscrit
     $sql = <<<__sql__
@@ -94,7 +96,7 @@ __sql__;
     $rst    = $xoopsDB->query($sql);
     $acteur = $xoopsDB->fetchArray($rst);
     //echo "{$sql}<br>";
-    // ext_echoArray($acteur,'acteur');
+    // Extcal\Utility::echoArray($acteur,'acteur');
     //--------------------------------------------------------------
     //Recuperation des données des membres présents
     $sql = <<<__sql__
@@ -130,7 +132,7 @@ __sql__;
         $members[$row['uid']] = $row;
     }
 
-    // ext_echoArray($members,'members');
+    // Extcal\Utility::echoArray($members,'members');
     // exit;
 
     //--------------------------------------------------------------
@@ -143,7 +145,7 @@ __sql__;
     //Chargement du template dans le dossier de langue
     //$f = _EXTCAL_PATH_LG . $xoopsConfig['language'] . '\mail_inscription.html';
     //$tpl = new tpl($f);
-    $tpl = new XoopsTpl();
+    $tpl = new \XoopsTpl();
 
     $tpl->assign('dateAction', date(_MD_EXTCAL_FORMAT_DATE));
     $tpl->assign('submiter', $submiter);
@@ -165,7 +167,7 @@ __sql__;
         $destinataires[$row['email']] = $row['email'];
     }
 
-    // ext_echoArray($destinataires);
+    // Extcal\Utility::echoArray($destinataires);
     // exit;
 
     $mail_fromName  = $xoopsConfig['sitename'];
@@ -208,8 +210,8 @@ function extcal_SendMail(
     $mail_body,
     $bEcho = false,
     $mode = 0,
-    $sep = '|'
-) {
+    $sep = '|')
+{
     global $ModName, $signature, $mail_admin, $xoopsConfig, $xoopsDB, $xoopsModule;
 
     //$bEcho=false;
@@ -230,7 +232,7 @@ function extcal_SendMail(
     }
     $header = extcal_getHeader(1, $mail_fromemail);
     //-----------------------------
-    $myts = MyTextSanitizer::getInstance();
+    $myts = \MyTextSanitizer::getInstance();
     //$xoopsMailer = getMailer();
     $xoopsMailer = xoops_getMailer();
 
@@ -259,8 +261,8 @@ function extcal_SendMail(
     $xoopsMailer->send($bEcho);
 
     if ($bEcho) {
-        ExtcalUtility::ext_echo($xoopsMailer->getSuccess());
-        ExtcalUtility::ext_echo($xoopsMailer->getErrors());
+        Extcal\Utility::extEcho($xoopsMailer->getSuccess());
+        Extcal\Utility::extEcho($xoopsMailer->getErrors());
     }
     /*
 

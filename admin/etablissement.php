@@ -17,9 +17,11 @@
  * @author       XOOPS Development Team,
  */
 
+use XoopsModules\Extcal;
+
 // Include xoops admin header
 require_once __DIR__ . '/../../../include/cp_header.php';
-require_once __DIR__ . '/../class/ExtcalPersistableObjectHandler.php';
+//require_once __DIR__ . '/../class/ExtcalPersistableObjectHandler.php';
 require_once __DIR__ . '/../../../kernel/module.php';
 require_once __DIR__ . '/../../../class/xoopsformloader.php';
 require_once __DIR__ . '/../../../class/tree.php';
@@ -27,7 +29,7 @@ require_once __DIR__ . '/../../../class/xoopslists.php';
 require_once __DIR__ . '/../../../class/pagenav.php';
 require_once __DIR__ . '/../../../class/xoopsform/grouppermform.php';
 require_once __DIR__ . '/../../../class/uploader.php';
-require_once __DIR__ . '/../class/etablissement.php';
+//require_once __DIR__ . '/../class/etablissement.php';
 require_once __DIR__ . '/../include/constantes.php';
 
 require_once __DIR__ . '/admin_header.php';
@@ -36,7 +38,7 @@ require_once __DIR__ . '/admin_header.php';
 //include_once("../include/functions.php");
 
 if ($xoopsUser) {
-    $xoopsModule = XoopsModule::getByDirname('extcal');
+    $xoopsModule = \XoopsModule::getByDirname('extcal');
     if (!$xoopsUser->isAdmin($xoopsModule->mid())) {
         redirect_header(XOOPS_URL . '/', 3, _NOPERM);
     }
@@ -46,12 +48,12 @@ if ($xoopsUser) {
 
 // Include language file
 xoops_loadLanguage('admin', 'system');
-xoops_loadLanguage('admin', $xoopsModule->getVar('dirname', 'e'));
-xoops_loadLanguage('modinfo', $xoopsModule->getVar('dirname', 'e'));
-$myts = MyTextSanitizer::getInstance();
+Extcal\Helper::getInstance()->loadLanguage('admin');
+Extcal\Helper::getInstance()->loadLanguage('modinfo');
+$myts = \MyTextSanitizer::getInstance();
 
 //appel des class
-$etablissementHandler = xoops_getModuleHandler(_EXTCAL_CLS_ETABLISSEMENT, _EXTCAL_MODULE);
+$etablissementHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_ETABLISSEMENT);
 
 xoops_cp_header();
 
@@ -78,7 +80,7 @@ switch ($op) {
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
-        $criteria = new CriteriaCompo();
+        $criteria = new \CriteriaCompo();
         if (isset($_REQUEST['limit'])) {
             $criteria->setLimit($_REQUEST['limit']);
             $limit = $_REQUEST['limit'];
@@ -98,7 +100,7 @@ switch ($op) {
         $etablissement_arr = $etablissementHandler->getObjects($criteria);
         $numrows           = $etablissementHandler->getCount($criteria);
         if ($numrows > $limit) {
-            $pagenav = new XoopsPageNav($numrows, $limit, $start, 'start', 'op=liste&limit=' . $limit);
+            $pagenav = new \XoopsPageNav($numrows, $limit, $start, 'start', 'op=liste&limit=' . $limit);
             $pagenav = $pagenav->renderNav(4);
         } else {
             $pagenav = '';
@@ -206,7 +208,7 @@ switch ($op) {
         $delimg = @$_REQUEST['delimg'];
         $delimg = isset($delimg) ? (int)$delimg : 0;
         if (0 == $delimg && !empty($_REQUEST['xoops_upload_file'][0])) {
-            $upload = new XoopsMediaUploader($uploaddir_etablissement, [
+            $upload = new \XoopsMediaUploader($uploaddir_etablissement, [
                 'image/gif',
                 'image/jpeg',
                 'image/pjpeg',

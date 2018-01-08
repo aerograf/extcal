@@ -1,5 +1,7 @@
 <?php
 
+use XoopsModules\Extcal;
+
 include __DIR__ . '/../../mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
 $params                                  = ['view' => _EXTCAL_NAV_CALWEEK, 'file' => _EXTCAL_FILE_CALWEEK];
@@ -25,12 +27,12 @@ $day    = date('j', $dayTS);
 //echo $dayTS . '   dayTS-2 <br>';
 //echo gmdate("Y-m-d\TH:i:s\Z", $dayTS). '   dayTS-2 <br>';
 
-$form = new XoopsSimpleForm('', 'navigSelectBox', $params['file'], 'get');
+$form = new \XoopsSimpleForm('', 'navigSelectBox', $params['file'], 'get');
 $form->addElement(getListYears($year, $xoopsModuleConfig['agenda_nb_years_before'], $xoopsModuleConfig['agenda_nb_years_after']));
 $form->addElement(getListMonths($month));
 $form->addElement(getListDays($day));
-$form->addElement(ExtcalUtility::getListCategories($cat));
-$form->addElement(new XoopsFormButton('', 'form_submit', _SUBMIT, 'submit'));
+$form->addElement(Extcal\Utility::getListCategories($cat));
+$form->addElement(new \XoopsFormButton('', 'form_submit', _SUBMIT, 'submit'));
 
 // Assigning the form to the template
 $form->assign($xoopsTpl);
@@ -85,7 +87,7 @@ foreach ($events as $event) {
 */
 // Flag current day
 $selectedDays = [
-    new Calendar_Day(date('Y', xoops_getUserTimestamp(time(), $extcalTimeHandler->_getUserTimeZone($xoopsUser))), date('n', xoops_getUserTimestamp(time(), $extcalTimeHandler->_getUserTimeZone($xoopsUser))), date('j', xoops_getUserTimestamp(time(), $extcalTimeHandler->_getUserTimeZone($xoopsUser)))),
+    new Calendar_Day(date('Y', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($xoopsUser))), date('n', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($xoopsUser))), date('j', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($xoopsUser)))),
 ];
 
 // Build calendar object
@@ -137,15 +139,15 @@ $monthNames = Calendar_Util_Textual::monthNames();
 $navig = [
     'prev' => [
         'uri'  => 'year=' . $pWeekCalObj->thisYear() . '&amp;month=' . $pWeekCalObj->thisMonth() . '&amp;day=' . $pWeekCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $pWeekCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $pWeekCalObj->getTimestamp()),
     ],
     'this' => [
         'uri'  => 'year=' . $weekCalObj->thisYear() . '&amp;month=' . $weekCalObj->thisMonth() . '&amp;day=' . $weekCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $weekCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $weekCalObj->getTimestamp()),
     ],
     'next' => [
         'uri'  => 'year=' . $nWeekCalObj->thisYear() . '&amp;month=' . $nWeekCalObj->thisMonth() . '&amp;day=' . $nWeekCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $nWeekCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_week'], $nWeekCalObj->getTimestamp()),
     ],
 ];
 

@@ -1,11 +1,14 @@
 <?php
 
+use XoopsModules\Extcal;
+
 include __DIR__ . '/../../mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
 require_once __DIR__ . '/header.php';
 
 require_once XOOPS_ROOT_PATH . '/class/template.php';
-$eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
+/** @var Extcal\EventHandler $eventHandler */
+$eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 if (!isset($_GET['cat'])) {
     $cat = 0;
 } else {
@@ -15,7 +18,7 @@ if (function_exists('mb_http_output')) {
     mb_http_output('pass');
 }
 header('Content-Type:text/xml; charset=utf-8');
-$tpl          = new XoopsTpl();
+$tpl          = new \XoopsTpl();
 $tpl->caching = 0;
 $tpl->xoops_setCacheTime($xoopsModuleConfig['rss_cache_time'] * _EXTCAL_TS_MINUTE);
 if (!$tpl->is_cached('db:extcal_rss.tpl', $cat)) {

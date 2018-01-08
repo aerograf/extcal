@@ -9,6 +9,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+use XoopsModules\Extcal;
+
 /**
  * @copyright    {@link https://xoops.org/ XOOPS Project}
  * @license      {@link http://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
@@ -30,12 +32,12 @@ $day   = isset($_GET['day']) ? (int)$_GET['day'] : date('j');
 $cat   = isset($_GET['cat']) ? (int)$_GET['cat'] : 0;
 /* ========================================================================== */
 
-$form = new XoopsSimpleForm('', 'navigSelectBox', $params['file'], 'get');
+$form = new \XoopsSimpleForm('', 'navigSelectBox', $params['file'], 'get');
 $form->addElement(getListYears($year, $xoopsModuleConfig['agenda_nb_years_before'], $xoopsModuleConfig['agenda_nb_years_after']));
 $form->addElement(getListMonths($month));
 $form->addElement(getListDays($day));
-$form->addElement(ExtcalUtility::getListCategories($cat));
-$form->addElement(new XoopsFormButton('', '', _SUBMIT, 'submit'));
+$form->addElement(Extcal\Utility::getListCategories($cat));
+$form->addElement(new \XoopsFormButton('', '', _SUBMIT, 'submit'));
 
 // Assigning the form to the template
 $form->assign($xoopsTpl);
@@ -98,15 +100,15 @@ $nDayCalObj = $dayCalObj->nextDay('object');
 $navig = [
     'prev' => [
         'uri'  => 'year=' . $pDayCalObj->thisYear() . '&amp;month=' . $pDayCalObj->thisMonth() . '&amp;day=' . $pDayCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $pDayCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $pDayCalObj->getTimestamp()),
     ],
     'this' => [
         'uri'  => 'year=' . $dayCalObj->thisYear() . '&amp;month=' . $dayCalObj->thisMonth() . '&amp;day=' . $dayCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $dayCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $dayCalObj->getTimestamp()),
     ],
     'next' => [
         'uri'  => 'year=' . $nDayCalObj->thisYear() . '&amp;month=' . $nDayCalObj->thisMonth() . '&amp;day=' . $nDayCalObj->thisDay(),
-        'name' => $extcalTimeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $nDayCalObj->getTimestamp()),
+        'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_day'], $nDayCalObj->getTimestamp()),
     ],
 ];
 

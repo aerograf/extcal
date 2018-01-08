@@ -15,14 +15,17 @@
  * L'utilisation de ce formulaire d'adminitration suppose
  * que la classe correspondante de la table a été générées avec classGenerator
  **/
+
+use XoopsModules\Extcal;
+
 define('_EXTCAL_FORMAT_AGENDA_KEYD', 'Y-m-d');
 define('_EXTCAL_FORMAT_AGENDA_KEYT', 'H:i');
 
 require_once __DIR__ . '/constantes.php';
-require_once __DIR__ . '/../class/utility.php';
+//require_once __DIR__ . '/../class/Utility.php';
 
 $moduleDirName = basename(dirname(__DIR__));
-xoops_loadLanguage('main', $moduleDirName);
+Extcal\Helper::getInstance()->loadLanguage('main');
 
 /*******************************************************************
  *
@@ -137,8 +140,8 @@ function agenda_getEvents(
     $mPlage = 15,
     $nbJours = 1,
     $formatDate = 'd-m-Y',
-    $formatJour = 'H:i'
-) {
+    $formatJour = 'H:i')
+{
 
     //    $tAgenda = agenda_getCanevas($ts, 8, 20, $mPlage, $nbJours);
     $tAgenda = agenda_getCanevas($ts, $hStart, $hEnd - 1, $mPlage, $nbJours, $formatDate, $formatJour);
@@ -226,7 +229,7 @@ function orderEvents($event1, $event2)
 function getListYears($year, $nbYearsBefore = 0, $nbYearsAfter = 5, $addNone = false, $name = 'year')
 {
     // Year selectbox
-    $select = new XoopsFormSelect('', $name, $year);
+    $select = new \XoopsFormSelect('', $name, $year);
     if ($addNone) {
         $select->addOption(0, ' ');
     }
@@ -252,15 +255,15 @@ function getListYears($year, $nbYearsBefore = 0, $nbYearsAfter = 5, $addNone = f
 function getListMonths($month, $addNone = false, $name = 'month')
 {
     // Month selectbox
-    $extcalTimeHandler = ExtcalTime::getHandler();
+    $timeHandler = Extcal\Time::getHandler();
 
-    $select = new XoopsFormSelect('', $name, $month);
+    $select = new \XoopsFormSelect('', $name, $month);
     if ($addNone) {
         $select->addOption(0, ' ');
     }
 
     for ($i = 1; $i < 13; ++$i) {
-        $select->addOption($i, $extcalTimeHandler->getMonthName($i));
+        $select->addOption($i, $timeHandler->getMonthName($i));
     }
 
     return $select;
@@ -276,7 +279,7 @@ function getListMonths($month, $addNone = false, $name = 'month')
 function getListDays($day, $addNone = false)
 {
     // Day selectbox
-    $select = new XoopsFormSelect('', 'day', $day);
+    $select = new \XoopsFormSelect('', 'day', $day);
     if ($addNone) {
         $select->addOption(0, ' ');
     }
@@ -431,8 +434,8 @@ function getNavBarTabs($currentTab = '')
     }
 
     $user = isset($GLOBALS['xoopsUser']) ? $GLOBALS['xoopsUser'] : null;
-    /** @var ExtcalCatHandler $catHandler */
-    $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
+    /** @var Extcal\CategoryHandler $catHandler */
+    $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
     if ($catHandler->haveSubmitRight($user)) {
         $view = _EXTCAL_NAV_NEW_EVENT;
         if (in_array($view, $visibleTabs)) {
@@ -457,8 +460,8 @@ function getNavBarTabs($currentTab = '')
 
     array_multisort($tNavBar, SORT_ASC, SORT_NUMERIC, $ordre, SORT_ASC, SORT_NUMERIC);
 
-    //    ext_echoArray($tNavBar);
-    //    ext_echoArray($ordre);
+    //    Extcal\Utility::echoArray($tNavBar);
+    //    Extcal\Utility::echoArray($ordre);
     return $tNavBar;
 }
 

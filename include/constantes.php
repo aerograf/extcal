@@ -31,14 +31,14 @@ define('_EXTCAL_CLS_MEMBER', 'eventmember');
 define('_EXTCAL_CLS_NOT_MEMBER', 'eventnotmember');
 define('_EXTCAL_CLS_ETABLISSEMENT', 'etablissement');
 
-define('_EXTCAL_CLN_CAT', 'ExtcalCat');
-define('_EXTCAL_CLN_FILE', 'ExtcalFile');
-define('_EXTCAL_CLN_MEMBER', 'ExtcalEventmember');
-define('_EXTCAL_CLN_NOT_MEMBER', 'ExtcalEventNotMember');
-define('_EXTCAL_CLN_ETABLISSEMENT', 'ExtcalEtablissement');
+define('_EXTCAL_CLN_CAT', 'Category');
+define('_EXTCAL_CLN_FILE', 'File');
+define('_EXTCAL_CLN_MEMBER', 'Eventmember');
+define('_EXTCAL_CLN_NOT_MEMBER', 'EventNotMember');
+define('_EXTCAL_CLN_ETABLISSEMENT', 'Etablissement');
 
 define('_EXTCAL_CLS_EVENT', 'event');
-define('_EXTCAL_CLN_EVENT', 'ExtcalEvent');
+define('_EXTCAL_CLN_EVENT', 'Event');
 
 //-------------------------------------------------------------------
 define('_EXTCAL_PEAR_ROOT_DEFAULT', __DIR__ . '/../class/pear');
@@ -56,10 +56,12 @@ if (is_object($xoopsModule)) {
 $moduleHandler = xoops_getHandler('module');
 $module        = $moduleHandler->getByDirname('extcal');
 
+/** @var XoopsModules\Extcal\Config $extcalConfig */
 if ('extcal' === $name || is_object($module)) {
     if (is_object($xoopsModuleConfig)) {
         $extcalConfig = $xoopsModuleConfig;
     } else {
+        /** @var \XoopsConfigHandler $configHandler */
         $configHandler = xoops_getHandler('config');
         $extcalConfig  = $configHandler->getConfigList($module->getVar('mid'));
     }
@@ -106,10 +108,8 @@ define('_EXTCAL_NAV_AGENDA_DAY', 'agenda-day');
 define('_EXTCAL_NAV_SEARCH', 'search');
 define('_EXTCAL_NAV_NEW_EVENT', 'new-event');
 
-define(
-    '_EXTCAL_NAV_LIST',
-       _EXTCAL_NAV_CALMONTH . "\n" . _EXTCAL_NAV_CALWEEK . "\n" . _EXTCAL_NAV_YEAR . "\n" . _EXTCAL_NAV_MONTH . "\n" . _EXTCAL_NAV_WEEK . "\n" . _EXTCAL_NAV_DAY . "\n" . _EXTCAL_NAV_AGENDA_WEEK . "\n" . _EXTCAL_NAV_AGENDA_DAY . "\n" . _EXTCAL_NAV_SEARCH . "\n" . _EXTCAL_NAV_NEW_EVENT
-);
+define('_EXTCAL_NAV_LIST',
+       _EXTCAL_NAV_CALMONTH . "\n" . _EXTCAL_NAV_CALWEEK . "\n" . _EXTCAL_NAV_YEAR . "\n" . _EXTCAL_NAV_MONTH . "\n" . _EXTCAL_NAV_WEEK . "\n" . _EXTCAL_NAV_DAY . "\n" . _EXTCAL_NAV_AGENDA_WEEK . "\n" . _EXTCAL_NAV_AGENDA_DAY . "\n" . _EXTCAL_NAV_SEARCH . "\n" . _EXTCAL_NAV_NEW_EVENT);
 
 define('_EXTCAL_PREFIX_VIEW', 'view_');
 define('_EXTCAL_SUFFIX_VIEW', '.php');

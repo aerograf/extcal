@@ -17,17 +17,19 @@
  * @author       XOOPS Development Team,
  */
 
+use XoopsModules\Extcal;
+
 include __DIR__ . '/../../mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'extcal_post.tpl';
 
 include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-include __DIR__ . '/class/form/extcalform.php';
-include __DIR__ . '/class/perm.php';
+//include __DIR__ . '/class/form/extcalform.php';
+//include __DIR__ . '/class/perm.php';
 
-require_once __DIR__ . '/class/utility.php';
+require_once __DIR__ . '/class/Utility.php';
 require_once __DIR__ . '/include/constantes.php';
 
-$permHandler = ExtcalPerm::getHandler();
+$permHandler = Extcal\Perm::getHandler();
 $xoopsUser   = $xoopsUser ?: null;
 
 if (!$permHandler->isAllowed($xoopsUser, 'extcal_cat_submit', (int)$_POST['cat_id'])) {
@@ -35,7 +37,8 @@ if (!$permHandler->isAllowed($xoopsUser, 'extcal_cat_submit', (int)$_POST['cat_i
 }
 
 // Getting eXtCal object's handler
-$eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
+/** @var Extcal\EventHandler $eventHandler */
+$eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
 if (isset($_POST['form_preview'])) {
     include XOOPS_ROOT_PATH . '/header.php';
@@ -86,6 +89,7 @@ if (isset($_POST['form_preview'])) {
     $event['have_end'] = $_POST['have_end'];
 
     // Display the submit form
+    /** @var Extcal\Form\ThemeForm $form */
     $form     = $eventHandler->getEventForm('user', 'preview', $event);
     $formBody = $form->render();
     $xoopsTpl->assign('preview', true);
@@ -96,7 +100,7 @@ if (isset($_POST['form_preview'])) {
     if (!isset($_POST['rrule_weekly_interval'])) {
         $_POST['rrule_weekly_interval'] = 0;
     }
-    // ext_echoArray($_POST, '',true);
+    // Extcal\Utility::echoArray($_POST, '',true);
     // exit;
     // $ts = print_r($_POST,true);
     // echo "<pre>{$ts}</pre>";
@@ -112,13 +116,14 @@ if (isset($_POST['form_preview'])) {
     //        exit;
     //    }
     ///////////////////////////////////////////////////////////////////////////////
-    ExtcalUtility::extcal_loadImg($_REQUEST, $event_picture1, $event_picture2);
+    Extcal\Utility::loadImg($_REQUEST, $event_picture1, $event_picture2);
     ///////////////////////////////////////////////////////////////////////////////
 
     require_once __DIR__ . '/class/perm.php';
 
-    $fileHandler = xoops_getModuleHandler(_EXTCAL_CLS_FILE, _EXTCAL_MODULE);
-    $permHandler = ExtcalPerm::getHandler();
+    /** @var Extcal\FileHandler $fileHandler */
+    $fileHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_FILE);
+    $permHandler = Extcal\Perm::getHandler();
     $approve     = $permHandler->isAllowed($xoopsUser, 'extcal_cat_autoapprove', (int)$_POST['cat_id']);
 
     $data = [
@@ -162,10 +167,12 @@ if (isset($_POST['form_preview'])) {
             $notifyEvent = 'new_event_pending';
         }
 
+        /** @var \XoopsNotificationHandler $notificationHandler */
         $notificationHandler = xoops_getHandler('notification');
         $notificationHandler->triggerEvent('global', 0, $notifyEvent, ['EVENT_TITLE' => $_POST['event_title']]);
         if (1 == $approve) {
-            $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
+            //            $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
+            $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
             $cat        = $catHandler->getCat((int)$_POST['cat_id'], $xoopsUser, 'all');
             $notificationHandler->triggerEvent('cat', (int)$_POST['cat_id'], 'new_event_cat', [
                 'EVENT_TITLE' => $_POST['event_title'],
