@@ -1,15 +1,17 @@
 <?php
 
 use XoopsModules\Extcal;
+
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
+require_once __DIR__ . '/include/constantes.php';
+
 /** @var Extcal\Helper $helper */
 $helper = Extcal\Helper::getInstance();
 
-include __DIR__ . '/../../mainfile.php';
-require_once __DIR__ . '/include/constantes.php';
 $params                                  = ['view' => _EXTCAL_NAV_CALMONTH, 'file' => _EXTCAL_FILE_CALMONTH];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
 
-//include __DIR__ . '/preloads/autoloader.php';
+//require_once __DIR__   . '/preloads/autoloader.php';
 //$catHandler   = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
 
 require_once __DIR__ . '/header.php';
@@ -189,4 +191,4 @@ $lang = [
 $xoopsTpl->assign('lang', $lang);
 $xoopsTpl->assign('view', 'calmonth');
 
-include XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

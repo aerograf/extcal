@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -34,9 +36,9 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
     public $_extcalPerm;
 
     /**
-     * @param $db
+     * @param \XoopsDatabase|null $db
      */
-    public function __construct(\XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db = null)
     {
         $this->_extcalPerm = Extcal\Perm::getHandler();
         //        parent::__construct($db, 'extcal_cat', _EXTCAL_CLN_CAT, 'cat_id');
@@ -129,12 +131,12 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
         if (!$skipPerm) {
             $this->addCatPermCriteria($criteriaCompo, $GLOBALS['xoopsUser']);
         }
-        $ret =& $this->getObjects($criteriaCompo);
+        $ret = $this->getObjects($criteriaCompo);
         if (isset($ret[0])) {
             return $ret[0];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

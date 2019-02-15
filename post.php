@@ -18,15 +18,16 @@
  */
 
 use XoopsModules\Extcal;
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
 
-include __DIR__ . '/../../mainfile.php';
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
+
+/** @var Extcal\Helper $helper */
+$helper                                  = Extcal\Helper::getInstance();
 $GLOBALS['xoopsOption']['template_main'] = 'extcal_post.tpl';
 
-include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
-//include __DIR__ . '/class/form/extcalform.php';
-//include __DIR__ . '/class/perm.php';
+require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+//require_once __DIR__   . '/class/form/extcalform.php';
+//require_once __DIR__   . '/class/perm.php';
 
 require_once __DIR__ . '/class/Utility.php';
 require_once __DIR__ . '/include/constantes.php';
@@ -34,7 +35,7 @@ require_once __DIR__ . '/include/constantes.php';
 $permHandler = Extcal\Perm::getHandler();
 $xoopsUser   = $xoopsUser ?: null;
 
-if (!$permHandler->isAllowed($xoopsUser, 'extcal_cat_submit', (int)$_POST['cat_id'])) {
+if (!$permHandler->isAllowed($xoopsUser, 'extcal_cat_submit', \Xmf\Request::getInt('cat_id', 0, 'POST'))) {
     redirect_header('index.php', 3);
 }
 
@@ -42,17 +43,17 @@ if (!$permHandler->isAllowed($xoopsUser, 'extcal_cat_submit', (int)$_POST['cat_i
 /** @var Extcal\EventHandler $eventHandler */
 $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
-if (isset($_POST['form_preview'])) {
-    include XOOPS_ROOT_PATH . '/header.php';
+if (\Xmf\Request::hasVar('form_preview', 'POST')) {
+    require_once XOOPS_ROOT_PATH . '/header.php';
 
     // Title of the page
     $xoopsTpl->assign('xoops_pagetitle', _MI_EXTCAL_SUBMIT_EVENT);
 
     $data = [
         'event_title'        => $_POST['event_title'],
-        'cat_id'             => (int)$_POST['cat_id'],
+        'cat_id'             => \Xmf\Request::getInt('cat_id', 0, 'POST'),
         'event_desc'         => $_POST['event_desc'],
-        'event_nbmember'     => (int)$_POST['event_nbmember'],
+        'event_nbmember'     => \Xmf\Request::getInt('event_nbmember', 0, 'POST'),
         'event_contact'      => $_POST['event_contact'],
         'event_url'          => $_POST['event_url'],
         'event_email'        => $_POST['event_email'],
@@ -67,8 +68,8 @@ if (isset($_POST['form_preview'])) {
         'event_icone'        => $_POST['event_icone'],
     ];
 
-    if (isset($_POST['event_id'])) {
-        $data['event_id'] = (int)$_POST['event_id'];
+    if (\Xmf\Request::hasVar('event_id', 'POST')) {
+        $data['event_id'] = \Xmf\Request::getInt('event_id', 0, 'POST');
     }
 
     // Creating tempory event object to apply Object data filtering
@@ -87,7 +88,7 @@ if (isset($_POST['form_preview'])) {
     //     // Assigning language data to the template
     //     $xoopsTpl->assign('lang', $lang);
 
-    $event['cat_id']   = (int)$_POST['cat_id'];
+    $event['cat_id']   = \Xmf\Request::getInt('cat_id', 0, 'POST');
     $event['have_end'] = $_POST['have_end'];
 
     // Display the submit form
@@ -97,8 +98,8 @@ if (isset($_POST['form_preview'])) {
     $xoopsTpl->assign('preview', true);
     $xoopsTpl->assign('formBody', $formBody);
 
-    include XOOPS_ROOT_PATH . '/footer.php';
-} elseif (isset($_POST['form_submit'])) {
+    require_once XOOPS_ROOT_PATH . '/footer.php';
+} elseif (\Xmf\Request::hasVar('form_submit', 'POST')) {
     if (!isset($_POST['rrule_weekly_interval'])) {
         $_POST['rrule_weekly_interval'] = 0;
     }
@@ -121,40 +122,39 @@ if (isset($_POST['form_preview'])) {
     Extcal\Utility::loadImg($_REQUEST, $event_picture1, $event_picture2);
     ///////////////////////////////////////////////////////////////////////////////
 
-//    require_once __DIR__ . '/class/perm.php';
+    //    require_once __DIR__ . '/class/perm.php';
 
     /** @var Extcal\FileHandler $fileHandler */
     $fileHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_FILE);
     $permHandler = Extcal\Perm::getHandler();
-    $approve     = $permHandler->isAllowed($xoopsUser, 'extcal_cat_autoapprove', (int)$_POST['cat_id']);
+    $approve     = $permHandler->isAllowed($xoopsUser, 'extcal_cat_autoapprove', \Xmf\Request::getInt('cat_id', 0, 'POST'));
 
     $data = [
-        'event_title'         => $_POST['event_title'],
-        'cat_id'              => $_POST['cat_id'],
-        'event_desc'          => $_POST['event_desc'],
-        'event_nbmember'      => $_POST['event_nbmember'],
-        'event_organisateur'  => $_POST['event_organisateur'],
-        'event_contact'       => $_POST['event_contact'],
-        'event_url'           => $_POST['event_url'],
-        'event_email'         => $_POST['event_email'],
-        'event_address'       => $_POST['event_address'],
-        'event_approved'      => (false === $approve) ? 0 : 1,
-        'event_start'         => $_POST['event_start'],
-        'have_end'            => $_POST['have_end'],
-        'event_end'           => $_POST['event_end'],
-        'event_picture1'      => @$event_picture1,
-        'event_picture2'      => @$event_picture2,
-        'event_price'         => @$_POST['event_price'],
-        'event_etablissement' => $_POST['event_etablissement'],
-        'dohtml'              => $helper->getConfig('allow_html'),
-        'event_icone'         => $_POST['event_icone'],
-
+        'event_title'        => $_POST['event_title'],
+        'cat_id'             => $_POST['cat_id'],
+        'event_desc'         => $_POST['event_desc'],
+        'event_nbmember'     => $_POST['event_nbmember'],
+        'event_organisateur' => $_POST['event_organisateur'],
+        'event_contact'      => $_POST['event_contact'],
+        'event_url'          => $_POST['event_url'],
+        'event_email'        => $_POST['event_email'],
+        'event_address'      => $_POST['event_address'],
+        'event_approved'     => (false === $approve) ? 0 : 1,
+        'event_start'        => $_POST['event_start'],
+        'have_end'           => $_POST['have_end'],
+        'event_end'          => $_POST['event_end'],
+        'event_picture1'     => @$event_picture1,
+        'event_picture2'     => @$event_picture2,
+        'event_price'        => @$_POST['event_price'],
+        'event_location'     => $_POST['event_location'],
+        'dohtml'             => $helper->getConfig('allow_html'),
+        'event_icone'        => $_POST['event_icone'],
     ];
 
-    if (isset($_POST['event_id'])) {
-        $eventHandler->modifyEvent((int)$_POST['event_id'], $data);
-        $fileHandler->updateEventFile((int)$_POST['event_id']);
-        $fileHandler->createFile((int)$_POST['event_id']);
+    if (\Xmf\Request::hasVar('event_id', 'POST')) {
+        $eventHandler->modifyEvent(\Xmf\Request::getInt('event_id', 0, 'POST'), $data);
+        $fileHandler->updateEventFile(\Xmf\Request::getInt('event_id', 0, 'POST'));
+        $fileHandler->createFile(\Xmf\Request::getInt('event_id', 0, 'POST'));
 
         redirect_header('event.php?event=' . $_POST['event_id'], 3, _MD_EXTCAL_EVENT_UPDATED, false);
     } else {
@@ -175,8 +175,8 @@ if (isset($_POST['form_preview'])) {
         if (1 == $approve) {
             //            $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
             $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-            $cat        = $catHandler->getCat((int)$_POST['cat_id'], $xoopsUser, 'all');
-            $notificationHandler->triggerEvent('cat', (int)$_POST['cat_id'], 'new_event_cat', [
+            $cat        = $catHandler->getCat(\Xmf\Request::getInt('cat_id', 0, 'POST'), $xoopsUser, 'all');
+            $notificationHandler->triggerEvent('cat', \Xmf\Request::getInt('cat_id', 0, 'POST'), 'new_event_cat', [
                 'EVENT_TITLE' => $_POST['event_title'],
                 'CAT_NAME'    => $cat->getVar('cat_name'),
             ]);

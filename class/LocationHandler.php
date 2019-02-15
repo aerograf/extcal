@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -24,40 +26,40 @@
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
 /**
- * Class EtablissementHandler.
+ * Class LocationHandler.
  */
-class EtablissementHandler extends ExtcalPersistableObjectHandler
+class LocationHandler extends ExtcalPersistableObjectHandler
 {
     /**
-     * @param $db
+     * @param \XoopsDatabase|null $db
      */
-    public function __construct(\XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db = null)
     {
-        parent::__construct($db, 'extcal_etablissement', Etablissement::class, 'id', 'nom');
+        parent::__construct($db, 'extcal_location', Location::class, 'id', 'nom');
     }
 
     /**
-     * @param      $etablissementId
+     * @param      $locationId
      * @param bool $skipPerm
      *
      * @return bool
      */
-    public function getEtablissement($etablissementId, $skipPerm = false)
+    public function getLocation($locationId, $skipPerm = false)
     {
         $user = $GLOBALS['xoopsUser'];
 
         $criteriaCompo = new \CriteriaCompo();
-        $criteriaCompo->add(new \Criteria('id', $etablissementId));
+        $criteriaCompo->add(new \Criteria('id', $locationId));
 
         if (!$skipPerm) {
             $this->addCatPermCriteria($criteriaCompo, $user);
         }
-        $ret =& $this->getObjects($criteriaCompo);
+        $ret = $this->getObjects($criteriaCompo);
         if (isset($ret[0])) {
             return $ret[0];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -72,14 +74,13 @@ class EtablissementHandler extends ExtcalPersistableObjectHandler
         \CriteriaElement $criteria = null,
         $fields = null,
         $asObject = true,
-        $id_as_key = true
-    ) //getAll($criteria = null, $asObject = false)
+        $id_as_key = true) //getAll($criteria = null, $asObject = false)
     {
-        $rst =& $this->getObjects($criteria, $asObject);
+        $rst = $this->getObjects($criteria, $asObject);
         if ($asObject) {
             return $rst;
-        } else {
-            return $this->objectToArray($rst);
         }
+
+        return $this->objectToArray($rst);
     }
 }

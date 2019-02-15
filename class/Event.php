@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -26,7 +28,7 @@
 //require_once __DIR__ . '/config.php';
 //require_once __DIR__ . '/ExtDateTime.php';
 //require_once __DIR__ . '/utility.php';
-require_once __DIR__ . '/../include/constantes.php';
+require_once dirname(__DIR__) . '/include/constantes.php';
 
 /**
  * Class Event.
@@ -35,9 +37,6 @@ class Event extends \XoopsObject
 {
     public $externalKey = [];
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->initVar('event_id', XOBJ_DTYPE_INT, null, false);
@@ -64,7 +63,7 @@ class Event extends \XoopsObject
         $this->initVar('event_picture2', XOBJ_DTYPE_TXTBOX, null, false);
         //$this->initVar("event_price",XOBJ_DTYPE_OTHER,null,false,10);
         $this->initVar('event_price', XOBJ_DTYPE_TXTBOX, '', false);
-        $this->initVar('event_etablissement', XOBJ_DTYPE_INT, 5, false);
+        $this->initVar('event_location', XOBJ_DTYPE_INT, 5, false);
         $this->initVar('event_icone', XOBJ_DTYPE_TXTBOX, '', false);
 
         $this->externalKey['cat_id']          = [

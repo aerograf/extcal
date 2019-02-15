@@ -1,14 +1,15 @@
 <?php
 
 use XoopsModules\Extcal;
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
 
-include __DIR__ . '/../../mainfile.php';
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
 $params                                  = ['view' => _EXTCAL_NAV_AGENDA_DAY, 'file' => _EXTCAL_FILE_AGENDA_DAY];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
 require_once __DIR__ . '/header.php';
+
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 /* ========================================================================== */
 //recupe des variables get
@@ -158,4 +159,4 @@ $lang = [
 $xoopsTpl->assign('lang', $lang);
 $xoopsTpl->assign('view', 'agendaday');
 
-include XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

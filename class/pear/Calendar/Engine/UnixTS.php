@@ -207,7 +207,7 @@ class Calendar_Engine_UnixTS /* implements Calendar_Engine_Interface */
      */
     public function getMinYears()
     {
-        return $min = false === strpos(PHP_OS, 'WIN') ? 1902 : 1970;
+        return $min = false === mb_strpos(PHP_OS, 'WIN') ? 1902 : 1970;
     }
 
     /**
@@ -439,7 +439,7 @@ class Calendar_Engine_UnixTS /* implements Calendar_Engine_Interface */
     public function isToday($stamp)
     {
         static $today = null;
-        if (is_null($today)) {
+        if (null === $today) {
             $today_date = @date('Y n j');
             $today      = sscanf($today_date, '%d %d %d');
         }

@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -17,7 +19,6 @@
  * @since
  * @author       XOOPS Development Team
  */
-
 defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 /**
@@ -28,14 +29,13 @@ class Helper extends \Xmf\Module\Helper
     public $debug;
 
     /**
-     * 
      * @param bool $debug
      */
-    protected function __construct($debug = false)
+    public function __construct($debug = false)
     {
         $this->debug   = $debug;
-       $moduleDirName = basename(dirname(__DIR__));
-       parent::__construct($moduleDirName);
+        $moduleDirName = basename(dirname(__DIR__));
+        parent::__construct($moduleDirName);
     }
 
     /**
@@ -72,8 +72,9 @@ class Helper extends \Xmf\Module\Helper
     {
         $ret   = false;
         $db    = \XoopsDatabaseFactory::getDatabaseConnection();
-        $class = '\\XoopsModules\\' . ucfirst(strtolower(basename(dirname(__DIR__)))) . '\\' . $name . 'Handler';
+        $class = '\\XoopsModules\\' . ucfirst(mb_strtolower(basename(dirname(__DIR__)))) . '\\' . $name . 'Handler';
         $ret   = new $class($db);
+
         return $ret;
     }
 }

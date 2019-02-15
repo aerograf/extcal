@@ -1,11 +1,13 @@
 <?php
 
 use XoopsModules\Extcal;
+
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
+require_once __DIR__ . '/include/constantes.php';
+
 /** @var Extcal\Helper $helper */
 $helper = Extcal\Helper::getInstance();
 
-include __DIR__ . '/../../mainfile.php';
-require_once __DIR__ . '/include/constantes.php';
 $params                                  = ['view' => _EXTCAL_NAV_MONTH, 'file' => _EXTCAL_FILE_MONTH];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
 require_once __DIR__ . '/header.php';
@@ -131,13 +133,13 @@ $xoopsTpl->assign('list_position', $helper->getConfig('list_position'));
 if ($xoopsUser) {
     $xoopsTpl->assign('isAdmin', $xoopsUser->isAdmin());
     $canEdit = false;
-/* todo
-    $canEdit
-        =
-        $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
-            && $xoopsUser->getVar('uid') == $event['user']['uid'];
-    $xoopsTpl->assign('canEdit', $canEdit);
-*/
+    /* todo
+        $canEdit
+            =
+            $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
+                && $xoopsUser->getVar('uid') == $event['user']['uid'];
+        $xoopsTpl->assign('canEdit', $canEdit);
+    */
 } else {
     $xoopsTpl->assign('isAdmin', false);
     $xoopsTpl->assign('canEdit', false);
@@ -163,4 +165,4 @@ $lang = [
 $xoopsTpl->assign('lang', $lang);
 $xoopsTpl->assign('view', 'month');
 
-include XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

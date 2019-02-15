@@ -18,20 +18,21 @@
  */
 
 use XoopsModules\Extcal;
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
 
-require_once __DIR__ . '/../../../include/cp_header.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-// require_once __DIR__ . '/../class/form/extcalform.php';
+// require_once  dirname(__DIR__) . '/class/form/extcalform.php';
 require_once __DIR__ . '/admin_header.php';
-// require_once __DIR__ . '/../class/Utility.php';
+// require_once  dirname(__DIR__) . '/class/Utility.php';
+
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 $gepeto = array_merge($_GET, $_POST);
 //while (list($k, $v) = each($gepeto)) {
 foreach ($gepeto as $k => $v) {
-    $$k = $v;
+    ${$k} = $v;
 }
 if (!isset($op)) {
     $op = '';
@@ -73,7 +74,6 @@ function deleteEvents($ids)
 }
 
 switch ($op) {
-
     case 'enreg':
 
         $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
@@ -98,38 +98,39 @@ switch ($op) {
         Extcal\Utility::loadImg($_REQUEST, $event_picture1, $event_picture2);
         ///////////////////////////////////////////////////////////////////////////////
         $data = [
-            'event_title'         => $_POST['event_title'],
-            'cat_id'              => $_POST['cat_id'],
-            'event_desc'          => $_POST['event_desc'],
-            'event_nbmember'      => $_POST['event_nbmember'],
-            'event_organisateur'  => $_POST['event_organisateur'],
-            'event_contact'       => $_POST['event_contact'],
-            'event_url'           => $_POST['event_url'],
-            'event_email'         => $_POST['event_email'],
-            'event_address'       => $_POST['event_address'],
-            'event_approved'      => 1,
-            'event_start'         => $_POST['event_start'],
-            'have_end'            => $_POST['have_end'],
-            'event_end'           => $_POST['event_end'],
-            'event_picture1'      => @$event_picture1,
-            'event_picture2'      => @$event_picture2,
-            'event_price'         => @$_POST['event_price'],
-            'event_etablissement' => $_POST['event_etablissement'],
-            'dohtml'              => $extcalConfig['allow_html'],
-            'event_icone'         => $_POST['event_icone'],
+            'event_title'        => $_POST['event_title'],
+            'cat_id'             => $_POST['cat_id'],
+            'event_desc'         => $_POST['event_desc'],
+            'event_nbmember'     => $_POST['event_nbmember'],
+            'event_organisateur' => $_POST['event_organisateur'],
+            'event_contact'      => $_POST['event_contact'],
+            'event_url'          => $_POST['event_url'],
+            'event_email'        => $_POST['event_email'],
+            'event_address'      => $_POST['event_address'],
+            'event_approved'     => 1,
+            'event_start'        => $_POST['event_start'],
+            'have_end'           => $_POST['have_end'],
+            'event_end'          => $_POST['event_end'],
+            'event_picture1'     => @$event_picture1,
+            'event_picture2'     => @$event_picture2,
+            'event_price'        => @$_POST['event_price'],
+            'event_location'     => $_POST['event_location'],
+            'dohtml'             => $extcalConfig['allow_html'],
+            'event_icone'        => $_POST['event_icone'],
         ];
 
         // Event edited
-        if (isset($_POST['event_id'])) {
+        if (\Xmf\Request::hasVar('event_id', 'POST')) {
             if (!$eventHandler->modifyEvent($_POST['event_id'], $data)) {
                 redirect_header('event.php', 3, _AM_EXTCAL_EVENT_EDIT_FAILED, false);
             } else {
-                $fileHandler->createFile((int)$_POST['event_id']);
+                $fileHandler->createFile(\Xmf\Request::getInt('event_id', 0, 'POST'));
                 redirect_header('event.php', 3, _AM_EXTCAL_EVENT_EDITED, false);
             }
 
             // New event
         } else {
+            /** @var \XoopsNotificationHandler $notificationHandler */
             $notificationHandler = xoops_getHandler('notification');
             /** @var Extcal\CategoryHandler $catHandler */
             //            $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
@@ -152,7 +153,6 @@ switch ($op) {
             }
         }
         break;
-
     case 'clone': /* sur validation du formulaire */
     case 'modify':
         $action = (('clone' === $op) ? 'clone' : 'edit');
@@ -207,7 +207,6 @@ switch ($op) {
         xoops_cp_footer();
 
         break;
-
     case 'clone2': /* sur clique de l'icone du formulaire*/
 
         //$newEventId = 1;
@@ -233,10 +232,9 @@ switch ($op) {
 
         redirect_header("event.php?op=modify&event_id={$newEventId}", 3, _AM_EXTCAL_EVENT_DELETED, false);
         break;
-
     case 'delete':
 
-        if (isset($_POST['confirm'])) {
+        if (\Xmf\Request::hasVar('confirm', 'POST')) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header('index.php', 3, _NOPERM . '<br>' . implode('<br>', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -260,7 +258,6 @@ switch ($op) {
         }
 
         break;
-
     case 'deleteSelection':
 
         xoops_cp_header();
@@ -289,7 +286,6 @@ switch ($op) {
         xoops_cp_footer();
 
         break;
-
     case 'deleteSelectionOK':
         //-----------------------------------------
         // $t = print_r($_GET,true);
@@ -312,12 +308,11 @@ switch ($op) {
         }
 
         break;
-
     case 'default':
     default:
 
         //global $extcalConfig;
-        $extcalConfig      = Extcal\Config::getHandler();
+        $extcalConfig = Extcal\Config::getHandler();
 
         $start          = \Xmf\Request::getInt('start', 0, 'GET');
         $nbEventsByPage = $helper->getConfig('nbEventsByPage');
@@ -373,7 +368,7 @@ switch ($op) {
                 echo "<input type='hidden' name='deleteAllEvents[{$event['event_id']}]' value='1'>";
                 echo '</td>';
                 echo "<td align = 'center' width='5%'>" . $event['event_id'] . '</td>';
-                echo "<td  width='10%'>" . '<a href=cat.php?op=modify&amp;cat_id=' . $event['Category']['cat_id'] . '&form_modify' . '>' . $event['Category']['cat_name'] . '</a>' . '</td>';
+                echo "<td  width='10%'>" . '<a href=cat.php?op=modify&amp;cat_id=' . $event['cat']['cat_id'] . '&form_modify' . '>' . $event['cat']['cat_name'] . '</a>' . '</td>';
 
                 echo '<td>' . '<a href=event.php?op=modify&amp;event_id=' . $event['event_id'] . '>' . $event['event_title'] . '</a>' . '</td>';
 

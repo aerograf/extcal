@@ -15,7 +15,6 @@
  * @package      extcal
  * @since
  * @author       XOOPS Development Team,
- *
  */
 
 use XoopsModules\Extcal;
@@ -38,9 +37,8 @@ function tableExists($tablename)
 }
 
 /**
- *
  * Prepares system prior to attempting to install module
- * @param XoopsModule $module {@link XoopsModule}
+ * @param \XoopsModule $module {@link XoopsModule}
  *
  * @return bool true if ready to install, false if not
  */
@@ -53,18 +51,17 @@ function xoops_module_pre_update_extcal(\XoopsModule $module)
 
     $xoopsSuccess = $utility::checkVerXoops($module);
     $phpSuccess   = $utility::checkVerPhp($module);
+
     return $xoopsSuccess && $phpSuccess;
 }
 
 /**
- *
  * Performs tasks required during update of the module
- * @param XoopsModule $module {@link XoopsModule}
+ * @param \XoopsModule $module {@link XoopsModule}
  * @param null        $previousVersion
  *
  * @return bool true if update successful, false if not
  */
-
 function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = null)
 {
     //    global $xoopsDB;
@@ -97,14 +94,14 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
             $f    = $fld . $name . '.php';
             //ext_echo ("<hr>{$f}<hr>");
             if (is_readable($f)) {
-                echo "mise à jour version : {$key} = {$val}<br>";
+                echo "update version: {$key} = {$val}<br>";
                 require_once $f;
                 $cl = new $name($module, ['previousVersion' => $previousVersion]);
             }
         }
     }
 
-    $capsDirName = strtoupper($moduleDirName);
+    $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
     /** @var Extcal\Helper $helper */
     /** @var Extcal\Utility $utility */
@@ -113,8 +110,10 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
     $utility      = new Extcal\Utility();
     $configurator = new Extcal\Common\Configurator();
 
-    if ($previousVersion < 240) {
+    $migrator = new \XoopsModules\Extgallery\Common\Migrate($configurator);
+    $migrator->synchronizeSchema();
 
+    if ($previousVersion < 241) {
         //delete old HTML templates
         if (count($configurator['templateFolders']) > 0) {
             foreach ($configurator['templateFolders'] as $folder) {
@@ -135,10 +134,10 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
 
         //  ---  COPY blank.png FILES ---------------
         if (count($configurator['copyFiles']) > 0) {
-            $file = __DIR__ . '/../assets/images/blank.png';
+            $file = dirname(__DIR__) . '/assets/images/blank.png';
             foreach (array_keys($configurator['copyFiles']) as $i) {
                 $dest = $configurator['copyFiles'][$i] . '/blank.png';
-                $utilityClass::copyFile($file, $dest);
+                $utility::copyFile($file, $dest);
             }
         }
 
@@ -156,7 +155,7 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
         //---------------------
 
         //delete .html entries from the tpl table
-        $sql = 'DELETE FROM ' . $xoopsDB->prefix('tplfile') . " WHERE `tpl_module` = '" . $module->getVar('dirname', 'n') . "' AND `tpl_file` LIKE '%.html%'";
+        $sql = 'DELETE FROM ' . $GLOBALS['xoopsDB']->prefix('tplfile') . " WHERE `tpl_module` = '" . $module->getVar('dirname', 'n') . "' AND `tpl_file` LIKE '%.html%'";
         $xoopsDB->queryF($sql);
 
         // Load class XoopsFile ====================
@@ -167,8 +166,8 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
         $folderHandler   = \XoopsFile::getHandler('folder', $imagesDirectory);
         $folderHandler->delete($imagesDirectory);
     }
+    /** @var \XoopsGroupPermHandler $grouppermHandler */
+    $grouppermHandler = xoops_getHandler('groupperm');
 
-    $gpermHandler = xoops_getHandler('groupperm');
-
-    return $gpermHandler->deleteByModule($module->getVar('mid'), 'item_read');
+    return $grouppermHandler->deleteByModule($module->getVar('mid'), 'item_read');
 }

@@ -111,13 +111,13 @@ class Calendar_Table_Helper
      * Constructs Calendar_Table_Helper.
      *
      * @param object &$calendar Calendar_Month_Weekdays, Calendar_Month_Weeks, Calendar_Week
-     * @param int    $firstDay  (optional) first day of the week e.g. 1 for Monday
+     * @param int     $firstDay (optional) first day of the week e.g. 1 for Monday
      */
     public function __construct($calendar, $firstDay = null)
     {
         $this->calendar = $calendar;
         $this->cE       = $calendar->getEngine();
-        if (is_null($firstDay)) {
+        if (null === $firstDay) {
             $firstDay = $this->cE->getFirstDayOfWeek($this->calendar->thisYear(), $this->calendar->thisMonth(), $this->calendar->thisDay());
         }
         $this->firstDay = $firstDay;
@@ -183,7 +183,7 @@ class Calendar_Table_Helper
     /**
      * Returns the order array of days in a week.
      *
-     * @return int
+     * @return array
      */
     public function getDaysOfWeek()
     {

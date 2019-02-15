@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -30,9 +32,9 @@ use XoopsModules\Extcal;
 class EventmemberHandler extends ExtcalPersistableObjectHandler
 {
     /**
-     * @param $db
+     * @param \XoopsDatabase|null $db
      */
-    public function __construct(\XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db = null)
     {
         parent::__construct($db, 'extcal_eventmember', Eventmember::class, ['event_id', 'uid']);
     }
@@ -68,7 +70,7 @@ class EventmemberHandler extends ExtcalPersistableObjectHandler
     public function getMembers($eventId)
     {
         $memberHandler = xoops_getHandler('member');
-        $eventMember   =& $this->getObjects(new \Criteria('event_id', $eventId));
+        $eventMember   = $this->getObjects(new \Criteria('event_id', $eventId));
         $count         = count($eventMember);
         if ($count > 0) {
             $in = '(' . $eventMember[0]->getVar('uid');

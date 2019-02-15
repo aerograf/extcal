@@ -19,15 +19,14 @@
 
 use XoopsModules\Extcal;
 
-include __DIR__ . '/../preloads/autoloader.php';
+require_once dirname(__DIR__) . '/preloads/autoloader.php';
 
 $moduleDirName      = basename(dirname(__DIR__));
-$moduleDirNameUpper = strtoupper($moduleDirName);
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
 /** @var \XoopsDatabase $db */
 /** @var Extcal\Helper $helper */
 /** @var Extcal\Utility $utility */
-
 $db      = \XoopsDatabaseFactory::getDatabaseConnection();
 $helper  = Extcal\Helper::getInstance();
 $utility = new Extcal\Utility();
@@ -58,8 +57,8 @@ if (!defined($moduleDirNameUpper . '_CONSTANTS_DEFINED')) {
     define($moduleDirNameUpper . '_CONSTANTS_DEFINED', 1);
 }
 
-$pathIcon16 = Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon32 = Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon32 = \Xmf\Module\Admin::iconUrl('', 32);
 //$pathModIcon16 = $helper->getModule()->getInfo('modicons16');
 //$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 

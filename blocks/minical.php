@@ -20,9 +20,9 @@
 use XoopsModules\Extcal;
 
 global $extcalConfig, $xoopsUser;
-require_once __DIR__ . '/../include/constantes.php';
-// require_once __DIR__ . '/../class/Utility.php';
-// require_once __DIR__ . '/../class/tableForm.php';
+require_once dirname(__DIR__) . '/include/constantes.php';
+// require_once  dirname(__DIR__) . '/class/Utility.php';
+// require_once  dirname(__DIR__) . '/class/tableForm.php';
 //---------------------------------------------------------------------------
 /**
  * @param $options
@@ -35,7 +35,7 @@ function bExtcalMinicalShow($options)
 
     extcal_getDefautminicalOption($options);
 
-    //    // require_once __DIR__ . '/../class/Config.php';
+    //    // require_once  dirname(__DIR__) . '/class/Config.php';
 
     require_once _EXTCAL_PEAR_CALENDAR_ROOT . '/Util/Textual.php';
     require_once _EXTCAL_PEAR_CALENDAR_ROOT . '/Month/Weeks.php';
@@ -74,7 +74,7 @@ function bExtcalMinicalShow($options)
     //$xoopsModuleConfig = $extcalConfig->getModuleConfig();
     //----------------------------------------------------
     //recupe de xoopsmoduleConfig
-    /** @var XoopsModuleHandler $moduleHandler */
+    /** @var \XoopsModuleHandler $moduleHandler */
     $moduleHandler = xoops_getHandler('module');
     $module        = $moduleHandler->getByDirname('extcal');
     $configHandler = xoops_getHandler('config');
@@ -84,13 +84,13 @@ function bExtcalMinicalShow($options)
     //----------------------------------------------------
     // Getting eXtCal object's handler
     //    $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-    $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $catHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $catHandler->getAllCatById($xoopsUser);
     // $t = print_r($cats,true);
     // echo "zzz<pre>{$t}</pre>";
 
-    $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $eventHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
     $timeHandler  = Extcal\Time::getHandler();
 
     // Retriving month and year value according to block options
@@ -165,11 +165,8 @@ function bExtcalMinicalShow($options)
      */
     // Flag current day
     $selectedDays = [
-        new Calendar_Day(
-            date('Y', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser']))),
-            date('n', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser']))),
-                         date('j', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser'])))
-        ),
+        new Calendar_Day(date('Y', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser']))), date('n', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser']))),
+                         date('j', xoops_getUserTimestamp(time(), $timeHandler->getUserTimeZone($GLOBALS['xoopsUser'])))),
     ];
 
     // Build calendar object
@@ -257,7 +254,7 @@ function bExtcalMinicalShow($options)
  */
 function bExtcalMinicalEdit($options)
 {
-    //    // require_once __DIR__ . '/../class/form/spin/formspin.php';
+    //    // require_once  dirname(__DIR__) . '/class/form/spin/formspin.php';
     global $xoopsUser;
 
     //  $t = print_r(get_defined_vars(),true);
@@ -273,7 +270,7 @@ function bExtcalMinicalEdit($options)
 
     //============================================================
 
-    $catHandler      = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $catHandler      = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
     $cats            = $catHandler->getAllCat($xoopsUser, 'extcal_cat_view');
     $imageCatHandler = xoops_getHandler('imagecategory');
 
@@ -397,7 +394,6 @@ function bExtcalMinicalEdit($options)
  */
 function _makeXMLSlideshowConf($options)
 {
-
     // create a  new \XML document
     $doc               = new DomDocument('1.0');
     $doc->formatOutput = true;
@@ -455,12 +451,12 @@ function _makeXMLSlideshowConf($options)
 
 /**************************************************************************/
 /**
- * @param array      $event
- * @param array      $eventsArray
- * @param Extcal\Time       $timeHandler
- * @param            $startMonth
- * @param            $endMonth
- * @param            $cats
+ * @param array       $event
+ * @param array       $eventsArray
+ * @param Extcal\Time $timeHandler
+ * @param             $startMonth
+ * @param             $endMonth
+ * @param             $cats
  *
  * @return bool
  */

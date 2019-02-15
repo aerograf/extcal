@@ -1,12 +1,9 @@
 <?php
 
 use XoopsModules\Extcal;
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
 
-require_once __DIR__ . '/../../../include/cp_header.php';
-include __DIR__ . '/../../../class/xoopsformloader.php';
 require_once __DIR__ . '/admin_header.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
 
 function extgalleryLastVersion()
 {
@@ -23,18 +20,11 @@ function isUpToDate()
     return $GLOBALS['xoopsModule']->getVar('version') >= $version;
 }
 
-if (isset($_GET['op'])) {
-    $op = $_GET['op'];
-} else {
-    $op = 'default';
-    if (isset($_POST['op'])) {
-        $op = $_POST['op'];
-    }
-}
-$fct = 'default';
-if (isset($_GET['fct'])) {
-    $fct = $_GET['fct'];
-}
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
+
+$op  = \Xmf\Request::getCmd('op', 'default');
+$fct = \Xmf\Request::getString('fct', 'default', 'GET');
 
 switch ($op) {
     case 'notification':
@@ -51,8 +41,8 @@ switch ($op) {
                 //                $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
                 //                $eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
                 //                $eventMemberHandler = xoops_getModuleHandler(_EXTCAL_CLS_MEMBER, _EXTCAL_MODULE);
-                $extcalTime        = Extcal\Time::getHandler();
-                $extcalConfig      = Extcal\Config::getHandler();
+                $extcalTime   = Extcal\Time::getHandler();
+                $extcalConfig = Extcal\Config::getHandler();
 
                 $event = $eventHandler->getEvent($_POST['event_id'], $xoopsUser, true);
                 $cat   = $catHandler->getCat($event->getVar('cat_id'), $xoopsUser, 'all');
@@ -62,10 +52,10 @@ switch ($op) {
                 $xoopsMailer->setFromEmail($myts->oopsStripSlashesGPC($_POST['mail_fromemail']));
                 $xoopsMailer->setSubject($myts->oopsStripSlashesGPC($_POST['mail_subject']));
                 $xoopsMailer->setBody($myts->oopsStripSlashesGPC($_POST['mail_body']));
-                if (in_array('mail', $_POST['mail_send_to'])) {
+                if (in_array('mail', $_POST['mail_send_to'], true)) {
                     $xoopsMailer->useMail();
                 }
-                if (empty($_POST['mail_inactive']) && in_array('pm', $_POST['mail_send_to'])) {
+                if (empty($_POST['mail_inactive']) && in_array('pm', $_POST['mail_send_to'], true)) {
                     $xoopsMailer->usePM();
                 }
                 $tag = [
@@ -83,7 +73,6 @@ switch ($op) {
                 xoops_cp_footer();
 
                 break;
-
             case 'default':
             default:
                 xoops_cp_header();
@@ -125,7 +114,7 @@ switch ($op) {
                 $form->addElement(new \XoopsFormText($subjectCaption, 'mail_subject', 50, 255, _AM_EXTCAL_SEND_NOTIFICATION_SUBJECT), true);
                 $form->addElement(new \XoopsFormTextArea($bodyCaption, 'mail_body', _AM_EXTCAL_SEND_NOTIFICATION_BODY, 10), true);
                 $form->addElement($toCheckBox, true);
-                $form->addElement(new \XoopsFormHidden('event_id', $_GET['event_id']), false);
+                $form->addElement(new \XoopsFormHidden('event_id', \Xmf\Request::getInt('event_id', 0, 'GET'), false));
                 $form->addElement(new \XoopsFormButton('', 'mail_submit', _SUBMIT, 'submit'));
                 $form->display();
                 echo '</fieldset>';
@@ -135,7 +124,6 @@ switch ($op) {
                 break;
         }
         break;
-
     default:
     case 'default':
         // @author      Gregory Mage (Aka Mage)

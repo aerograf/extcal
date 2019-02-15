@@ -23,21 +23,21 @@ class Extcal_2_34
     //----------------------------------------------------
 
     /**
-     * @param XoopsModule $module
+     * @param \XoopsModule $module
      * @param             $options
      */
     public function __construct(\XoopsModule $module, $options)
     {
         global $xoopsDB;
 
-        $this->alterTable_etablissement();
+        $this->alterTable_location();
     }
 
     //----------------------------------------------------
-    public function alterTable_etablissement()
+    public function alterTable_location()
     {
         global $xoopsDB;
-        $tbl = $xoopsDB->prefix('extcal_etablissement');
+        $tbl = $xoopsDB->prefix('extcal_location');
 
         $sql = <<<__sql__
 ALTER TABLE `{$tbl}`
@@ -47,6 +47,7 @@ __sql__;
         $xoopsDB->queryF($sql);
         //echo "<hr>{$sql}<hr>";
     }
+
     //----------------------------------------------------
 
     //-----------------------------------------------------------------

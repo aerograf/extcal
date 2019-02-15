@@ -23,23 +23,32 @@ use XoopsModules\Extcal\Common;
 require_once __DIR__ . '/admin_header.php';
 // Display Admin header
 xoops_cp_header();
-/** @var Extcal\Utility $utilityClass */
+/** @var Extcal\Utility $utility */
 
-//$configurator = include __DIR__ . '/../include/config.php';
+//$configurator = require_once dirname(__DIR__) . '/include/config.php';
 
-$configurator = new common\Configurator();
+$configurator = new Common\Configurator();
 
 //foreach (array_keys($configurator['uploadFolders']) as $i) {
-//    $utilityClass::createFolder($configurator['uploadFolders'][$i]);
+//    $utility::createFolder($configurator['uploadFolders'][$i]);
 //    $adminObject->addConfigBoxLine($configurator['uploadFolders'][$i], 'folder');
 //    //    $adminObject->addConfigBoxLine(array($configurator['uploadFolders'][$i], '777'), 'chmod');
 //}
+
+$adminObject->displayNavigation(basename(__FILE__));
+
+
+//check for latest release
+$newRelease = $utility::checkVerModule($helper);
+if (!empty($newRelease)) {
+    $adminObject->addItemButton($newRelease[0], $newRelease[1], 'download', 'style="color : Red"');
+}
 
 //------------- Test Data ----------------------------
 
 if ($helper->getConfig('displaySampleButton')) {
     xoops_loadLanguage('admin/modulesadmin', 'system');
-    require_once __DIR__ . '/../testdata/index.php';
+    require_once dirname(__DIR__) . '/testdata/index.php';
 
     $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'ADD_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=load', 'add');
 

@@ -19,7 +19,7 @@
 
 use XoopsModules\Extcal;
 
-require_once __DIR__ . '/../include/constantes.php';
+require_once dirname(__DIR__) . '/include/constantes.php';
 
 /**
  * @param $options
@@ -28,12 +28,12 @@ require_once __DIR__ . '/../include/constantes.php';
  */
 function bExtcalRandomShow($options)
 {
-    //    // require_once __DIR__ . '/../class/Config.php';
+    //    // require_once  dirname(__DIR__) . '/class/Config.php';
 
     /** @var Extcal\Helper $helper */
-    $helper = Extcal\Helper::getInstance();
+    $helper = \XoopsModules\Extcal\Helper::getInstance();
 
-    $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $eventHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
     $nbEvent     = $options[0];
     $titleLenght = $options[1];
@@ -61,7 +61,7 @@ function bExtcalRandomEdit($options)
 {
     global $xoopsUser;
 
-    $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $catHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $catHandler->getAllCat($xoopsUser, 'extcal_cat_view');
 
@@ -71,13 +71,13 @@ function bExtcalRandomEdit($options)
     array_shift($options);
     array_shift($options);
     $form .= _MB_EXTCAL_CAT_TO_USE . '<br><select name="options[]" multiple="multiple" size="5">';
-    if (false === array_search(0, $options)) {
+    if (false === array_search(0, $options, true)) {
         $form .= '<option value="0">' . _MB_EXTCAL_ALL_CAT . '</option>';
     } else {
         $form .= '<option value="0" selected="selected">' . _MB_EXTCAL_ALL_CAT . '</option>';
     }
     foreach ($cats as $cat) {
-        if (false === array_search($cat->getVar('cat_id'), $options)) {
+        if (false === array_search($cat->getVar('cat_id'), $options, true)) {
             $form .= '<option value="' . $cat->getVar('cat_id') . '">' . $cat->getVar('cat_name') . '</option>';
         } else {
             $form .= '<option value="' . $cat->getVar('cat_id') . '" selected="selected">' . $cat->getVar('cat_name') . '</option>';

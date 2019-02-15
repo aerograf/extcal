@@ -7,7 +7,7 @@
 //if you use ISO-8601 dates, switch to PearDate engine
 define('CALENDAR_ENGINE', 'PearDate');
 
-if (!@include 'Calendar/Calendar.php') {
+if (!@require_once __DIR__ . '/Calendar/Calendar.php') {
     define('CALENDAR_ROOT', '../../');
 }
 
@@ -48,11 +48,10 @@ class DiaryEvent extends Calendar_Decorator
         $entry = each($this->entries);
         if ($entry) {
             return $entry['value'];
-        } else {
-            reset($this->entries);
-
-            return false;
         }
+        reset($this->entries);
+
+        return false;
     }
 }
 
@@ -93,10 +92,11 @@ class MonthPayload_Decorator extends Calendar_Decorator
         if (count($events) > 0) {
             $this->setSelection($events);
         }
-        Calendar_Month_Weekdays::buildEmptyDaysBefore();
-        Calendar_Month_Weekdays::shiftDays();
-        Calendar_Month_Weekdays::buildEmptyDaysAfter();
-        Calendar_Month_Weekdays::setWeekMarkers();
+        $calMonthWeekdays = new Calendar_Month_Weekdays($this->year, $this->month);
+        $calMonthWeekdays->buildEmptyDaysBefore();
+        $calMonthWeekdays->shiftDays();
+        $calMonthWeekdays->buildEmptyDaysAfter();
+        $calMonthWeekdays->setWeekMarkers();
 
         return true;
     }
@@ -130,11 +130,10 @@ class MonthPayload_Decorator extends Calendar_Decorator
         $child = each($this->children);
         if ($child) {
             return $child['value'];
-        } else {
-            reset($this->children);
-
-            return false;
         }
+        reset($this->children);
+
+        return false;
     }
 }
 

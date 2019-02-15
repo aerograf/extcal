@@ -1,4 +1,6 @@
-<?php namespace XoopsModules\Extcal;
+<?php
+
+namespace XoopsModules\Extcal;
 
 /*
  * You may not change or alter any portion of this comment or credits
@@ -29,9 +31,9 @@ require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 class FileHandler extends ExtcalPersistableObjectHandler
 {
     /**
-     * @param $db
+     * @param \XoopsDatabase|null $db
      */
-    public function __construct(\XoopsDatabase $db)
+    public function __construct(\XoopsDatabase $db = null)
     {
         parent::__construct($db, 'extcal_file', File::class, 'file_id');
     }
@@ -46,7 +48,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
         $userId = $GLOBALS['xoopsUser'] ? $GLOBALS['xoopsUser']->getVar('uid') : 0;
 
         $allowedMimeType = [];
-        $mimeType        = include XOOPS_ROOT_PATH . '/include/mimetypes.inc.php';
+        $mimeType        = require_once XOOPS_ROOT_PATH . '/include/mimetypes.inc.php';
         foreach ($GLOBALS['xoopsModuleConfig']['allowed_file_extention'] as $fileExt) {
             $allowedMimeType[] = $mimeType[$fileExt];
         }
@@ -110,7 +112,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
         $criteria->add(new \Criteria('file_approved', 1));
         $criteria->add(new \Criteria('event_id', $eventId));
 
-        if (isset($_POST['filetokeep'])) {
+        if (\Xmf\Request::hasVar('filetokeep', 'POST')) {
             if (is_array($_POST['filetokeep'])) {
                 $count = count($_POST['filetokeep']);
                 $in    = '(' . $_POST['filetokeep'][0];
@@ -125,7 +127,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
             $criteria->add(new \Criteria('file_id', $in, 'NOT IN'));
         }
 
-        $files =& $this->getObjects($criteria);
+        $files = $this->getObjects($criteria);
         foreach ($files as $file) {
             $this->deleteFile($file);
         }

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../include/constantes.php';
+require_once dirname(dirname(__DIR__)) . '/include/constantes.php';
 define('_MI_EXTCAL_NAME', 'eXtCal');
 define('_MI_EXTCAL_ABOUT', 'About');
 define('_MI_EXTCAL_AFTER', 'After');
@@ -57,8 +57,8 @@ define('_MI_EXTCAL_EMAIL_MODE_DESC', 'Select Email Format that you want to use')
 define('_MI_EXTCAL_EMAIL_MODE_HTML', 'HTML Format');
 define('_MI_EXTCAL_EMAIL_MODE_NONE', 'No email');
 define('_MI_EXTCAL_EMAIL_MODE_TEXT', 'Plain text');
-define('_MI_EXTCAL_ETABLISSEMENT', 'Location');
-define('_MI_EXTCAL_ETABLISSEMENTS', 'Locations');
+define('_MI_EXTCAL_LOCATION', 'Location');
+define('_MI_EXTCAL_LOCATIONS', 'Locations');
 define('_MI_EXTCAL_EVENT', 'Event');
 define('_MI_EXTCAL_EVENT_NOTIFY', 'Event');
 define('_MI_EXTCAL_EVENT_NOTIFYDSC', 'Event notification');
@@ -165,3 +165,17 @@ define('_MI_EXTCAL_DIRNAME', basename(dirname(dirname(__DIR__))));
 define('_MI_EXTCAL_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
 define('_MI_EXTCAL_BACK_2_ADMIN', 'Back to Administration of ');
 define('_MI_EXTCAL_OVERVIEW', 'Overview');
+
+//help multi-page
+define('_MI_EXTCAL_DISCLAIMER', 'Disclaimer');
+define('_MI_EXTCAL_LICENSE', 'License');
+define('_MI_EXTCAL_SUPPORT', 'Support');
+
+define('_MI_EXTCAL_SHOW_SAMPLE_BUTTON', 'Show Sample Button?');
+define('_MI_EXTCAL_SHOW_SAMPLE_BUTTON_DESC', 'If yes, the "Add Sample Data" button will be visible to the Admin. It is Yes as a default for first installation.');
+
+define('_MI_EXTCAL_ADMENU_MIGRATE', 'Migrate');
+define('_MI_EXTCAL_BLOCKS_ADMIN', 'Blocks Admin');
+
+define('_MI_EXTCAL_SHOW_DEV_TOOLS', 'Show Development Tools Button?');
+define('_MI_EXTCAL_SHOW_DEV_TOOLS_DESC', 'If yes, the "Migrate" Tab and other Development tools will be visible to the Admin.');

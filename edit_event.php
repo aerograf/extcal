@@ -19,9 +19,9 @@
 
 use XoopsModules\Extcal;
 
-include __DIR__ . '/../../mainfile.php';
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
 
-include XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 require_once __DIR__ . '/include/constantes.php';
 
 $permHandler = Extcal\Perm::getHandler();
@@ -34,7 +34,7 @@ if (0 == count($permHandler->getAuthorizedCat($xoopsUser, 'extcal_cat_submit'))
 
 $params                                  = ['view' => _EXTCAL_NAV_NEW_EVENT, 'file' => _EXTCAL_FILE_NEW_EVENT];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
-include XOOPS_ROOT_PATH . '/header.php';
+require_once XOOPS_ROOT_PATH . '/header.php';
 /* ========================================================================== */
 
 // Tooltips include
@@ -42,21 +42,13 @@ include XOOPS_ROOT_PATH . '/header.php';
 $xoTheme->addScript('modules/extcal/include/ToolTips.js');
 $xoTheme->addStylesheet('modules/extcal/assets/css/infobulle.css');
 
-if (!isset($_GET['event'])) {
-    $eventId = 0;
-} else {
-    $eventId = (int)$_GET['event'];
-}
-if (!isset($_GET['action'])) {
-    $action = 'edit';
-} else {
-    $action = $_GET['action'];
-}
+$eventId = \Xmf\Request::getInt('event', 0, 'GET');
+$action  = \Xmf\Request::getString('action', 'edit', 'GET');
 
 // Getting eXtCal object's handler
 $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
-include XOOPS_ROOT_PATH . '/header.php';
+require_once XOOPS_ROOT_PATH . '/header.php';
 
 // Title of the page
 $xoopsTpl->assign('xoops_pagetitle', _MI_EXTCAL_SUBMIT_EVENT);
@@ -65,4 +57,4 @@ $xoopsTpl->assign('xoops_pagetitle', _MI_EXTCAL_SUBMIT_EVENT);
 $form = $eventHandler->getEventForm('user', $action, ['event_id' => $eventId]);
 $form->display();
 
-include XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

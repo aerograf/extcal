@@ -21,7 +21,7 @@ use XoopsModules\Extcal;
 
 // defined('XOOPS_ROOT_PATH') || die('XOOPS Root Path not defined');
 
-include __DIR__ . '/preloads/autoloader.php';
+require_once __DIR__ . '/preloads/autoloader.php';
 
 $moduleDirName = basename(__DIR__);
 
@@ -35,8 +35,8 @@ setlocale(LC_TIME, $xoopsConfig['language']);
 
 //***************************************************************************************
 $modversion['version']          = '2.40';
-$modversion['module_status']    = 'Beta 1';
-$modversion['release_date']     = '2018/01/08';
+$modversion['module_status']    = 'Beta 2';
+$modversion['release_date']     = '2018/09/21';
 $modversion['name']             = _MI_EXTCAL_NAME;
 $modversion['description']      = _MI_EXTCAL_DESC;
 $modversion['credits']          = 'Zoullou';
@@ -78,7 +78,7 @@ if (isset($GLOBALS['xoopsModule']) && is_object($GLOBALS['xoopsModule'])
     && 'extcal' === $GLOBALS['xoopsModule']->getVar('dirname')) {
     $user = isset($GLOBALS['xoopsUser']) ? $GLOBALS['xoopsUser'] : null;
     //    $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-    $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $catHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
     if ($catHandler->haveSubmitRight($user)) {
         $modversion['sub'][0]['name'] = _MI_EXTCAL_SUBMIT_EVENT;
         $modversion['sub'][0]['url']  = _EXTCAL_FILE_NEW_EVENT;
@@ -104,7 +104,7 @@ $modversion['tables'] = [
     $moduleDirName . '_' . 'eventmember',
     $moduleDirName . '_' . 'eventnotmember',
     $moduleDirName . '_' . 'file',
-    $moduleDirName . '_' . 'etablissement'
+    $moduleDirName . '_' . 'location',
 ];
 
 // SQL
@@ -582,6 +582,30 @@ $modversion['config'][$i]['valuetype']   = 'text';
 $modversion['config'][$i]['size']        = 80;
 $modversion['config'][$i]['default']     = '';
 
+/**
+ * Make Sample button visible?
+ */
+$modversion['config'][] = [
+    'name'        => 'displaySampleButton',
+    'title'       => '_MI_EXTCAL_SHOW_SAMPLE_BUTTON',
+    'description' => '_MI_EXTCAL_SHOW_SAMPLE_BUTTON_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+/**
+ * Show Developer Tools?
+ */
+$modversion['config'][] = [
+    'name'        => 'displayDeveloperTools',
+    'title'       => '_MI_EXTCAL_SHOW_DEV_TOOLS',
+    'description' => '_MI_EXTCAL_SHOW_DEV_TOOLS_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 0,
+];
+
 //modif JJD ------------------------------------------------------------
 
 // Templates
@@ -641,8 +665,8 @@ $modversion['templates'][$i]['description'] = '';
 $modversion['templates'][$i]['file']        = 'extcal_navbar.tpl';
 $modversion['templates'][$i]['description'] = '';
 ++$i;
-$modversion['templates'][$i]['file']        = 'extcal_etablissement.tpl';
-$modversion['templates'][$i]['description'] = 'etablissement';
+$modversion['templates'][$i]['file']        = 'extcal_location.tpl';
+$modversion['templates'][$i]['description'] = 'location';
 
 ++$i;
 $modversion['templates'][$i]['file']        = 'extcal_info_bulle.tpl';
@@ -791,12 +815,12 @@ $modversion['notification']['event'][3]['mail_subject']  = _MI_EXTCAL_NEW_EVENT_
 
 // XoopsInfo
 $modversion['developer_website_url']  = 'http://www.zoullou.net/';
-$modversion['developer_website_name'] = 'eXtCal and eXtGallery module for XOOPS : Zoullou.net';
+$modversion['developer_website_name'] = 'eXtCal and EXTCALlery module for XOOPS : Zoullou.net';
 $modversion['download_website']       = 'http://www.zoullou.net/';
 $modversion['status_fileinfo']        = '';
 $modversion['demo_site_url']          = 'http://www.zoullou.net/modules/extcal/';
-$modversion['demo_site_name']         = 'eXtCal and eXtGallery module for XOOPS : Zoullou.net';
+$modversion['demo_site_name']         = 'eXtCal and EXTCALlery module for XOOPS : Zoullou.net';
 $modversion['support_site_url']       = 'http://www.zoullou.net/';
-$modversion['support_site_name']      = 'eXtCal and eXtGallery module for XOOPS : Zoullou.net';
+$modversion['support_site_name']      = 'eXtCal and EXTCALlery module for XOOPS : Zoullou.net';
 $modversion['submit_bug']             = 'http://sourceforge.net/tracker/?func=add&group_id=177145&atid=880070';
 $modversion['submit_feature']         = 'http://sourceforge.net/tracker/?func=add&group_id=177145&atid=880073';

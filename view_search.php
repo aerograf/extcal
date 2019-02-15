@@ -1,10 +1,8 @@
 <?php
 
 use XoopsModules\Extcal;
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
 
-include __DIR__ . '/../../mainfile.php';
+require_once dirname(dirname(__DIR__)) . '/mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
 $params                                  = [
     'view' => _EXTCAL_NAV_SEARCH,
@@ -12,6 +10,9 @@ $params                                  = [
 ];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
 require_once __DIR__ . '/header.php';
+
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 $recurEventsArray = [];
 //needed to save the state of the form, so we don't show on the first time the list of available events
@@ -125,7 +126,6 @@ $catHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
 
 //=========================================
 foreach ($recurrents as $h => $hValue) {
-
     //    $recurEvents = $eventHandler->getRecurEventToDisplay($event, $startMonth, $endMonth);
     $recurEvents = $eventHandler->getRecurEventToDisplay($recurrents[$h], $startMonth, $endMonth);
 
@@ -200,13 +200,13 @@ $xoopsTpl->assign('num_tries', $num_tries);
 if ($xoopsUser) {
     $xoopsTpl->assign('isAdmin', $xoopsUser->isAdmin());
     $canEdit = false;
-/* todo
-    $canEdit
-        =
-        $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
-            && $xoopsUser->getVar('uid') == $event['user']['uid'];
-    $xoopsTpl->assign('canEdit', $canEdit);
-*/
+    /* todo
+        $canEdit
+            =
+            $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
+                && $xoopsUser->getVar('uid') == $event['user']['uid'];
+        $xoopsTpl->assign('canEdit', $canEdit);
+    */
 } else {
     $xoopsTpl->assign('isAdmin', false);
     $xoopsTpl->assign('canEdit', false);
@@ -239,4 +239,4 @@ $lang = [
 $xoopsTpl->assign('lang', $lang);
 $xoopsTpl->assign('view', 'search');
 
-include XOOPS_ROOT_PATH . '/footer.php';
+require_once XOOPS_ROOT_PATH . '/footer.php';

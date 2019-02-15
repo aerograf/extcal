@@ -26,14 +26,14 @@
     }
 
     #extcal-nav #navlist li a#current {
-        border-bottom: 0 solid white;
+        border-bottom: 0 solid #ffffff;
     }
 </style>
 
 <{if $list_position==0}>
     <form action="<{$navigSelectBox.action}>" method="<{$navigSelectBox.method}>" class="head">
         <{foreach item=element from=$navigSelectBox.elements}>
-        <{$element.body}>
+            <{$element.body}>
         <{/foreach}>
     </form>
 <{/if}>
@@ -43,7 +43,7 @@
         <{foreach item=navBar from=$tNavBar}>
             <li>
                 <a href="<{$navBar.href}>"
-                        <{if $navBar.current}>
+                        <{if isset($navBar.current) }>
                             id="current"
                         <{else}>
                             class="head"
@@ -59,7 +59,7 @@
 <{if $list_position==1}>
     <form action="<{$navigSelectBox.action}>" method="<{$navigSelectBox.method}>" class="head">
         <{foreach item=element from=$navigSelectBox.elements}>
-        <{$element.body}>
+            <{$element.body}>
         <{/foreach}>
     </form>
 <{/if}>

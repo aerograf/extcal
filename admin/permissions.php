@@ -17,19 +17,18 @@
  * @author       XOOPS Development Team,
  */
 
-require_once __DIR__ . '/../../../include/cp_header.php';
-require_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
 require_once __DIR__ . '/admin_header.php';
+require_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
+
 
 $step = 'default';
-if (isset($_POST['step'])) {
+if (\Xmf\Request::hasVar('step', 'POST')) {
     $step = $_POST['step'];
 }
 
 $moduleId = $xoopsModule->getVar('mid');
 
 switch ($step) {
-
     case 'enreg':
 
         $groupPermissionHandler = xoops_getHandler('groupperm');
@@ -49,7 +48,6 @@ switch ($step) {
         redirect_header('permissions.php', 3, _AM_EXTCAL_PERM_MASK_UPDATED);
 
         break;
-
     case 'default':
     default:
 
@@ -80,11 +78,11 @@ switch ($step) {
          */
         function getChecked($array, $v)
         {
-            if (in_array($v, $array)) {
+            if (in_array($v, $array, true)) {
                 return ' checked';
-            } else {
-                return '';
             }
+
+            return '';
         }
 
         echo '<script type="text/javascript" src="../include/admin.js"></script>';
@@ -294,5 +292,4 @@ switch ($step) {
         require_once __DIR__ . '/admin_footer.php';
 
         break;
-
 }
