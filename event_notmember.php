@@ -1,6 +1,8 @@
 <?php
 
 use XoopsModules\Extcal;
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 include __DIR__ . '/../../mainfile.php';
 
@@ -25,7 +27,7 @@ if (!$GLOBALS['xoopsSecurity']->check()) {
     redirect_header('index.php', 3, _NOPERM . '<br>' . implode('<br>', $GLOBALS['xoopsSecurity']->getErrors()));
 }
 
-if ($xoopsUser && $xoopsModuleConfig['whosnot_going']) {
+if ($xoopsUser && $helper->getConfig('whosnot_going')) {
     // If param are right
     if ((int)$_POST['event'] > 0 && ('add' === $_POST['mode'] || 'remove' === $_POST['mode'])) {
         $eventHandler          = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
@@ -41,7 +43,7 @@ if ($xoopsUser && $xoopsModuleConfig['whosnot_going']) {
             sendMail2member($mode, $event_id, $member_uid, _MD_EXTCAL_SUBJECT_3, _MD_EXTCAL_MSG_3);
             $rediredtMessage = _MD_EXTCAL_WHOSNOT_GOING_ADDED_TO_EVENT;
 
-            // If the user have to be remove
+        // If the user have to be remove
         } else {
             if ('remove' === $_POST['mode']) {
                 $eventNotMemberHandler->deleteEventNotMember([(int)$_POST['event'], $xoopsUser->getVar('uid')]);

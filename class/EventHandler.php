@@ -21,7 +21,7 @@
 //use Punic\Exception;
 use XoopsModules\Extcal;
 
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+// defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 require_once __DIR__ . '/../include/constantes.php';
 
@@ -131,7 +131,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
      */
     public function getAllEvents($criteria = null, $asObject = false)
     {
-        $rst = $this->getObjects($criteria, $asObject);
+        $rst =& $this->getObjects($criteria, $asObject);
         if ($asObject) {
             return $rst;
         } else {
@@ -157,7 +157,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         if (!$skipPerm) {
             $this->addCatPermCriteria($criteriaCompo, $user);
         }
-        $ret = $this->getObjects($criteriaCompo);
+        $ret =& $this->getObjects($criteriaCompo);
         if (isset($ret[0])) {
             return $ret[0];
         } else {
@@ -182,7 +182,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         if (!$skipPerm) {
             $this->addCatPermCriteria($criteriaCompo, $user);
         }
-        $ret = $this->getObjects($criteriaCompo);
+        $ret =& $this->getObjects($criteriaCompo);
         if (isset($ret[0])) {
             return $ret[0];
         } else {
@@ -424,7 +424,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $criteriaCompo->add(new \Criteria('event_isrecur', 0, '='));
         $criteriaCompo->setOrder($sens);
 
-        $result = $this->getObjects($criteriaCompo);
+        $result =& $this->getObjects($criteriaCompo);
         $events = $this->objectToArray($result, $externalKeys);
         $this->serverTimeToUserTimes($events);
 
@@ -497,7 +497,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $criteriaCompo->add(new \Criteria('event_isrecur', 1, '='));
         $criteriaCompo->setOrder($sens);
 
-        $result = $this->getObjects($criteriaCompo);
+        $result =& $this->getObjects($criteriaCompo);
         $events = $this->objectToArray($result, $externalKeys);
         $this->serverTimeToUserTimes($events);
 
@@ -910,7 +910,8 @@ class EventHandler extends ExtcalPersistableObjectHandler
      */
     public function getEventForm($siteSide = 'user', $mode = 'new', $data = null)
     {
-        global $xoopsModuleConfig;
+        /** @var Extcal\Helper $helper */
+        $helper = Extcal\Helper::getInstance();
         $catHandler  = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
         $fileHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_FILE);
 
@@ -1164,9 +1165,9 @@ class EventHandler extends ExtcalPersistableObjectHandler
             $options['width']  = '100%';
             $options['height'] = '200px';
             if ($isAdmin) {
-                $descEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $xoopsModuleConfig['editorAdmin'], $options, $nohtml = false, $onfailure = 'textarea');
+                $descEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $helper->getConfig('editorAdmin'), $options, $nohtml = false, $onfailure = 'textarea');
             } else {
-                $descEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $xoopsModuleConfig['editorUser'], $options, $nohtml = false, $onfailure = 'textarea');
+                $descEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $helper->getConfig('editorUser'), $options, $nohtml = false, $onfailure = 'textarea');
             }
         } else {
             $descEditor = new \XoopsFormDhtmlTextArea(_MD_EXTCAL_DESCRIPTION, 'event_desc', $desc, '100%', '100%');
@@ -1204,9 +1205,9 @@ class EventHandler extends ExtcalPersistableObjectHandler
             $options['width']  = '100%';
             $options['height'] = '200px';
             if ($isAdmin) {
-                $addressEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $xoopsModuleConfig['editorAdmin'], $options, $nohtml = false, $onfailure = 'textarea');
+                $addressEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $helper->getConfig('editorAdmin'), $options, $nohtml = false, $onfailure = 'textarea');
             } else {
-                $addressEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $xoopsModuleConfig['editorUser'], $options, $nohtml = false, $onfailure = 'textarea');
+                $addressEditor = new \XoopsFormEditor(_MD_EXTCAL_DESCRIPTION, $helper->getConfig('editorUser'), $options, $nohtml = false, $onfailure = 'textarea');
             }
         } else {
             $addressEditor = new \XoopsFormDhtmlTextArea(_MD_EXTCAL_DESCRIPTION, 'event_address', $event_address, '100%', '100%');
@@ -1473,7 +1474,6 @@ class EventHandler extends ExtcalPersistableObjectHandler
      */
     public function getRecurEventToDisplay($event, $periodStart, $periodEnd)
     {
-
         $recuEvents   = [];
         $eventOptions = explode('|', $event['event_recur_rules']);
 
@@ -2267,7 +2267,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         }
 
         $ret = [];
-        while ($myrow = $xoopsDB->fetchArray($result)) {
+        while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
             $myrow['cat']['cat_name']        = $myrow['cat_name'];
             $myrow['cat']['cat_color']       = $myrow['cat_color'];
             $myrow['cat']['cat_light_color'] = Extcal\Utility::getLighterColor($myrow['cat']['cat_color'], _EXTCAL_INFOBULLE_RGB_MIN, _EXTCAL_INFOBULLE_RGB_MAX);
@@ -2308,8 +2308,8 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $limit = 0,
         $offset = 0,
         $userId = 0,
-        $user = '')
-    {
+        $user = ''
+    ) {
         global $xoopsDB;
 
         //echo "<hr>{$andor}-{$limit}-{$offset}-{$userId}-{$user}<br>{$criteresPlus}";
@@ -2419,7 +2419,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $result = $this->getSearchEvents(0, 0, 0, 0, $queryarray, $andor, ['event_id DESC']);
 
         $i = 0;
-        while ($myrow = $xoopsDB->fetchArray($result)) {
+        while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
             $ret[$i]['image'] = 'assets/images/icons/extcal.gif';
             $ret[$i]['link']  = 'event.php?event=' . $myrow['event_id'];
             $ret[$i]['title'] = $myrow['event_title'];
@@ -2451,8 +2451,8 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $userId,
         $user,
         $criteresPlus = '',
-        $xoopsSearch = true)
-    {
+        $xoopsSearch = true
+    ) {
         global $xoopsDB;
         //echo "<hr>{$andor}-{$limit}-{$offset}-{$userId}-{$user}<br>{$criteresPlus}";
 
@@ -2518,7 +2518,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $ret    = [];
         $i      = 0;
         if ($xoopsSearch) {
-            while ($myrow = $xoopsDB->fetchArray($result)) {
+            while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
                 $ret[$i]['image'] = 'assets/images/icons/extcal.gif';
                 $ret[$i]['link']  = 'event.php?event=' . $myrow['event_id'];
                 $ret[$i]['title'] = $myrow['event_title'];
@@ -2527,7 +2527,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
                 ++$i;
             }
         } else {
-            while ($myrow = $xoopsDB->fetchArray($result)) {
+            while (false !== ($myrow = $xoopsDB->fetchArray($result))) {
                 $myrow['cat']['cat_name']  = $myrow['cat_name'];
                 $myrow['cat']['cat_color'] = $myrow['cat_color'];
                 $ret[]                     = $myrow;

@@ -22,7 +22,7 @@ define('_EXTCAL_FORMAT_AGENDA_KEYD', 'Y-m-d');
 define('_EXTCAL_FORMAT_AGENDA_KEYT', 'H:i');
 
 require_once __DIR__ . '/constantes.php';
-//require_once __DIR__ . '/../class/Utility.php';
+// require_once __DIR__ . '/../class/Utility.php';
 
 $moduleDirName = basename(dirname(__DIR__));
 Extcal\Helper::getInstance()->loadLanguage('main');
@@ -43,12 +43,13 @@ Extcal\Helper::getInstance()->loadLanguage('main');
 
 function agenda_getCanevas($ts, $hStart, $hEnd, $mPlage = 15, $nbJours = 1, $formatDate, $formatJour = 'H:i')
 {
-    global $xoopsModuleConfig;
+    /** @var Extcal\Helper $helper */
+    $helper = Extcal\Helper::getInstance();
     $jour = date('d', $ts);
     $mois = date('m', $ts);
     $an   = date('Y', $ts);
     if (!isset($formatDate)) {
-        $formatDate = $xoopsModuleConfig['event_date_week'];
+        $formatDate = $helper->getConfig('event_date_week');
     }
 
     //echo "agenda_getCanevas : {$jour}-{$mois}-{$an}-{$ts}<br>";
@@ -140,8 +141,8 @@ function agenda_getEvents(
     $mPlage = 15,
     $nbJours = 1,
     $formatDate = 'd-m-Y',
-    $formatJour = 'H:i')
-{
+    $formatJour = 'H:i'
+) {
 
     //    $tAgenda = agenda_getCanevas($ts, 8, 20, $mPlage, $nbJours);
     $tAgenda = agenda_getCanevas($ts, $hStart, $hEnd - 1, $mPlage, $nbJours, $formatDate, $formatJour);
@@ -326,15 +327,16 @@ function ext_loadLanguage($name)
 
 function getNavBarTabs($currentTab = '')
 {
-    global $xoopsModuleConfig;
+    /** @var Extcal\Helper $helper */
+    $helper = Extcal\Helper::getInstance();
 
     ext_loadLanguage('_MD_');
 
-    $visibleTabs = $xoopsModuleConfig['visible_tabs'];
+    $visibleTabs = $helper->getConfig('visible_tabs');
     $tNavBar     = $ordre = [];
 
     $sep     = '=';
-    $tabs    = str_replace("\n", $sep, $xoopsModuleConfig['weight_tabs']);
+    $tabs    = str_replace("\n", $sep, $helper->getConfig('weight_tabs'));
     $tabs    = str_replace("\r", '', $tabs);
     $tabs    = str_replace(' ', '', $tabs);
     $t       = explode($sep, $tabs);

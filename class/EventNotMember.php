@@ -21,26 +21,19 @@
 // defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
-//require_once __DIR__ . '/perm.php';
-//require_once __DIR__ . '/time.php';
 
 /**
- * Class Category.
+ * Class EventNotMember.
  */
-class Category extends \XoopsObject
+class EventNotMember extends \XoopsObject
 {
-    public $externalKey = [];
-
     /**
-     * Category constructor.
+     * EventNotMember constructor.
      */
     public function __construct()
     {
-        $this->initVar('cat_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('cat_name', XOBJ_DTYPE_TXTBOX, null, true, 255);
-        $this->initVar('cat_desc', XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar('cat_color', XOBJ_DTYPE_TXTBOX, '000000', false, 255);
-        $this->initVar('cat_weight', XOBJ_DTYPE_INT, 0, false);
-        $this->initVar('cat_icone', XOBJ_DTYPE_TXTBOX, '', false, 50);
+        $this->initVar('eventnotmember_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('event_id', XOBJ_DTYPE_INT, null, true);
+        $this->initVar('uid', XOBJ_DTYPE_INT, null, true);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use XoopsModules\Extcal;
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 include __DIR__ . '/../../mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
@@ -19,15 +21,15 @@ $num_tries = isset($_POST['num_tries']) ? $_POST['num_tries'] + 1 : 0;
 /***************************************************************/
 /*  ajout des elements de recherche                            */
 /***************************************************************/
-$searchExp = isset($_POST['searchExp']) ? $_POST['searchExp'] : '';
-$andor     = isset($_POST['andor']) ? $_POST['andor'] : '';
-$year      = isset($_POST['year']) ? (int)$_POST['year'] : date('Y');
-$month     = isset($_POST['month']) ? (int)$_POST['month'] : date('n');
-$day       = isset($_POST['day']) ? (int)$_POST['day'] : 0;
-$cat       = isset($_POST['cat']) ? (int)$_POST['cat'] : 0;
+$searchExp = \Xmf\Request::getString('searchExp', '', 'POST');
+$andor     = \Xmf\Request::getString('andor', '', 'POST');
+$year      = \Xmf\Request::getInt('year', date('Y'), 'POST');
+$month     = \Xmf\Request::getInt('month', date('n'), 'POST');
+$day       = \Xmf\Request::getInt('day', 0, 'POST');
+$cat       = \Xmf\Request::getInt('cat', 0, 'POST');
 $orderby1  = isset($_POST['orderby1']) ? $_POST['orderby1'] : 'cat_name ASC';
 $orderby2  = isset($_POST['orderby2']) ? $_POST['orderby2'] : 'event_title ASC';
-$orderby3  = isset($_POST['orderby3']) ? $_POST['orderby3'] : '';
+$orderby3  = \Xmf\Request::getString('orderby3', '', 'POST');
 /* ========================================================================== */
 
 //$orderby = isset($_GET['orderby']) ? (int)($_GET['orderby']) : 0;
@@ -37,7 +39,7 @@ $search              = [];
 $exp                 = new \XoopsFormText(_MD_EXTCAL_EXPRESSION, 'searchExp', 80, 80, $searchExp);
 $search['searchExp'] = $exp->render();
 $search['andor']     = Extcal\Utility::getListAndOr('andor', '', $andor)->render();
-//$search['year']  = getListYears($year,$xoopsModuleConfig['agenda_nb_years_before'],$xoopsModuleConfig['agenda_nb_years_after'], true)->render();
+//$search['year']  = getListYears($year,$helper->getConfig('agenda_nb_years_before'),$helper->getConfig('agenda_nb_years_after'), true)->render();
 $search['year']  = getListYears($year, 2, 5, true)->render();
 $search['month'] = getListMonths($month, true)->render();
 $search['day']   = getListDays($day, true)->render();
@@ -54,7 +56,7 @@ $xoopsTpl->assign('search', $search);
 /***************************************************************/
 
 // $form = new \XoopsSimpleForm('', 'navigSelectBox', $params['file'], 'get');
-// // $form->addElement(getListYears($year,$xoopsModuleConfig['agenda_nb_years_before'],$xoopsModuleConfig['agenda_nb_years_after'], true));
+// // $form->addElement(getListYears($year,$helper->getConfig('agenda_nb_years_before'),$helper->getConfig('agenda_nb_years_after'), true));
 // // $form->addElement(getListMonths($month, rtue));
 // $form->addElement(getListCategories($cat));
 // $form->addElement(Extcal\Utility::getListOrderBy($orderby));
@@ -81,7 +83,7 @@ $events = $eventHandler->getSearchEvent2($year, $month, $day, $cat, $searchExp, 
 $eventHandler->serverTimeToUserTimes($events);
 
 // Formating date
-$eventHandler->formatEventsDate($events, $xoopsModuleConfig['event_date_year']);
+$eventHandler->formatEventsDate($events, $helper->getConfig('event_date_year'));
 
 // Treatment for recurring event
 $startMonth     = mktime(0, 0, 0, $month, 1, $year);
@@ -97,13 +99,13 @@ $eventsArray = [];
 foreach ($events as $event) {
     if (!$event['event_isrecur']) {
         // Formating date
-        $eventHandler->formatEventDate($event, $xoopsModuleConfig['event_date_week']);
+        $eventHandler->formatEventDate($event, $helper->getConfig('event_date_week'));
         $eventsArray[] = $event;
     } else {
         $recurEvents = $eventHandler->getRecurEventToDisplay($event, $startMonth, $endMonth);
 
         // Formating date
-        $eventHandler->formatEventsDate($recurEvents, $xoopsModuleConfig['event_date_week']);
+        $eventHandler->formatEventsDate($recurEvents, $helper->getConfig('event_date_week'));
         //$eventsArray = array_merge($eventsArray, $recurEvents);
     }
 }
@@ -137,7 +139,7 @@ foreach ($recurrents as $h => $hValue) {
     //    $recurEvents['cat']['cat_light_color'] = Extcal\Utility::getLighterColor($categoryObject->vars['cat_color']['value'], _EXTCAL_INFOBULLE_RGB_MIN, _EXTCAL_INFOBULLE_RGB_MAX);
 
     // Formating date
-    $eventHandler->formatEventsDate($recurEvents, $xoopsModuleConfig['event_date_week']);
+    $eventHandler->formatEventsDate($recurEvents, $helper->getConfig('event_date_week'));
     foreach ($recurEvents as $val) {
         $val['cat']['cat_name']        = $categoryObject->vars['cat_name']['value'];
         $val['cat']['cat_color']       = $categoryObject->vars['cat_color']['value'];
@@ -146,7 +148,7 @@ foreach ($recurrents as $h => $hValue) {
     }
 }
 
-$eventsArray = array_merge((array)$eventsArray, (array)$recurEventsArray);
+$eventsArray = array_merge($eventsArray, $recurEventsArray);
 
 // Sort event array by event start
 //usort($eventsArray, "orderEvents");
@@ -166,13 +168,13 @@ $xoopsTpl->assign('cats', $cats);
 // $nMonthCalObj = $monthCalObj->nextMonth('object');
 // $navig = array('prev' => array('uri' => 'year=' . $pMonthCalObj->thisYear()
 //                                       . '&amp;month=' . $pMonthCalObj->thisMonth(),
-//                                'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_month'], $pMonthCalObj->getTimestamp())),
+//                                'name' => $timeHandler->getFormatedDate($helper->getConfig('nav_date_month'), $pMonthCalObj->getTimestamp())),
 //               'this' => array( 'uri'  => 'year=' . $monthCalObj->thisYear()
 //                                        . '&amp;month=' . $monthCalObj->thisMonth(),
-//                                'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_month'], $monthCalObj->getTimestamp())    ),
+//                                'name' => $timeHandler->getFormatedDate($helper->getConfig('nav_date_month'), $monthCalObj->getTimestamp())    ),
 //               'next'  => array('uri' => 'year=' . $nMonthCalObj->thisYear()
 //                                       . '&amp;month=' . $nMonthCalObj->thisMonth(),
-//                                'name' => $timeHandler->getFormatedDate($xoopsModuleConfig['nav_date_month'], $nMonthCalObj->getTimestamp())    )
+//                                'name' => $timeHandler->getFormatedDate($helper->getConfig('nav_date_month'), $nMonthCalObj->getTimestamp())    )
 //               );
 //
 // // Title of the page
@@ -184,8 +186,8 @@ $xoopsTpl->assign('cats', $cats);
 // $xoopsTpl->assign('navig', $navig);
 
 //Display tooltip
-$xoopsTpl->assign('showInfoBulle', $xoopsModuleConfig['showInfoBulle']);
-$xoopsTpl->assign('showId', $xoopsModuleConfig['showId']);
+$xoopsTpl->assign('showInfoBulle', $helper->getConfig('showInfoBulle'));
+$xoopsTpl->assign('showId', $helper->getConfig('showId'));
 
 // Assigning current form navig data to the template
 $xoopsTpl->assign('selectedCat', $cat);
@@ -198,13 +200,13 @@ $xoopsTpl->assign('num_tries', $num_tries);
 if ($xoopsUser) {
     $xoopsTpl->assign('isAdmin', $xoopsUser->isAdmin());
     $canEdit = false;
-    /* todo
-        $canEdit
-            =
-            $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
-                && $xoopsUser->getVar('uid') == $event['user']['uid'];
-        $xoopsTpl->assign('canEdit', $canEdit);
-    */
+/* todo
+    $canEdit
+        =
+        $permHandler->isAllowed($xoopsUser, 'extcal_cat_edit', $event['cat']['cat_id'])
+            && $xoopsUser->getVar('uid') == $event['user']['uid'];
+    $xoopsTpl->assign('canEdit', $canEdit);
+*/
 } else {
     $xoopsTpl->assign('isAdmin', false);
     $xoopsTpl->assign('canEdit', false);

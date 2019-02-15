@@ -19,7 +19,7 @@
  *
  * @version         FormSpin v 1.2
  */
-defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 xoops_load('XoopsFormElement');
 
@@ -150,8 +150,8 @@ class FormSpin extends \XoopsFormElement
         $imgFolder = 'default',
         $styleText = '',
         $styleBordure = '',
-        $minMaxVisible = true)
-    {
+        $minMaxVisible = true
+    ) {
         $this->setName($name);
         $this->setCaption($caption);
         $this->setValue($value);
@@ -482,7 +482,7 @@ class FormSpin extends \XoopsFormElement
      *************************************************************************/
     public function getFolder()
     {
-        $sSpinFolder = $GLOBALS['xoops']->url('modules/extcal/class/form/spin/');
+        $sSpinFolder = $GLOBALS['xoops']->url('modules/extcal/class/Form/Spin/');
 
         return $sSpinFolder;
     }

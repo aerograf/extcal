@@ -23,7 +23,7 @@ use XoopsModules\Extcal;
 require_once __DIR__ . '/../../../include/cp_header.php';
 include __DIR__ . '/../../../class/xoopsformloader.php';
 require_once __DIR__ . '/admin_header.php';
-//require_once __DIR__ . '/../class/Utility.php';
+// require_once __DIR__ . '/../class/Utility.php';
 require_once __DIR__ . '/../include/constantes.php';
 
 //$gepeto = array_merge($_GET, $_POST);
@@ -67,7 +67,7 @@ switch ($op) {
 
             $catHandler->modifyCat($cat_id, $varArr);
             redirect_header('cat.php', 3, _AM_EXTCAL_CAT_EDITED, false);
-            // Create new cat
+        // Create new cat
         } else {
             // $catHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
             //            $varArr = [

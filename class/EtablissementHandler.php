@@ -19,7 +19,7 @@
  */
 
 //Kraven 30
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access.');
+// defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
@@ -52,7 +52,7 @@ class EtablissementHandler extends ExtcalPersistableObjectHandler
         if (!$skipPerm) {
             $this->addCatPermCriteria($criteriaCompo, $user);
         }
-        $ret = $this->getObjects($criteriaCompo);
+        $ret =& $this->getObjects($criteriaCompo);
         if (isset($ret[0])) {
             return $ret[0];
         } else {
@@ -72,9 +72,10 @@ class EtablissementHandler extends ExtcalPersistableObjectHandler
         \CriteriaElement $criteria = null,
         $fields = null,
         $asObject = true,
-        $id_as_key = true) //getAll($criteria = null, $asObject = false)
+        $id_as_key = true
+    ) //getAll($criteria = null, $asObject = false)
     {
-        $rst = $this->getObjects($criteria, $asObject);
+        $rst =& $this->getObjects($criteria, $asObject);
         if ($asObject) {
             return $rst;
         } else {

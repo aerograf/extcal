@@ -18,13 +18,15 @@
  */
 
 use XoopsModules\Extcal;
+/** @var Extcal\Helper $helper */
+$helper = Extcal\Helper::getInstance();
 
 require_once __DIR__ . '/../../../include/cp_header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 require_once XOOPS_ROOT_PATH . '/class/pagenav.php';
-//require_once __DIR__ . '/../class/form/extcalform.php';
+// require_once __DIR__ . '/../class/form/extcalform.php';
 require_once __DIR__ . '/admin_header.php';
-//require_once __DIR__ . '/../class/Utility.php';
+// require_once __DIR__ . '/../class/Utility.php';
 
 $gepeto = array_merge($_GET, $_POST);
 //while (list($k, $v) = each($gepeto)) {
@@ -316,10 +318,9 @@ switch ($op) {
 
         //global $extcalConfig;
         $extcalConfig      = Extcal\Config::getHandler();
-        $xoopsModuleConfig = $extcalConfig->getModuleConfig();
 
-        $start          = isset($_GET['start']) ? $_GET['start'] : 0;
-        $nbEventsByPage = $xoopsModuleConfig['nbEventsByPage'];
+        $start          = \Xmf\Request::getInt('start', 0, 'GET');
+        $nbEventsByPage = $helper->getConfig('nbEventsByPage');
 
         xoops_cp_header();
         // @author      Gregory Mage (Aka Mage)

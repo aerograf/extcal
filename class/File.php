@@ -21,26 +21,27 @@
 // defined('XOOPS_ROOT_PATH') || die('Restricted access');
 
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
-//require_once __DIR__ . '/perm.php';
-//require_once __DIR__ . '/time.php';
+require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 
 /**
- * Class Category.
+ * Class File.
  */
-class Category extends \XoopsObject
+class File extends \XoopsObject
 {
-    public $externalKey = [];
-
     /**
-     * Category constructor.
+     * File constructor.
      */
     public function __construct()
     {
-        $this->initVar('cat_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('cat_name', XOBJ_DTYPE_TXTBOX, null, true, 255);
-        $this->initVar('cat_desc', XOBJ_DTYPE_TXTAREA, null, false);
-        $this->initVar('cat_color', XOBJ_DTYPE_TXTBOX, '000000', false, 255);
-        $this->initVar('cat_weight', XOBJ_DTYPE_INT, 0, false);
-        $this->initVar('cat_icone', XOBJ_DTYPE_TXTBOX, '', false, 50);
+        $this->initVar('file_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_name', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_nicename', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_mimetype', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_size', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_download', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_date', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_approved', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('event_id', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('uid', XOBJ_DTYPE_INT, null, false);
     }
 }
