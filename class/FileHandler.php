@@ -14,13 +14,13 @@ namespace XoopsModules\Extcal;
 
 /**
  * @copyright    {@link https://xoops.org/ XOOPS Project}
- * @license      {@link http://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
+ * @license      {@link https://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
  * @package      extcal
  * @since
  * @author       XOOPS Development Team,
  */
 
-// defined('XOOPS_ROOT_PATH') || die('Restricted access');
+// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 // // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
@@ -83,7 +83,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
     /**
      * @param $file
      */
-    public function deleteFile(&$file)
+    public function deleteFile($file)
     {
         $this->_deleteFile($file);
         $this->deleteById($file->getVar('file_id'));
@@ -168,7 +168,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
     /**
      * @param $file
      */
-    public function _deleteFile(&$file)
+    public function _deleteFile($file)
     {
         if (file_exists(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'))) {
             unlink(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'));

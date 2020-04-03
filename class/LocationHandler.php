@@ -14,14 +14,14 @@ namespace XoopsModules\Extcal;
 
 /**
  * @copyright    {@link https://xoops.org/ XOOPS Project}
- * @license      {@link http://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
+ * @license      {@link https://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
  * @package      extcal
  * @since
  * @author       XOOPS Development Team,
  */
 
 //Kraven 30
-// defined('XOOPS_ROOT_PATH') || die('Restricted access');
+// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
@@ -70,7 +70,7 @@ class LocationHandler extends ExtcalPersistableObjectHandler
      *
      * @return array
      */
-    public function &getAll(
+    public function getAll(
         \CriteriaElement $criteria = null,
         $fields = null,
         $asObject = true,
