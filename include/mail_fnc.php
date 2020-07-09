@@ -250,12 +250,12 @@ function extcal_SendMail(
     }
 
     $xoopsMailer->multimailer->isHTML(true);
-    $xoopsMailer->setFromName($myts->oopsStripSlashesGPC($mail_fromname));
+    $xoopsMailer->setFromName($myts->stripSlashesGPC($mail_fromname));
 
-    $xoopsMailer->setFromEmail($myts->oopsStripSlashesGPC($mail_fromemail));
+    $xoopsMailer->setFromEmail($myts->stripSlashesGPC($mail_fromemail));
 
-    $xoopsMailer->setSubject($myts->oopsStripSlashesGPC($mail_subject));
-    $xoopsMailer->setBody($myts->oopsStripSlashesGPC($mail_body));
+    $xoopsMailer->setSubject($myts->stripSlashesGPC($mail_subject));
+    $xoopsMailer->setBody($myts->stripSlashesGPC($mail_body));
     //$xoopsMailer->encodeBody($mail_body);
 
     $xoopsMailer->useMail();

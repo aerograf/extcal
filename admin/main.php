@@ -58,10 +58,10 @@ switch ($op) {
                 $cat   = $categoryHandler->getCat($event->getVar('cat_id'), $xoopsUser, 'all');
 
                 $xoopsMailer->setToUsers($eventmemberHandler->getMembers(Request::getInt('event_id', 0, 'POST')));
-                $xoopsMailer->setFromName($myts->oopsStripSlashesGPC(Request::getString('mail_fromname', '', 'POST')));
-                $xoopsMailer->setFromEmail($myts->oopsStripSlashesGPC(Request::getString('mail_fromemail', '', 'POST')));
-                $xoopsMailer->setSubject($myts->oopsStripSlashesGPC(Request::getString('mail_subject', '', 'POST')));
-                $xoopsMailer->setBody($myts->oopsStripSlashesGPC(Request::getString('mail_body', '', 'POST')));
+                $xoopsMailer->setFromName($myts->stripSlashesGPC(Request::getString('mail_fromname', '', 'POST')));
+                $xoopsMailer->setFromEmail($myts->stripSlashesGPC(Request::getString('mail_fromemail', '', 'POST')));
+                $xoopsMailer->setSubject($myts->stripSlashesGPC(Request::getString('mail_subject', '', 'POST')));
+                $xoopsMailer->setBody($myts->stripSlashesGPC(Request::getString('mail_body', '', 'POST')));
                 if (in_array('mail', Request::getString('mail_send_to', '', 'POST'))) {
                     $xoopsMailer->useMail();
                 }
