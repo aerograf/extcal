@@ -126,9 +126,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * retrieve objects from the database.
      *
-     * @param \CriteriaElement $criteria {@link CriteriaElement} conditions to be met
-     * @param bool             $idAsKey  use the ID as key for the array?
-     * @param bool             $asObject return an array of objects?
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement} conditions to be met
+     * @param bool                  $idAsKey  use the ID as key for the array?
+     * @param bool                  $asObject return an array of objects?
      *
      * @return array
      */
@@ -249,7 +249,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * count objects matching a condition.
      *
-     * @param \CriteriaCompo|\CriteriaElement $criteria {@link \CriteriaCompo|\CriteriaElement} to match
+     * @param \CriteriaElement|null $criteria {@link \CriteriaCompo|\CriteriaElement} to match
      *
      * @return int|array count of objects
      */
@@ -407,10 +407,10 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * Change a value for objects with a certain criteria.
      *
-     * @param string           $fieldname  Name of the field
-     * @param string|array     $fieldvalue Value to write
-     * @param \CriteriaElement $criteria   {@link CriteriaElement}
-     * @param bool             $force
+     * @param string                $fieldname  Name of the field
+     * @param string|array          $fieldvalue Value to write
+     * @param \CriteriaElement|null $criteria   {@link CriteriaElement}
+     * @param bool                  $force
      *
      * @return bool
      */
@@ -469,10 +469,10 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * delete all objects meeting the conditions.
      *
-     * @param \CriteriaCompo|\CriteriaElement $criteria       {@link \CriteriaCompo|\CriteriaElement}
+     * @param \CriteriaElement|null $criteria  {@link \CriteriaCompo|\CriteriaElement}
      *                                         with conditions to meet
-     * @param bool             $force
-     * @param bool             $asObject
+     * @param bool                  $force
+     * @param bool                  $asObject
      * @return bool
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
@@ -623,8 +623,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param \CriteriaCompo $criteria
-     * @param string           $sum
+* @param \CriteriaCompo|null $criteria
+     * @param string         $sum
      *
      * @return array|string
      */
@@ -663,8 +663,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param \CriteriaCompo $criteria
-     * @param string           $max
+* @param \CriteriaCompo|null $criteria
+     * @param string         $max
      *
      * @return array|string
      */

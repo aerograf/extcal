@@ -62,10 +62,10 @@ class LocationHandler extends ExtcalPersistableObjectHandler
     }
 
     /**
-     * @param \CriteriaElement $criteria
-     * @param null             $fields
-     * @param bool             $asObject
-     * @param bool             $id_as_key
+     * @param \CriteriaElement|null $criteria
+     * @param null                  $fields
+     * @param bool                  $asObject
+     * @param bool                  $id_as_key
      *
      * @return array
      */
