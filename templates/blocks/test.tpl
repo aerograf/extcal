@@ -208,7 +208,7 @@
             <!-- End center top blocks loop -->
 
             <!-- Start content module page -->
-            <div id="content">﻿﻿</div>
+            <div id="content"></div>
             <!-- End content module -->
 
             <!-- Start center bottom blocks loop -->
