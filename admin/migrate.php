@@ -56,10 +56,8 @@ EOF;
 
 //XoopsLoad::load('migrate', 'tdmmoney');
 
-/** @var Common\Configurator $configurator */
 $configurator = new Common\Configurator();
 
-/** @var Common\Migrate $migrator */
 $migrator = new Common\Migrate($configurator);
 
 $op        = Request::getCmd('op', 'show');

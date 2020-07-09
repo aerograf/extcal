@@ -48,7 +48,6 @@ function tableExists($tablename)
  */
 function xoops_module_pre_update_extcal(\XoopsModule $module)
 {
-    /** @var Utility $utility */
     $utility = new Utility();
 
     $xoopsSuccess = $utility::checkVerXoops($module);
@@ -57,7 +56,6 @@ function xoops_module_pre_update_extcal(\XoopsModule $module)
     //mb    return $xoopsSuccess && $phpSuccess;
 
     //    XoopsLoad::load('migrate', 'extcal');
-    /** @var Common\Configurator $configurator */
     $configurator = new Common\Configurator();
 
     //create upload folders

@@ -118,8 +118,7 @@ switch ($op) {
                 echo '<fieldset><legend style="font-weight:bold; color:#0A3760;">' . _AM_EXTCAL_INFORMATION . '</legend>';
                 echo _AM_EXTCAL_INFO_SEND_NOTIF;
                 echo '</fieldset><br>';
-                /** @var \XoopsThemeForm $form */
-                $form = new \XoopsThemeForm(_AM_EXTCAL_SEND_NOTIFICATION, 'mailusers', 'index.php?op=notification&amp;fct=send', 'post', true);
+            $form = new \XoopsThemeForm(_AM_EXTCAL_SEND_NOTIFICATION, 'mailusers', 'index.php?op=notification&amp;fct=send', 'post', true);
                 $form->addElement(new \XoopsFormText(_AM_EXTCAL_FROM_NAME, 'mail_fromname', 30, 255, $xoopsConfig['sitename']), true);
                 $form->addElement(new \XoopsFormText(_AM_EXTCAL_FROM_EMAIL, 'mail_fromemail', 30, 255, $fromemail), true);
                 $form->addElement(new \XoopsFormText($subjectCaption, 'mail_subject', 50, 255, _AM_EXTCAL_SEND_NOTIFICATION_SUBJECT), true);
