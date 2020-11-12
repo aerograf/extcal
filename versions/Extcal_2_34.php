@@ -21,7 +21,6 @@
 class Extcal_2_34
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
      * @param              $options

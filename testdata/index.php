@@ -10,12 +10,11 @@
  * @copyright       XOOPS Project (https://xoops.org)
  * @license         GNU GPL 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @since           2.5.9
- * @author          Michael Beck (aka Mamba)
+ * @author          Michael Beck (aka Mamba): https://github.com/mambax7
  */
 
 use \Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Common,
     Utility
 };
@@ -57,7 +56,7 @@ function loadSampleData()
     global $xoopsConfig;
     $moduleDirName      = basename(dirname(__DIR__));
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
-    $helper = Helper::getInstance();
+    $helper             = Helper::getInstance();
 
     $utility      = new Utility();
     $configurator = new Common\Configurator();
@@ -99,8 +98,8 @@ function saveSampleData()
     global $xoopsConfig;
     $moduleDirName      = basename(dirname(__DIR__));
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
-    $helper = Helper::getInstance();
-    $skipColumns = [];
+    $helper             = Helper::getInstance();
+    $skipColumns        = [];
 
     $tables = $helper->getModule()->getInfo('tables');
 
@@ -130,7 +129,7 @@ function exportSchema()
 {
     $moduleDirName      = basename(dirname(__DIR__));
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
-    $helper = Helper::getInstance();
+    $helper             = Helper::getInstance();
 
     try {
         // TODO set exportSchema

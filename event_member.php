@@ -1,7 +1,6 @@
 <?php
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Utility
 };
 use Xmf\Request;

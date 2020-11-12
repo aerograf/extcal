@@ -2,7 +2,7 @@
 
 namespace XoopsModules\Extcal;
 
- /**
+/**
  * Class Perm.
  */
 class Perm

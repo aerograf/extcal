@@ -21,13 +21,13 @@ use XoopsModules\Extcal\Helper;
 
 /**
  * @param \XoopsModule $xoopsModule
- * @param null        $previousVersion
+ * @param null         $previousVersion
  *
  * @return bool
  */
 function xoops_module_update_extcal(\XoopsModule $xoopsModule, $previousVersion = null)
 {
-    $helper = Helper::getInstance();
+    $helper     = Helper::getInstance();
     $newVersion = $helper->getModule()->getVar('version') * 100;
     if ($newVersion == $previousVersion) {
         return true;

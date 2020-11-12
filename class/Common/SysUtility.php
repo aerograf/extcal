@@ -27,8 +27,7 @@ use Xmf\Request;
 use MyTextSanitizer;
 use XoopsFormDhtmlTextArea;
 use XoopsFormTextArea;
-use XoopsModules\Extcal\{
-    Helper
+use XoopsModules\Extcal\{Helper
 };
 
 /**
@@ -36,11 +35,17 @@ use XoopsModules\Extcal\{
  */
 class SysUtility
 {
-    use VersionChecks; //checkVerXoops, checkVerPhp Traits
+    use VersionChecks;
 
-    use ServerStats; // getServerStats Trait
+    //checkVerXoops, checkVerPhp Traits
 
-    use FilesManagement; // Files Management Trait
+    use ServerStats;
+
+    // getServerStats Trait
+
+    use FilesManagement;
+
+    // Files Management Trait
 
     /**
      * truncateHtml can truncate a string up to a number of characters while preserving whole words and HTML tags

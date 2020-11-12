@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     EventmemberHandler,
     EventNotMemberHandler,
@@ -30,7 +29,7 @@ use XoopsModules\Extcal\{
 use Xmf\Request;
 
 require_once __DIR__ . '/include/constantes.php';
-$params = ['view' => _EXTCAL_NAV_NEW_EVENT, 'file' => _EXTCAL_FILE_NEW_EVENT];
+$params                                  = ['view' => _EXTCAL_NAV_NEW_EVENT, 'file' => _EXTCAL_FILE_NEW_EVENT];
 $GLOBALS['xoopsOption']['template_main'] = 'extcal_event.tpl';
 require_once __DIR__ . '/header.php';
 
@@ -53,7 +52,7 @@ if (!isset($_GET['event'])) {
     $eventId = Request::getInt('event', 0, 'GET');
 }
 
-$myts                  = \MyTextSanitizer::getInstance(); // MyTextSanitizer object
+$myts = \MyTextSanitizer::getInstance(); // MyTextSanitizer object
 
 if (!function_exists('clear_unicodeslashes')) {
     /**
@@ -119,7 +118,7 @@ $xoopsTpl->assign('event_attachement', $eventFiles);
 $xoopsTpl->assign('token', $GLOBALS['xoopsSecurity']->getTokenHTML());
 
 // Location
-$locationObj     = $locationHandler->get($event['event_location']);
+$locationObj = $locationHandler->get($event['event_location']);
 //$location = $locationHandler->objectToArray($locationObj);
 $location = $locationObj->vars;
 $xoopsTpl->assign('location', $location);
@@ -228,28 +227,26 @@ $tNavBar = getNavBarTabs($params['view']);
 $xoopsTpl->assign('tNavBar', $tNavBar);
 //---------------------
 
-
 // TZV //
 // mb missing for xBootstrap templates by Tzvook
-$lang = ['start'      => _MD_EXTCAL_START,
-         'end'        => _MD_EXTCAL_END,
-         'calmonth'   => _MD_EXTCAL_NAV_CALMONTH,
-         'calweek'    => _MD_EXTCAL_NAV_CALWEEK,
-         'year'       => _MD_EXTCAL_NAV_YEAR,
-         'month'      => _MD_EXTCAL_NAV_MONTH,
-         'week'       => _MD_EXTCAL_NAV_WEEK,
-         'day'        => _MD_EXTCAL_NAV_DAY,
-         'agendaweek' => _MD_EXTCAL_NAV_AGENDA_WEEK,
-         'agendaday'  => _MD_EXTCAL_NAV_AGENDA_DAY,
-         'search'     => _MD_EXTCAL_NAV_SEARCH,
-         'newevent'   => _MD_EXTCAL_NAV_NEW_EVENT,
+$lang = [
+    'start'      => _MD_EXTCAL_START,
+    'end'        => _MD_EXTCAL_END,
+    'calmonth'   => _MD_EXTCAL_NAV_CALMONTH,
+    'calweek'    => _MD_EXTCAL_NAV_CALWEEK,
+    'year'       => _MD_EXTCAL_NAV_YEAR,
+    'month'      => _MD_EXTCAL_NAV_MONTH,
+    'week'       => _MD_EXTCAL_NAV_WEEK,
+    'day'        => _MD_EXTCAL_NAV_DAY,
+    'agendaweek' => _MD_EXTCAL_NAV_AGENDA_WEEK,
+    'agendaday'  => _MD_EXTCAL_NAV_AGENDA_DAY,
+    'search'     => _MD_EXTCAL_NAV_SEARCH,
+    'newevent'   => _MD_EXTCAL_NAV_NEW_EVENT,
 ];
 
 // Assigning language data to the template
 $xoopsTpl->assign('lang', $lang);
 $xoopsTpl->assign('view', 'event');
-
-
 
 /*  test modofication status    JJD
   $k = 'status';

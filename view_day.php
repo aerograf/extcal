@@ -9,8 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Utility,
     CategoryHandler,
     EventHandler

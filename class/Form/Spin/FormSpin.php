@@ -22,7 +22,6 @@ namespace XoopsModules\Extcal\Form\Spin;
  * @version         FormSpin v 1.2
  */
 
-
 \xoops_load('XoopsFormElement');
 
 /**
@@ -43,84 +42,72 @@ class FormSpin extends \XoopsFormElement
      * @var int
      */
     protected $_value = 0;
-
     /**
      * Value minimum.
      *
      * @var int
      */
     protected $_min = 0;
-
     /**
      * Value maximum.
      *
      * @var int
      */
     protected $_max = 100;
-
     /**
      * Small increment.
      *
      * @var int
      */
     protected $_smallIncrement = 1;
-
     /**
      * Large increment.
      *
      * @var int
      */
     protected $_largeIncrement = 10;
-
     /**
      *  unite for information on value.
      *
      * @var string
      */
     protected $_unite = '';
-
     /**
      * Folder of arrow image.
      *
      * @var string
      */
     protected $_imgFolder = 'default';
-
     /**
      * size of input text in nb car.
      *
      * @var int
      */
     protected $_size = 2;
-
     /**
      *  minMaxVisible show buttons to go minimum and maximum.
      *
      * @var bool|int
      */
     protected $_minMaxVisible = true;
-
     /**
      *  tyleBordure ;  style CSS of frame control.
      *
      * @var string
      */
     protected $_styleBordure = 'color: #FFFFFF; background-color: #CCCCCC; line-height: 100%;border-width:1px; border-style: solid; border-color: #000000; margin-top: 0; margin-bottom: 0; padding: 0';
-
     /**
      *  tyleText : style CSS of input text.
      *
      * @var string
      */
     protected $_styleText = 'color: #000000; text-align: right; margin-left: 1; margin-right: 2; padding-right: 8';
-
     /**
      * Allow loading of javascript.
      *
      * @var bool
      */
     protected $_loadJS = true;
-
     /*---------------------------------------------------------------*/
 
     /**

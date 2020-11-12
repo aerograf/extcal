@@ -22,7 +22,6 @@ namespace XoopsModules\Extcal;
 
 //Kraven 30
 
-
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
 /**
@@ -73,7 +72,8 @@ class LocationHandler extends ExtcalPersistableObjectHandler
         \CriteriaElement $criteria = null,
         $fields = null,
         $asObject = true,
-        $id_as_key = true) //getAll($criteria = null, $asObject = false)
+        $id_as_key = true
+    ) //getAll($criteria = null, $asObject = false)
     {
         $rst = $this->getObjects($criteria, $asObject);
         if ($asObject) {

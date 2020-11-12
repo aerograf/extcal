@@ -29,15 +29,14 @@ trait FilesManagement
     public static function createFolder($folder)
     {
         try {
-            if (!\file_exists($folder)) {
+            if (!\is_dir($folder)) {
                 if (!\is_dir($folder) && !\mkdir($folder) && !\is_dir($folder)) {
                     throw new \RuntimeException(\sprintf('Unable to create the %s directory', $folder));
                 }
 
                 file_put_contents($folder . '/index.html', '<script>history.go(-1);</script>');
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n", '<br>';
         }
     }
@@ -80,10 +79,10 @@ trait FilesManagement
      *
      * @param string $src source directory to delete
      *
-     * @uses \Xmf\Module\Helper::getHelper()
+     * @return bool true on success
      * @uses \Xmf\Module\Helper::isUserAdmin()
      *
-     * @return bool true on success
+     * @uses \Xmf\Module\Helper::getHelper()
      */
     public static function deleteDirectory($src)
     {
@@ -106,8 +105,8 @@ trait FilesManagement
                         break;
                     }
                 } elseif (!($success = \unlink($fileInfo->getRealPath()))) {
-                        break;
-                    }
+                    break;
+                }
             }
             // now delete this (sub)directory if all the files are gone
             if ($success) {
@@ -208,10 +207,10 @@ trait FilesManagement
      * @param string $src  - Source of files being moved
      * @param string $dest - Destination of files being moved
      *
-     * @uses \Xmf\Module\Helper::getHelper()
+     * @return bool true on success
      * @uses \Xmf\Module\Helper::isUserAdmin()
      *
-     * @return bool true on success
+     * @uses \Xmf\Module\Helper::getHelper()
      */
     public static function rcopy($src, $dest)
     {

@@ -18,8 +18,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     LocationHandler
 };
 
@@ -29,7 +28,7 @@ require_once __DIR__ . '/header.php';
 
 global $xoopsTpl;
 
-$helper = Helper::getInstance();
+$helper          = Helper::getInstance();
 $locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);
 //require_once XOOPS_ROOT_PATH.'/header.php';
 

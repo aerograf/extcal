@@ -16,8 +16,8 @@
  * @since
  * @author       XOOPS Development Team,
  */
-use XoopsModules\Extcal\{
-    Helper,
+
+use XoopsModules\Extcal\{Helper,
     Utility,
     CategoryHandler,
     EventHandler,
@@ -30,7 +30,7 @@ use XoopsModules\Extcal\{
 };
 
 include __DIR__ . '/preloads/autoloader.php';
-require  dirname(dirname(__DIR__)) . '/mainfile.php';
+require dirname(dirname(__DIR__)) . '/mainfile.php';
 
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
@@ -59,13 +59,13 @@ $eventmemberHandler = $helper->getHandler(_EXTCAL_CLN_MEMBER);
 /** @var EventNotMemberHandler $eventNotMemberHandler */
 $eventNotMemberHandler = $helper->getHandler(_EXTCAL_CLN_NOT_MEMBER);
 /** @var FileHandler $fileHandler */
-$fileHandler     = $helper->getHandler(_EXTCAL_CLN_FILE);
+$fileHandler = $helper->getHandler(_EXTCAL_CLN_FILE);
 /** @var LocationHandler $locationHandler */
 $locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);
 
-$timeHandler  = Time::getHandler();
-$permHandler  = Perm::getHandler();
-$xoopsUser    = $xoopsUser ?: null;
+$timeHandler = Time::getHandler();
+$permHandler = Perm::getHandler();
+$xoopsUser   = $xoopsUser ?: null;
 //------------------------------------------------------
 // Tooltips include
 /** @var xos_opal_Theme $xoTheme */

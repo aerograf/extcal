@@ -28,10 +28,11 @@ function xoops_module_install_extcal(\XoopsModule $xoopsModule)
 
     $helper = Helper::getInstance();
 
-    $moduleId               = $xoopsModule->getVar('mid');
+    $moduleId = $xoopsModule->getVar('mid');
     /** @var \XoopsGroupPermHandler $grouppermHandler */
     $grouppermHandler = xoops_getHandler('groupperm');
-    $configHandler          = xoops_getHandler('config');
+    /** @var \XoopsConfigHandler $configHandler */
+    $configHandler = xoops_getHandler('config');
 
     /*
      * Default public category permission mask

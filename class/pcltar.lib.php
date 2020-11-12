@@ -1415,7 +1415,7 @@ if (!defined('PCL_TAR')) {
             }
 
             // ----- Check the filename
-            if (!file_exists($p_filename)) {
+            if (!is_dir($p_filename)) {
                 // ----- Error log
                 TrFctMessage(__FILE__, __LINE__, 2, "File '$p_filename' does not exists");
                 PclErrorLog(-4, "File '$p_filename' does not exists");

@@ -1,4 +1,4 @@
-<table class="width90 outer floatcenter0" summary="<{$smarty.const._MI_EXTCAL_MANAGER_CATS}>">
+<table class="width90 outer floatcenter0" summary="<{$smarty.const._AM_EXTCAL_MANAGER_CATS}>">
     <thead>
 
     <tr>

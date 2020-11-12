@@ -20,14 +20,14 @@ namespace XoopsModules\Extcal;
  **/
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     CategoryHandler,
     Common,
     Constants
 };
 
+/** @var CategoryHandler $categoryHandler */
 
 /**
  * Class Utility
@@ -35,7 +35,6 @@ use XoopsModules\Extcal\{
 class Utility extends Common\SysUtility
 {
     //--------------- Custom module methods -----------------------------
-
     /**
      * @param $eventId
      *
@@ -148,17 +147,17 @@ class Utility extends Common\SysUtility
      *
      ******************************************************************
      * @param string $name
-     * @param        $cat
+     * @param array|int|null $cat
      * @return array
      */
-    public static function getCheckeCategories($name = 'cat', $cat)
+    public static function getCheckeCategories($name = 'cat', $cat = null)
     {
         global $xoopsUser;
         // Category selectbox
         //<option style="background-color:#00FFFF;">VARCHAR</option>
 
         $categoryHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_CAT);
-        $catsList   = $categoryHandler->getAllCat($xoopsUser);
+        $catsList        = $categoryHandler->getAllCat($xoopsUser);
 
         $t = [];
         foreach ($catsList as $catList) {
@@ -184,15 +183,15 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param string $name
      * @param string $caption
-     * @param        $defaut
+     * @param mixed  $default
      * @param bool   $addNone
      * @return \XoopsFormSelect
      */
-    public static function getListOrderBy($name = 'orderby', $caption = '', $defaut, $addNone = false)
+    public static function getListOrderBy($name = 'orderby', $caption = '', $default = null, $addNone = false)
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
+        $select = new \XoopsFormSelect($caption, $name, $default);
         if ($addNone) {
             $select->addOption('', '');
         }
@@ -217,14 +216,14 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param string $name
      * @param string $caption
-     * @param        $defaut
+     * @param mixed  $default
      * @return \XoopsFormSelect
      */
-    public static function getListAndOr($name = 'andor', $caption = '', $defaut)
+    public static function getListAndOr($name = 'andor', $caption = '', $default = null)
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
+        $select = new \XoopsFormSelect($caption, $name, $default);
 
         $select->addOption('AND', \_MD_EXTCAL_AND);
         $select->addOption('OR', \_MD_EXTCAL_OR);
@@ -237,16 +236,16 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param        $name
      * @param        $caption
-     * @param        $defaut
+     * @param        $default
      * @param        $options
      * @param string $sep
      * @return \XoopsFormSelect
      */
-    public static function getList($name, $caption, $defaut, $options, $sep = ';')
+    public static function getList($name, $caption, $default, $options, $sep = ';')
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
+        $select = new \XoopsFormSelect($caption, $name, $default);
         if (!\is_array($options)) {
             $options = \explode($sep, $options);
         }
@@ -504,6 +503,5 @@ class Utility extends Common\SysUtility
         //return $ct->eclaircir($color,$plancher,$plafond);
         return ColorTools::eclaircir($color, $plancher, $plafond);
     }
-
     /**************************************************************************/
 }

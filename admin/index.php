@@ -17,12 +17,10 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Common,
     Utility
 };
-
 
 require_once __DIR__ . '/admin_header.php';
 // Display Admin header
@@ -32,10 +30,8 @@ xoops_cp_header();
 /** @var Utility $utility */
 /** @var Helper $helper */
 
-$helper = Helper::getInstance();
+$helper       = Helper::getInstance();
 $configurator = new Common\Configurator();
-
-
 
 //foreach (array_keys($configurator['uploadFolders']) as $i) {
 //    $utility::createFolder($configurator['uploadFolders'][$i]);
@@ -98,8 +94,8 @@ if ($helper->getConfig('displaySampleButton')) {
     $displaySampleButton = $config['displaySampleButton'];
 
     if (1 == $displaySampleButton) {
-    xoops_loadLanguage('admin/modulesadmin', 'system');
-    require_once dirname(__DIR__) . '/testdata/index.php';
+        xoops_loadLanguage('admin/modulesadmin', 'system');
+        require_once dirname(__DIR__) . '/testdata/index.php';
 
         $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'ADD_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=load', 'add');
         $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'SAVE_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=save', 'add');
@@ -116,15 +112,13 @@ if ($helper->getConfig('displaySampleButton')) {
 
 $adminObject->displayIndex();
 
-
-
 //***************************************************************************************
 $pendingEvent = $eventHandler->objectToArray($eventHandler->getPendingEvent(), ['cat_id']);
 $eventHandler->formatEventsDate($pendingEvent, _SHORTDATESTRING);
 
 echo '<fieldset><legend style="font-weight:bold; color:#990000;">' . _AM_EXTCAL_PENDING_EVENT . '</legend>';
 echo '<fieldset><legend style="font-weight:bold; color:#0A3760;">' . _AM_EXTCAL_INFORMATION . '</legend>';
-echo '<img src=' . $pathIcon16 . '/on.png>&nbsp;&nbsp;'._AM_EXTCAL_INFO_APPROVE_PENDING_EVENT.'<br>';
+echo '<img src=' . $pathIcon16 . '/on.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_APPROVE_PENDING_EVENT . '<br>';
 echo '<img src=' . $pathIcon16 . '/edit.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_EDIT_PENDING_EVENT . '<br>';
 echo '<img src=' . $pathIcon16 . '/delete.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_DELETE_PENDING_EVENT . '<br>';
 echo '</fieldset><br>';
@@ -157,9 +151,6 @@ if (count($pendingEvent) > 0) {
 }
 
 echo '</table></fieldset><br>';
-
-
-
 
 /**
  * @param $yamlFile

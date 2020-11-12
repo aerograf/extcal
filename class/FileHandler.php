@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-
-
 // // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 
@@ -173,7 +171,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
      */
     public function _deleteFile($file)
     {
-        if (\file_exists(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'))) {
+        if (\is_file(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'))) {
             \unlink(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'));
         }
     }

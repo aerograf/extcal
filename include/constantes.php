@@ -52,7 +52,8 @@ $pear_path = _EXTCAL_PEAR_ROOT_DEFAULT;
 //}
 //
 ///** @var \XoopsModuleHandler $moduleHandler */
-//$moduleHandler = xoops_getHandler('module');
+///** @var \XoopsModuleHandler $moduleHandler */
+$moduleHandler = xoops_getHandler('module');
 //$module        = $moduleHandler->getByDirname('extcal');
 
 ///** @var \XoopsModules\Extcal\Config $extcalConfig */
@@ -61,7 +62,8 @@ $pear_path = _EXTCAL_PEAR_ROOT_DEFAULT;
 //        $extcalConfig = $xoopsModuleConfig;
 //    } else {
 //        /** @var \XoopsConfigHandler $configHandler */
-//        $configHandler = xoops_getHandler('config');
+//        /** @var \XoopsConfigHandler $configHandler */
+$configHandler = xoops_getHandler('config');
 //        $extcalConfig  = $configHandler->getConfigList($module->getVar('mid'));
 //    }
 //}

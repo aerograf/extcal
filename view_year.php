@@ -18,8 +18,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     CategoryHandler,
     EventHandler,
     Utility
@@ -40,8 +39,8 @@ $year = \Xmf\Request::getInt('year', date('Y'), 'GET');
 $cat  = \Xmf\Request::getInt('cat', 0, 'GET');
 
 // Getting eXtCal object's handler
-$categoryHandler   = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-$eventHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+$categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+$eventHandler    = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
 // Tooltips include
 /** @var xos_opal_Theme $xoTheme */

@@ -14,8 +14,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Form
+use XoopsModules\Extcal\{Form
 };
 
 require __DIR__ . '/admin_header.php';
@@ -81,6 +80,7 @@ if ($GLOBALS['xoopsUser']->isAdmin($xoopsModule->mid())) {
         ksort($module_list);
         echo "
         <h4 style='text-align:left;'>" . constant('CO_' . $moduleDirNameUpper . '_' . 'BADMIN') . '</h4>';
+        /** @var \XoopsModuleHandler $moduleHandler */
         $moduleHandler = xoops_getHandler('module');
         echo "<form action='" . $_SERVER['SCRIPT_NAME'] . "' name='blockadmin' method='post'>";
         echo $GLOBALS['xoopsSecurity']->getTokenHTML();

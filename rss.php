@@ -1,7 +1,6 @@
 <?php
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler
 };
 
@@ -48,8 +47,8 @@ if (!$tpl->is_cached('db:extcal_rss.tpl', $cat)) {
         $tpl->assign('image_height', 52);
         foreach ($events as $event) {
             $tempTitle = htmlspecialchars($event->getVar('event_title'), ENT_QUOTES);
-            $tempDesc = htmlspecialchars($event->getVar('event_desc'), ENT_QUOTES);
-                $tpl->append(
+            $tempDesc  = htmlspecialchars($event->getVar('event_desc'), ENT_QUOTES);
+            $tpl->append(
                 'items',
                 [
                     'title'       => xoops_utf8_encode($tempTitle),

@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper
+use XoopsModules\Extcal\{Helper
 };
 
 // require_once  dirname(__DIR__) . '/class/Helper.php';
@@ -57,13 +56,13 @@ $adminmenu[] = [
 ];
 
 if ($helper->getConfig('formShowLocation', 1) == 1) {
-	if (isset($pathModIcon32)) {
-	$adminmenu[] = [
-		'title' => _MI_EXTCAL_LOCATIONS,
-		'link'  => 'admin/location.php',
-		'icon'  => $pathModIcon32 . '/location.png',
-	];
-	}
+    if (isset($pathModIcon32)) {
+        $adminmenu[] = [
+            'title' => _MI_EXTCAL_LOCATIONS,
+            'link'  => 'admin/location.php',
+            'icon'  => $pathModIcon32 . '/location.png',
+        ];
+    }
 }
 
 $adminmenu[] = [

@@ -81,7 +81,7 @@ return (object)[
     ],
 
     'renameTables' => [
-        'extcal_etablissement'     => 'extcal_location',
+        'extcal_etablissement' => 'extcal_location',
     ],
     'moduleStats'  => [
         //            'totalcategories' => $helper->getHandler('Category')->getCategoriesCount(-1),

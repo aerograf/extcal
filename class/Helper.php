@@ -19,6 +19,7 @@ namespace XoopsModules\Extcal;
  * @since
  * @author       XOOPS Development Team
  */
+
 /**
  * Class Helper
  */

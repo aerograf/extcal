@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     CategoryHandler
 };
 use Xmf\Request;
@@ -66,7 +65,9 @@ switch ($step) {
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
-        $memberHandler          = xoops_getHandler('member');
+        /** @var \XoopsMemberHandler $memberHandler */
+        $memberHandler = xoops_getHandler('member');
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
         $grouppermHandler = xoops_getHandler('groupperm');
 
         // Retriving the group list

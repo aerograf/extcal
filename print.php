@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     LocationHandler,
     EventHandler
 };

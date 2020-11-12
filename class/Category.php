@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-
-
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 //require_once __DIR__ . '/perm.php';
 //require_once __DIR__ . '/time.php';

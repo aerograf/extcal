@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Utility,
     Common
 };
@@ -44,8 +43,8 @@ function xoops_module_pre_install_extcal(\XoopsModule $module)
     if ($xoopsSuccess && $phpSuccess) {
         $moduleTables = &$module->getInfo('tables');
         foreach ($moduleTables as $table) {
-        $GLOBALS['xoopsDB']->queryF('DROP TABLE IF EXISTS ' . $GLOBALS['xoopsDB']->prefix($table) . ';');
-    }
+            $GLOBALS['xoopsDB']->queryF('DROP TABLE IF EXISTS ' . $GLOBALS['xoopsDB']->prefix($table) . ';');
+        }
     }
 
     return $xoopsSuccess && $phpSuccess;
@@ -62,8 +61,7 @@ function xoops_module_install_extcal(\XoopsModule $xoopsModule)
 
     $moduleDirName = basename(dirname(__DIR__));
 
-    /** @var Helper $helper */
-    /** @var Utility $utility */
+    /** @var Helper $helper */ /** @var Utility $utility */
     /** @var Common\Configurator $configurator */
     $helper       = Helper::getInstance();
     $utility      = new Utility();

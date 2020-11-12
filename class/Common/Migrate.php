@@ -82,6 +82,6 @@ class Migrate extends \Xmf\Database\Migrate
         if ($this->renameTables && \is_array($this->renameTables)) {
             $this->renameTable();
         }
-                $this->renameColumn('extcal_event', 'event_etablissement','event_location');
+        $this->renameColumn('extcal_event', 'event_etablissement', 'event_location');
     }
 }

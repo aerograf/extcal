@@ -18,8 +18,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    CategoryHandler,
+use XoopsModules\Extcal\{CategoryHandler,
     Form
 };
 
@@ -35,7 +34,7 @@ global $xoopsUser, $xoopsTpl;
 
 $op = 'list';
 if (Request::hasVar('op', 'GET')) {
-    $op     = Request::getCmd('op', 'list');
+    $op    = Request::getCmd('op', 'list');
     $catId = Request::getInt('cat_id', 0);
 }
 
@@ -145,7 +144,7 @@ switch ($op) {
             $hiddens = [
                 'cat_id'      => $catId,
                 'form_delete' => '',
-                CONFIRM     => 1,
+                CONFIRM       => 1,
             ];
             xoops_confirm($hiddens, 'cat.php?op=delete', _AM_EXTCAL_CONFIRM_DELETE_CAT, _DELETE, 'cat.php');
 

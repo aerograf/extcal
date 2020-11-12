@@ -17,15 +17,14 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Utility,
     CategoryHandler,
     EventHandler,
     EventmemberHandler,
     EventNotMemberHandler,
     FileHandler,
-    LocationHandler    
+    LocationHandler
 };
 
 require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
@@ -34,7 +33,7 @@ require_once dirname(__DIR__) . '/include/constantes.php';
 
 require_once dirname(__DIR__) . '/preloads/autoloader.php';
 
-$moduleDirName = basename(dirname(__DIR__));
+$moduleDirName      = basename(dirname(__DIR__));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
 /** @var Helper $helper */
@@ -57,7 +56,6 @@ $helper->loadLanguage('modinfo');
 $helper->loadLanguage('main');
 $helper->loadLanguage('common');
 
-
 $myts = \MyTextSanitizer::getInstance();
 
 if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof \XoopsTpl)) {
@@ -74,6 +72,6 @@ $eventmemberHandler = $helper->getHandler(_EXTCAL_CLN_MEMBER);
 /** @var EventNotMemberHandler $eventNotMemberHandler */
 $eventNotMemberHandler = $helper->getHandler(_EXTCAL_CLN_NOT_MEMBER);
 /** @var FileHandler $fileHandler */
-$fileHandler     = $helper->getHandler(_EXTCAL_CLN_FILE);
+$fileHandler = $helper->getHandler(_EXTCAL_CLN_FILE);
 /** @var LocationHandler $locationHandler */
 $locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);

@@ -1,8 +1,7 @@
 <?php
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     EventNotMemberHandler,
     Perm

@@ -21,7 +21,6 @@
 class Extcal_2_15
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
      * @param              $options
@@ -58,6 +57,5 @@ class Extcal_2_15
                . "` (`file_id` INT(11) NOT NULL AUTO_INCREMENT,`file_name` VARCHAR(255) NOT NULL,`file_nicename` VARCHAR(255) NOT NULL,`file_mimetype` VARCHAR(255) NOT NULL,`file_size` INT(11) NOT NULL,`file_download` INT(11) NOT NULL,`file_date` INT(11) NOT NULL,`file_approved` TINYINT(1) NOT NULL,`event_id` INT(11) NOT NULL,`uid` INT(11) NOT NULL,PRIMARY KEY  (`file_id`)) COMMENT='eXtcal By Zoullou' ;";
         $xoopsDB->query($sql);
     }
-
     //-----------------------------------------------------------------
 }   // fin de la classe

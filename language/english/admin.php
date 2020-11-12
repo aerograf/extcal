@@ -149,7 +149,6 @@ define('_AM_EXTCAL_FROM_EMAIL', '');
 define('_AM_EXTCAL_SEND_NOTIFICATION_SUBJECT', '');
 define('_AM_EXTCAL_SEND_NOTIFICATION_BODY', '');
 
-
 //Index
 define('AM_EXTCAL_STATISTICS', 'Extcal statistics');
 define('AM_EXTCAL_THEREARE_EXTCAL_CAT', "<span class='bold'>%s</span> Categories in the database");

@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     CategoryHandler
 };
@@ -63,8 +62,8 @@ function bExtcalUpcomingByCategoryShow($options)
 
     /***********************************************************/
     $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
-    $t          = $categoryHandler->objectToArray($categoryHandler->getAllCat($xoopsUser, 'all'));
-    $tCats      = [];
+    $t               = $categoryHandler->objectToArray($categoryHandler->getAllCat($xoopsUser, 'all'));
+    $tCats           = [];
     foreach ($t as $h => $hValue) {
         $tCats[$t[$h]['cat_id']] = $hValue;
     }
@@ -92,7 +91,7 @@ function bExtcalUpcomingByCategoryEdit($options)
 {
     global $xoopsUser;
 
-    $helper = Helper::getInstance();
+    $helper          = Helper::getInstance();
     $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $categoryHandler->getAllCat($xoopsUser, 'extcal_cat_view');

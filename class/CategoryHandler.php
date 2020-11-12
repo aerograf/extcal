@@ -20,12 +20,10 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Perm,
     Time
 };
-
 
 /**
  * Class CategoryHandler.
@@ -63,7 +61,7 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
         // Retriving permission mask
         /** @var \XoopsGroupPermHandler $grouppermHandler */
         $grouppermHandler = \xoops_getHandler('groupperm');
-        $moduleId               = $GLOBALS['xoopsModule']->getVar('mid');
+        $moduleId         = $GLOBALS['xoopsModule']->getVar('mid');
 
         $criteria = new \CriteriaCompo();
         $criteria->add(new \Criteria('gperm_name', 'extcal_perm_mask'));
@@ -178,7 +176,7 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
     }
 
     /**
-     * @param \CriteriaCompo   $criteria
+     * @param \CriteriaCompo     $criteria
      * @param                    $user
      * @param string             $perm
      */

@@ -2,8 +2,7 @@
 
 use Xmf\Module;
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     CategoryHandler,
     Time
@@ -52,16 +51,16 @@ switch ($op) {
                 //                $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
                 //                $eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
                 //                $eventmemberHandler = xoops_getModuleHandler(_EXTCAL_CLS_MEMBER, _EXTCAL_MODULE);
-                $extcalTime   = Time::getHandler();
+                $extcalTime = Time::getHandler();
 
                 $event = $eventHandler->getEvent(Request::getInt('event_id', 0, 'POST'), $xoopsUser, true);
                 $cat   = $categoryHandler->getCat($event->getVar('cat_id'), $xoopsUser, 'all');
 
                 $xoopsMailer->setToUsers($eventmemberHandler->getMembers(Request::getInt('event_id', 0, 'POST')));
-                $xoopsMailer->setFromName($myts->stripSlashesGPC(Request::getString('mail_fromname', '', 'POST')));
-                $xoopsMailer->setFromEmail($myts->stripSlashesGPC(Request::getString('mail_fromemail', '', 'POST')));
-                $xoopsMailer->setSubject($myts->stripSlashesGPC(Request::getString('mail_subject', '', 'POST')));
-                $xoopsMailer->setBody($myts->stripSlashesGPC(Request::getString('mail_body', '', 'POST')));
+                $xoopsMailer->setFromName((Request::getString('mail_fromname', '', 'POST')));
+                $xoopsMailer->setFromEmail((Request::getString('mail_fromemail', '', 'POST')));
+                $xoopsMailer->setSubject((Request::getString('mail_subject', '', 'POST')));
+                $xoopsMailer->setBody((Request::getString('mail_body', '', 'POST')));
                 if (in_array('mail', Request::getString('mail_send_to', '', 'POST'))) {
                     $xoopsMailer->useMail();
                 }
@@ -118,7 +117,7 @@ switch ($op) {
                 echo '<fieldset><legend style="font-weight:bold; color:#0A3760;">' . _AM_EXTCAL_INFORMATION . '</legend>';
                 echo _AM_EXTCAL_INFO_SEND_NOTIF;
                 echo '</fieldset><br>';
-            $form = new \XoopsThemeForm(_AM_EXTCAL_SEND_NOTIFICATION, 'mailusers', 'index.php?op=notification&amp;fct=send', 'post', true);
+                $form = new \XoopsThemeForm(_AM_EXTCAL_SEND_NOTIFICATION, 'mailusers', 'index.php?op=notification&amp;fct=send', 'post', true);
                 $form->addElement(new \XoopsFormText(_AM_EXTCAL_FROM_NAME, 'mail_fromname', 30, 255, $xoopsConfig['sitename']), true);
                 $form->addElement(new \XoopsFormText(_AM_EXTCAL_FROM_EMAIL, 'mail_fromemail', 30, 255, $fromemail), true);
                 $form->addElement(new \XoopsFormText($subjectCaption, 'mail_subject', 50, 255, _AM_EXTCAL_SEND_NOTIFICATION_SUBJECT), true);

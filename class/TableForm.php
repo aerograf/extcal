@@ -2,8 +2,6 @@
 
 namespace XoopsModules\Extcal;
 
-
-
 \xoops_load('XoopsForm');
 
 /**

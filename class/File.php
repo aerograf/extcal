@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-
-
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 

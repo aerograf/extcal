@@ -17,8 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Time,
     TableForm,
     Form
@@ -35,7 +34,7 @@ require_once dirname(__DIR__) . '/include/constantes.php';
  */
 function bExtcalMinicalShow($options)
 {
-    global  $xoopsUser;
+    global $xoopsUser;
 
     extcal_getDefautminicalOption($options);
 
@@ -114,8 +113,7 @@ function bExtcalMinicalShow($options)
     // Delete options to keep only categorie data
     $tCatSelected = explode(',', $options[9]);
 
-    /***************************************************************/
-    // Retriving events and formatting them
+    /***************************************************************/ // Retriving events and formatting them
     //$events = $eventHandler->objectToArray($eventHandler->getEventCalendarMonth($month, $year, $tCatSelected));
     if (true) {
         $criteres = [
@@ -130,8 +128,7 @@ function bExtcalMinicalShow($options)
         $events = [];
     }
     //Utility::echoArray($events, 'minical');
-    /***************************************************************/
-    //$eventHandler->formatEventDate($events, "l dS \of F Y h:i A");
+    /***************************************************************/ //$eventHandler->formatEventDate($events, "l dS \of F Y h:i A");
 
     // Calculating timestamp for the begin and the end of the month
     $startMonth = mktime(0, 0, 0, $month, 1, $year);
@@ -270,8 +267,8 @@ function bExtcalMinicalEdit($options)
 
     //============================================================
 
-    $helper = Helper::getInstance();
-    $categoryHandler      = $helper->getHandler(_EXTCAL_CLN_CAT);
+    $helper          = Helper::getInstance();
+    $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
     $cats            = $categoryHandler->getAllCat($xoopsUser, 'extcal_cat_view');
     $imageCatHandler = xoops_getHandler('imagecategory');
 
@@ -454,7 +451,7 @@ function _makeXMLSlideshowConf($options)
 /**
  * @param array       $event
  * @param array       $eventsArray
- * @param Time $timeHandler
+ * @param Time        $timeHandler
  * @param             $startMonth
  * @param             $endMonth
  * @param             $cats

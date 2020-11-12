@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team
  */
 
-
-
 /**
  * interface Constants
  */
@@ -31,23 +29,21 @@ interface Constants
      * Constant definition
      */
 
-    public const DISALLOW = 0;
-
+    const DISALLOW = 0;
     //modif JJD
-    public const _EXTCAL_MODULE = 'extcal';
-    public const _EXTCAL_CLS_CAT = 'cat';
-    public const _EXTCAL_CLS_FILE = 'file';
-    public const _EXTCAL_CLS_MEMBER = 'eventmember';
-    public const _EXTCAL_CLS_NOT_MEMBER = 'eventnotmember';
-    public const _EXTCAL_CLS_LOCATION = 'location';
-    public const _EXTCAL_CLN_CAT = 'Category';
-    public const _EXTCAL_CLN_FILE = 'File';
-    public const _EXTCAL_CLN_MEMBER = 'Eventmember';
-    public const _EXTCAL_CLN_NOT_MEMBER = 'EventNotMember';
-    public const _EXTCAL_CLN_LOCATION = 'Location';
-    public const _EXTCAL_CLS_EVENT = 'event';
-    public const _EXTCAL_CLN_EVENT = 'Event';
-
+    const _EXTCAL_MODULE = 'extcal';
+    const _EXTCAL_CLS_CAT = 'cat';
+    const _EXTCAL_CLS_FILE = 'file';
+    const _EXTCAL_CLS_MEMBER = 'eventmember';
+    const _EXTCAL_CLS_NOT_MEMBER = 'eventnotmember';
+    const _EXTCAL_CLS_LOCATION = 'location';
+    const _EXTCAL_CLN_CAT = 'Category';
+    const _EXTCAL_CLN_FILE = 'File';
+    const _EXTCAL_CLN_MEMBER = 'Eventmember';
+    const _EXTCAL_CLN_NOT_MEMBER = 'EventNotMember';
+    const _EXTCAL_CLN_LOCATION = 'Location';
+    const _EXTCAL_CLS_EVENT = 'event';
+    const _EXTCAL_CLN_EVENT = 'Event';
     //-------------------------------------------------------------------
     //    const _EXTCAL_PEAR_ROOT_DEFAULT =  dirname(__DIR__) . '/class/pear';
     //const _EXTCAL_PEAR_ROOT = 'F:/wamp/www/xfr254b/xoops_lib/Frameworks/pear' );
@@ -58,8 +54,7 @@ interface Constants
     //    const CALENDAR_ROOT = _EXTCAL_PEAR_CALENDAR_ROOT . '/';
 
     //-------------------------------------------------------------------
-    public const _EXTCAL_SHOW_NO_PICTURE = false;
-
+    const _EXTCAL_SHOW_NO_PICTURE = false;
     //    const _EXTCAL_PATH_HORLOGES = '/modules/extcal/assets/images/horloges/';
     //    const _EXTCAL_PATH_ICONS16 = XOOPS_URL . '/Frameworks/moduleclasses/icons/16/';
     //    const _EXTCAL_PATH_ICONS32 = XOOPS_URL . '/Frameworks/moduleclasses/icons/32/';
@@ -67,23 +62,22 @@ interface Constants
     //    const _EXTCAL_PATH_BO = _EXTCAL_PATH_FO . 'admin/';
     //    const _EXTCAL_PATH_LG = XOOPS_URL . '/modules/extcal/languages/';
 
-    public const _EXTCAL_IMG_INTERVAL = 'interval04.png';
+    const _EXTCAL_IMG_INTERVAL = 'interval04.png';
     //    const _EXTCAL_IMG_INTERVAL16 = _EXTCAL_PATH_ICONS16 . _EXTCAL_IMG_INTERVAL;
     //    const _EXTCAL_IMG_INTERVAL32 = _EXTCAL_PATH_ICONS32 . _EXTCAL_IMG_INTERVAL;
 
     //const _EXTCAL_DIRNAME =    $helper->getModule()->getVar('dirname'));
 
-    public const _EXTCAL_NAV_CALMONTH = 'calendar-month';
-    public const _EXTCAL_NAV_CALWEEK = 'calendar-week';
-    public const _EXTCAL_NAV_YEAR = 'year';
-    public const _EXTCAL_NAV_MONTH = 'month';
-    public const _EXTCAL_NAV_WEEK = 'week';
-    public const _EXTCAL_NAV_DAY = 'day';
-    public const _EXTCAL_NAV_AGENDA_WEEK = 'agenda-week';
-    public const _EXTCAL_NAV_AGENDA_DAY = 'agenda-day';
-    public const _EXTCAL_NAV_SEARCH = 'search';
-    public const _EXTCAL_NAV_NEW_EVENT = 'new-event';
-
+    const _EXTCAL_NAV_CALMONTH = 'calendar-month';
+    const _EXTCAL_NAV_CALWEEK = 'calendar-week';
+    const _EXTCAL_NAV_YEAR = 'year';
+    const _EXTCAL_NAV_MONTH = 'month';
+    const _EXTCAL_NAV_WEEK = 'week';
+    const _EXTCAL_NAV_DAY = 'day';
+    const _EXTCAL_NAV_AGENDA_WEEK = 'agenda-week';
+    const _EXTCAL_NAV_AGENDA_DAY = 'agenda-day';
+    const _EXTCAL_NAV_SEARCH = 'search';
+    const _EXTCAL_NAV_NEW_EVENT = 'new-event';
     //    const _EXTCAL_NAV_LIST = _EXTCAL_NAV_CALMONTH
     //                             . "\n"
     //                             . _EXTCAL_NAV_CALWEEK
@@ -104,9 +98,8 @@ interface Constants
     //                             . "\n"
     //                             . _EXTCAL_NAV_NEW_EVENT;
 
-    public const _EXTCAL_PREFIX_VIEW = 'view_';
-    public const _EXTCAL_SUFFIX_VIEW = '.php';
-
+    const _EXTCAL_PREFIX_VIEW = 'view_';
+    const _EXTCAL_SUFFIX_VIEW = '.php';
     //    const _EXTCAL_FILE_CALMONTH = _EXTCAL_PREFIX_VIEW . _EXTCAL_NAV_CALMONTH . _EXTCAL_SUFFIX_VIEW;
     //    const _EXTCAL_FILE_CALWEEK = _EXTCAL_PREFIX_VIEW . _EXTCAL_NAV_CALWEEK . _EXTCAL_SUFFIX_VIEW;
     //    const _EXTCAL_FILE_YEAR = _EXTCAL_PREFIX_VIEW . _EXTCAL_NAV_YEAR . _EXTCAL_SUFFIX_VIEW;
@@ -118,47 +111,42 @@ interface Constants
     //    const _EXTCAL_FILE_SEARCH = _EXTCAL_PREFIX_VIEW . _EXTCAL_NAV_SEARCH . _EXTCAL_SUFFIX_VIEW;
     //    const _EXTCAL_FILE_NEW_EVENT = _EXTCAL_PREFIX_VIEW . _EXTCAL_NAV_NEW_EVENT . _EXTCAL_SUFFIX_VIEW;
 
-    public const _EXTCAL_MULTILOADER = '/class/xoopsform/multiuploads/formmultiuploads.php';
-    public const _EXTCAL_STATUS_NONE = 0;
+    const _EXTCAL_MULTILOADER = '/class/xoopsform/multiuploads/formmultiuploads.php';
+    const _EXTCAL_STATUS_NONE = 0;
     // define("_EXTCAL_STATUS_INSCRIPTION", 1);
     // define("_EXTCAL_STATUS_DESINSCRIPTION", 2);
     // define("_EXTCAL_STATUS_DELEGATION", 3);
     // define("_EXTCAL_STATUS_MESSAGE", 4);
 
-    public const _EXTCAL_STATUS_COME = 1;
-    public const _EXTCAL_STATUS_NOTCOME = 2;
-    public const _EXTCAL_HEADER_TEXT = 0;
-    public const _EXTCAL_HEADER_HTML = 1;
-
+    const _EXTCAL_STATUS_COME = 1;
+    const _EXTCAL_STATUS_NOTCOME = 2;
+    const _EXTCAL_HEADER_TEXT = 0;
+    const _EXTCAL_HEADER_HTML = 1;
     //---------------------------------------------------
-    public const _EXTCAL_EVENTS_DAY = 0;
-    public const _EXTCAL_EVENTS_MONTH = 1;
-    public const _EXTCAL_EVENTS_CALENDAR_MONTH = 2;
-    public const _EXTCAL_EVENTS_WEEK = 4;
-    public const _EXTCAL_EVENTS_CALENDAR_WEEK = 3;
-    public const _EXTCAL_EVENTS_AGENDA_WEEK = 5;
-    public const _EXTCAL_EVENTS_YEAR = 6;
-
+    const _EXTCAL_EVENTS_DAY = 0;
+    const _EXTCAL_EVENTS_MONTH = 1;
+    const _EXTCAL_EVENTS_CALENDAR_MONTH = 2;
+    const _EXTCAL_EVENTS_WEEK = 4;
+    const _EXTCAL_EVENTS_CALENDAR_WEEK = 3;
+    const _EXTCAL_EVENTS_AGENDA_WEEK = 5;
+    const _EXTCAL_EVENTS_YEAR = 6;
     //---------------------------------------------------
-    public const _EXTCAL_TS_SECOND = 1;
-    public const _EXTCAL_TS_MINUTE = 60;
-    public const _EXTCAL_TS_HOUR = 3600;
-    public const _EXTCAL_TS_DAY = 86400;
-    public const _EXTCAL_TS_WEEK = 604800;
+    const _EXTCAL_TS_SECOND = 1;
+    const _EXTCAL_TS_MINUTE = 60;
+    const _EXTCAL_TS_HOUR = 3600;
+    const _EXTCAL_TS_DAY = 86400;
+    const _EXTCAL_TS_WEEK = 604800;
     //---------------------------------------------------
-    public const _EXTCAL_TS_YEARLY = 32140800;
-    public const _EXTCAL_MOTIF_DATE = "#(19|20)\d{2}-(0?[1-9]|1[0-2])-(?x)(0?[1-9]|[12]\d|3[01])#";
-    public const _EXTCAL_INFOBULLE_RGB_MIN = 220;
-    public const _EXTCAL_INFOBULLE_RGB_MAX = 250;
-
+    const _EXTCAL_TS_YEARLY = 32140800;
+    const _EXTCAL_MOTIF_DATE = "#(19|20)\d{2}-(0?[1-9]|1[0-2])-(?x)(0?[1-9]|[12]\d|3[01])#";
+    const _EXTCAL_INFOBULLE_RGB_MIN = 220;
+    const _EXTCAL_INFOBULLE_RGB_MAX = 250;
     //2.37
-    public const _EXTCAL_EVENTS_UPCOMING = 7;
-
-    public const EXTCAL_CATNAME = 'cat_name';
-    public const EXTCAL_CATDESC = 'cat_desc';
-    public const EXTCAL_CATWEIGHT = 'cat_weight';
-    public const EXTCAL_CATCOLOR = 'cat_color';
-    public const EXTCAL_CATICON = 'cat_icone';
-
+    const _EXTCAL_EVENTS_UPCOMING = 7;
+    const EXTCAL_CATNAME = 'cat_name';
+    const EXTCAL_CATDESC = 'cat_desc';
+    const EXTCAL_CATWEIGHT = 'cat_weight';
+    const EXTCAL_CATCOLOR = 'cat_color';
+    const EXTCAL_CATICON = 'cat_icone';
     /**#@-*/
 }

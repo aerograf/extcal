@@ -19,8 +19,7 @@
 
 use Xmf\Request;
 use Xmf\Module\Admin;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     LocationHandler
 };
 
@@ -35,8 +34,6 @@ require_once dirname(dirname(dirname(__DIR__))) . '/class/pagenav.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsform/grouppermform.php';
 require_once dirname(dirname(dirname(__DIR__))) . '/class/uploader.php';
 require_once dirname(__DIR__) . '/include/constantes.php';
-
-
 
 if ($xoopsUser) {
     $xoopsModule = \XoopsModule::getByDirname('extcal');
@@ -156,11 +153,15 @@ switch ($op) {
                 redirect_header('location.php', 1, _AM_EXTCAL_REDIRECT_DELOK);
             }
         } else {
-            xoops_confirm([
+            xoops_confirm(
+                [
                     'ok'          => 1,
                     'location_id' => Request::getInt('location_id', 0),
                     'op'          => 'delete_location',
-                          ], $_SERVER['REQUEST_URI'], _AM_EXTCAL_LOCATION_SURDEL . '<br>');
+                ],
+                $_SERVER['REQUEST_URI'],
+                _AM_EXTCAL_LOCATION_SURDEL . '<br>'
+            );
         }
         break;
     case 'edit_location':
@@ -206,13 +207,15 @@ switch ($op) {
         $delimg = @$_REQUEST['delimg'];
         $delimg = isset($delimg) ? (int)$delimg : 0;
         if (0 == $delimg && !empty($_REQUEST['xoops_upload_file'][0])) {
-            $upload = new \XoopsMediaUploader($uploaddir_location, [
+            $upload = new \XoopsMediaUploader(
+                $uploaddir_location, [
                 'image/gif',
                 'image/jpeg',
                 'image/pjpeg',
                 'image/x-png',
                 'image/png',
-            ], 3145728, null, null);
+            ], 3145728, null, null
+            );
             if ($upload->fetchMedia($_REQUEST['xoops_upload_file'][0])) {
                 $upload->setPrefix('location_');
                 $upload->fetchMedia($_REQUEST['xoops_upload_file'][0]);

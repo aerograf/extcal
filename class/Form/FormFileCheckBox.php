@@ -26,8 +26,8 @@ namespace XoopsModules\Extcal\Form;
 class FormFileCheckBox extends \XoopsFormCheckBox
 {
     /**
-     * @param      $caption
-     * @param      $name
+     * @param                   $caption
+     * @param                   $name
      * @param null|string|array $value
      */
     public function __construct($caption, $name, $value = null)

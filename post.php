@@ -18,8 +18,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     EventHandler,
     Form,
     Utility,
@@ -34,7 +33,7 @@ global $xoopsUser, $xoopsTpl;
 
 /** @var Time $timeHandler */
 /** @var Helper $helper */
-$helper                                  = Helper::getInstance();
+$helper = Helper::getInstance();
 
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
 //require_once __DIR__   . '/class/form/extcalform.php';
@@ -186,7 +185,7 @@ if (Request::hasVar('form_preview', 'POST')) {
         if (1 == $approve) {
             //            $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
             $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-            $cat        = $categoryHandler->getCat(Request::getInt('cat_id', 0, 'POST'), $xoopsUser, 'all');
+            $cat             = $categoryHandler->getCat(Request::getInt('cat_id', 0, 'POST'), $xoopsUser, 'all');
             $notificationHandler->triggerEvent(
                 'cat',
                 Request::getInt('cat_id', 0, 'POST'),

@@ -22,7 +22,6 @@ namespace XoopsModules\Extcal;
 
 //Kraven 30
 
-
 require_once XOOPS_ROOT_PATH . '/kernel/object.php';
 
 //class Event extends \XoopsObject

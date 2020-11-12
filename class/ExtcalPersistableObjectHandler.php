@@ -20,8 +20,7 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper
+use XoopsModules\Extcal\{Helper
 };
 
 /**
@@ -96,9 +95,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * retrieve an object.
      *
-     * @param mixed $id ID of the object - or array of ids for joint keys. Joint keys MUST be given in the same order as in the constructor
-     * @param null|array  $fields
-     * @param bool  $as_object
+     * @param mixed      $id ID of the object - or array of ids for joint keys. Joint keys MUST be given in the same order as in the constructor
+     * @param null|array $fields
+     * @param bool       $as_object
      *
      * @return mixed reference to the object, FALSE if failed
      *
@@ -203,8 +202,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
      * Retrieve a list of objects as arrays - DON'T USE WITH JOINT KEYS.
      *
      * @param \CriteriaCompo|\CriteriaElement|null $criteria {@link CriteriaCompo|\CriteriaElement} conditions to be met
-     * @param int              $limit    Max number of objects to fetch
-     * @param int              $start    Which record to start at
+     * @param int                                  $limit    Max number of objects to fetch
+     * @param int                                  $start    Which record to start at
      *
      * @return array
      */
@@ -623,8 +622,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-* @param \CriteriaCompo|null $criteria
-     * @param string         $sum
+     * @param \CriteriaCompo|null $criteria
+     * @param string              $sum
      *
      * @return array|string
      */
@@ -663,8 +662,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-* @param \CriteriaCompo|null $criteria
-     * @param string         $max
+     * @param \CriteriaCompo|null $criteria
+     * @param string              $max
      *
      * @return array|string
      */
@@ -703,8 +702,8 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param null|\CriteriaCompo   $criteria
-     * @param string $avg
+     * @param null|\CriteriaCompo $criteria
+     * @param string              $avg
      *
      * @return int
      */

@@ -21,7 +21,6 @@
 class Extcal_2_21
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
      * @param              $options
@@ -48,6 +47,5 @@ class Extcal_2_21
                . "` (`eventnotmember_id` INT(11) NOT NULL AUTO_INCREMENT,`event_id` INT(11) NOT NULL DEFAULT '0',`uid` INT(11) NOT NULL DEFAULT '0',PRIMARY KEY  (`eventnotmember_id`),UNIQUE KEY `eventnotmember` (`event_id`,`uid`)) COMMENT='eXtcal By Zoullou' ;";
         $xoopsDB->query($sql);
     }
-
     //-----------------------------------------------------------------
 }   // fin de la classe

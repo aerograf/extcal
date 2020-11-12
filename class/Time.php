@@ -2,11 +2,8 @@
 
 namespace XoopsModules\Extcal;
 
-use XoopsModules\Extcal\{
-    Helper
+use XoopsModules\Extcal\{Helper
 };
-
-
 
 require_once XOOPS_ROOT_PATH . '/language/' . $GLOBALS['xoopsConfig']['language'] . '/calendar.php';
 

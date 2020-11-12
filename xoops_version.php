@@ -17,12 +17,9 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     CategoryHandler
 };
-
-
 
 require_once __DIR__ . '/preloads/autoloader.php';
 
@@ -54,12 +51,12 @@ $modversion['dirname']          = basename(__DIR__);
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
 $modversion['system_menu']      = 1;
 $modversion['help']             = 'page=help';
-$modversion['modicons16'] = 'assets/images/icons/16';
-$modversion['modicons32'] = 'assets/images/icons/32';
+$modversion['modicons16']       = 'assets/images/icons/16';
+$modversion['modicons32']       = 'assets/images/icons/32';
 //about
 $modversion['module_website_url']  = 'www.xoops.org/';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['min_php']             = '7.1';
+$modversion['min_php']             = '7.2';
 $modversion['min_xoops']           = '2.5.10';
 $modversion['min_admin']           = '1.2';
 $modversion['min_db']              = ['mysql' => '5.5'];
@@ -68,10 +65,9 @@ $modversion['hasAdmin']   = 1;
 $modversion['adminindex'] = 'admin/index.php';
 $modversion['adminmenu']  = 'admin/menu.php';
 
-
 //Install/Uninstall Functions
-$modversion['onInstall']   = 'include/oninstall.php';
-$modversion['onUpdate']    = 'include/onupdate.php';
+$modversion['onInstall'] = 'include/oninstall.php';
+$modversion['onUpdate']  = 'include/onupdate.php';
 //$modversion['onUninstall'] = 'include/onuninstall.php';
 
 // Menu
@@ -82,7 +78,7 @@ $i                     = 0;
 
 if (isset($GLOBALS['xoopsModule']) && is_object($GLOBALS['xoopsModule'])
     && 'extcal' === $GLOBALS['xoopsModule']->getVar('dirname')) {
-    $user = $GLOBALS['xoopsUser'] ?? null;
+    $user            = $GLOBALS['xoopsUser'] ?? null;
     $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
     if ($categoryHandler->haveSubmitRight($user)) {
         $modversion['sub'][0]['name'] = _MI_EXTCAL_SUBMIT_EVENT;
@@ -826,13 +822,13 @@ $modversion['templates'] = [
 // Blocs
 
 $modversion['blocks'][] = [
-    'file' => 'minical.php',
-    'name' => _MI_EXTCAL_BNAME1,
+    'file'        => 'minical.php',
+    'name'        => _MI_EXTCAL_BNAME1,
     'description' => _MI_EXTCAL_BNAME1_DESC,
-    'show_func' => 'bExtcalMinicalShow',
-    'options' => '0|0|150|225|1|3|10|0|1|1,2,3,4,5|| |120|120',
-    'edit_func' => 'bExtcalMinicalEdit',
-    'template' => 'extcal_block_minical.tpl',
+    'show_func'   => 'bExtcalMinicalShow',
+    'options'     => '0|0|150|225|1|3|10|0|1|1,2,3,4,5|| |120|120',
+    'edit_func'   => 'bExtcalMinicalEdit',
+    'template'    => 'extcal_block_minical.tpl',
 ];
 
 $modversion['blocks'][] = [
@@ -895,7 +891,6 @@ $modversion['blocks'][] = [
     'template'    => 'extcal_block_upcomingByCategory.tpl',
 ];
 
-
 //---------------------------------------------------------
 // Notifications
 $modversion['hasNotification']             = 1;
@@ -927,7 +922,7 @@ $modversion['notification']['category'][] = [
     'allow_bookmark' => 1,
 ];
 
-$modversion['notification']['event'][]    = [
+$modversion['notification']['event'][] = [
     'name'          => 'new_event',
     'category'      => 'global',
     'title'         => _MI_EXTCAL_NEW_EVENT_NOTIFY,
@@ -937,7 +932,7 @@ $modversion['notification']['event'][]    = [
     'mail_subject'  => _MI_EXTCAL_NEW_EVENT_NOTIFYSBJ,
 ];
 
-$modversion['notification']['event'][]    = [
+$modversion['notification']['event'][] = [
     'name'          => 'new_event_pending',
     'category'      => 'global',
     'title'         => _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFY,
@@ -948,7 +943,7 @@ $modversion['notification']['event'][]    = [
     'admin_only'    => 1,
 ];
 
-$modversion['notification']['event'][]    = [
+$modversion['notification']['event'][] = [
     'name'          => 'new_event_cat',
     'category'      => 'cat',
     'title'         => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFY,
@@ -957,7 +952,6 @@ $modversion['notification']['event'][]    = [
     'mail_template' => 'cat_new_event',
     'mail_subject'  => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYSBJ,
 ];
-
 
 // XoopsInfo
 $modversion['developer_website_url']  = 'http://www.zoullou.net/';

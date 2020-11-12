@@ -18,8 +18,7 @@
  */
 
 use Xmf\Request;
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Perm
 };
 
@@ -37,8 +36,6 @@ if (0 == count($permHandler->getAuthorizedCat($xoopsUser, 'extcal_cat_submit'))
     && 0 == count($permHandler->getAuthorizedCat($xoopsUser, 'extcal_cat_edit'))) {
     redirect_header('index.php', 3);
 }
-
-
 
 /* ========================================================================== */
 

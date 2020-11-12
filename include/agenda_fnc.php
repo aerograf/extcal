@@ -16,13 +16,13 @@
  * que la classe correspondante de la table a été générées avec classGenerator
  **/
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     Time,
     CategoryHandler
 
 };
 
+/** @var Helper $helper */
 define('_EXTCAL_FORMAT_AGENDA_KEYD', 'Y-m-d');
 define('_EXTCAL_FORMAT_AGENDA_KEYT', 'H:i');
 
@@ -47,7 +47,6 @@ Helper::getInstance()->loadLanguage('main');
 
 function agenda_getCanevas($ts, $hStart, $hEnd, $mPlage = 15, $nbJours = 1, $formatDate, $formatJour = 'H:i')
 {
-    /** @var Helper $helper */
     $helper = Helper::getInstance();
     $jour   = date('d', $ts);
     $mois   = date('m', $ts);
@@ -345,111 +344,113 @@ function getNavBarTabs($currentTab = '')
     $t       = explode($sep, $tabs);
     $tWeight = array_flip($t);
 
-    //-----------------------------------------------------------------
-    $view = _EXTCAL_NAV_CALMONTH;
-    //   echo "{$view} - {$currentTab}<br>";
-    //   echoArray($visibleTabs,true);
+    if (is_array($visibleTabs)) {
+        //-----------------------------------------------------------------
+        $view = _EXTCAL_NAV_CALMONTH;
+        //   echo "{$view} - {$currentTab}<br>";
+        //   echoArray($visibleTabs,true);
     if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_CALMONTH,
-            'name'    => _MD_EXTCAL_NAV_CALMONTH,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 110,
-        ];
-    }
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_CALMONTH,
+                'name'    => _MD_EXTCAL_NAV_CALMONTH,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 110,
+            ];
+        }
 
-    $view = _EXTCAL_NAV_CALWEEK;
+        $view = _EXTCAL_NAV_CALWEEK;
     if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_CALWEEK,
-            'name'    => _MD_EXTCAL_NAV_CALWEEK,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 120,
-        ];
-    }
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_CALWEEK,
+                'name'    => _MD_EXTCAL_NAV_CALWEEK,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 120,
+            ];
+        }
 
-    $view = _EXTCAL_NAV_YEAR;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_YEAR,
-            'name'    => _MD_EXTCAL_NAV_YEAR,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 130,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_MONTH;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_MONTH,
-            'name'    => _MD_EXTCAL_NAV_MONTH,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 140,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_WEEK;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_WEEK,
-            'name'    => _MD_EXTCAL_NAV_WEEK,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 150,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_DAY;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_DAY,
-            'name'    => _MD_EXTCAL_NAV_DAY,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 160,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_AGENDA_WEEK;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_AGENDA_WEEK,
-            'name'    => _MD_EXTCAL_NAV_AGENDA_WEEK,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 170,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_AGENDA_DAY;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_AGENDA_DAY,
-            'name'    => _MD_EXTCAL_NAV_AGENDA_DAY,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 180,
-        ];
-    }
-
-    $view = _EXTCAL_NAV_SEARCH;
-    if (in_array($view, $visibleTabs)) {
-        $tNavBar[$view] = [
-            'href'    => _EXTCAL_FILE_SEARCH,
-            'name'    => _MD_EXTCAL_NAV_SEARCH,
-            'current' => ($view == $currentTab) ? 1 : 0,
-            'weight'  => 200,
-        ];
-    }
-
-    $user = $GLOBALS['xoopsUser'] ?? null;
-    /** @var CategoryHandler $categoryHandler */
-    $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-    if ($categoryHandler->haveSubmitRight($user)) {
-        $view = _EXTCAL_NAV_NEW_EVENT;
+        $view = _EXTCAL_NAV_YEAR;
         if (in_array($view, $visibleTabs)) {
             $tNavBar[$view] = [
-                'href'    => _EXTCAL_FILE_NEW_EVENT,
-                'name'    => _MD_EXTCAL_NAV_NEW_EVENT,
+                'href'    => _EXTCAL_FILE_YEAR,
+                'name'    => _MD_EXTCAL_NAV_YEAR,
                 'current' => ($view == $currentTab) ? 1 : 0,
-                'weight'  => 100,
+                'weight'  => 130,
             ];
+        }
+
+        $view = _EXTCAL_NAV_MONTH;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_MONTH,
+                'name'    => _MD_EXTCAL_NAV_MONTH,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 140,
+            ];
+        }
+
+        $view = _EXTCAL_NAV_WEEK;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_WEEK,
+                'name'    => _MD_EXTCAL_NAV_WEEK,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 150,
+            ];
+        }
+
+        $view = _EXTCAL_NAV_DAY;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_DAY,
+                'name'    => _MD_EXTCAL_NAV_DAY,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 160,
+            ];
+        }
+
+        $view = _EXTCAL_NAV_AGENDA_WEEK;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_AGENDA_WEEK,
+                'name'    => _MD_EXTCAL_NAV_AGENDA_WEEK,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 170,
+            ];
+        }
+
+        $view = _EXTCAL_NAV_AGENDA_DAY;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_AGENDA_DAY,
+                'name'    => _MD_EXTCAL_NAV_AGENDA_DAY,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 180,
+            ];
+        }
+
+        $view = _EXTCAL_NAV_SEARCH;
+        if (in_array($view, $visibleTabs)) {
+            $tNavBar[$view] = [
+                'href'    => _EXTCAL_FILE_SEARCH,
+                'name'    => _MD_EXTCAL_NAV_SEARCH,
+                'current' => ($view == $currentTab) ? 1 : 0,
+                'weight'  => 200,
+            ];
+        }
+
+        $user = $GLOBALS['xoopsUser'] ?? null;
+        /** @var CategoryHandler $categoryHandler */
+        $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+        if ($categoryHandler->haveSubmitRight($user)) {
+            $view = _EXTCAL_NAV_NEW_EVENT;
+            if (in_array($view, $visibleTabs)) {
+                $tNavBar[$view] = [
+                    'href'    => _EXTCAL_FILE_NEW_EVENT,
+                    'name'    => _MD_EXTCAL_NAV_NEW_EVENT,
+                    'current' => ($view == $currentTab) ? 1 : 0,
+                    'weight'  => 100,
+                ];
+            }
         }
     }
     //----------------------------------------------------------------

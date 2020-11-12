@@ -17,12 +17,10 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal\{
-    Helper,
+use XoopsModules\Extcal\{Helper,
     CategoryHandler,
     EventHandler
 };
-
 
 require_once dirname(__DIR__) . '/include/constantes.php';
 
