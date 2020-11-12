@@ -202,3 +202,4 @@ define('_MI_EXTCAL_BLOCKS_ADMIN', 'Blocks Admin');
 
 define('_MI_EXTCAL_SHOW_DEV_TOOLS', 'Show Development Tools Button?');
 define('_MI_EXTCAL_SHOW_DEV_TOOLS_DESC', 'If yes, the "Migrate" Tab and other Development tools will be visible to the Admin.');
+

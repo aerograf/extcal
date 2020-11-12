@@ -20,7 +20,7 @@
 <table class="outer" style="border: 1px;">
 
     <tr style="text-align:left;">
-        <td class='<{$trancheHeure.class}>' style="border: 1px solid #808080;" width='50px'>
+        <td class='<{$trancheHeure.class|default:false}>' style="border: 1px solid #808080;" width='50px'>
 
         </td>
     </tr>

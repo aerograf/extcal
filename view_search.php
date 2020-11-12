@@ -25,7 +25,7 @@ $num_tries = isset($_POST['num_tries']) ? $_POST['num_tries'] + 1 : 0;
 
 /* ========================================================================== */
 /***************************************************************/
-/*  ajout des elements de recherche                            */
+/*  adding search elements                            */
 /***************************************************************/
 $searchExp = Request::getString('searchExp', '', 'POST');
 $andor     = Request::getString('andor', '', 'POST');
@@ -127,7 +127,7 @@ if ($cat > 0) {
 
 $recurrents = $eventHandler->getAllEvents($criteria, false);
 //$categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-$categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+$categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
 
 //=========================================
 foreach ($recurrents as $h => $hValue) {
