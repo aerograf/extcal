@@ -1096,7 +1096,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         }
         $form->addElement($catSelect, true);
         // Icon
-        if ($helper->getConfig('formShowIcon', 1) == 1) {
+        if (1 == $helper->getConfig('formShowIcon', 1)) {
             $file_path = \dirname(__DIR__) . '/assets/css/images';
             $tf        = \XoopsLists::getImgListAsArray($file_path);
             \array_unshift($tf, \_MD_EXTCAL_NONE);
@@ -1107,7 +1107,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
             $form->addElement(new \XoopsFormHidden('event_icone', $event_icone), false);
         }
         //location
-        if ($helper->getConfig('formShowLocation', 1) == 1) {
+        if (1 == $helper->getConfig('formShowLocation', 1)) {
             $locationHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_LOCATION);
             $location_select = new \XoopsFormSelect(\_MD_EXTCAL_LOCATION, 'event_location', $event_location);
             $criteria        = new \CriteriaCompo();
@@ -1165,7 +1165,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         $form->addElement($nbMemberElement, false);
 
         //Price and monnaie
-        if ($helper->getConfig('formShowPrice', 1) == 1) {
+        if (1 == $helper->getConfig('formShowPrice', 1)) {
             $monnaie_price = new \XoopsFormElementTray(\_MD_EXTCAL_PRICE, '');
             //price
             $monnaie_price->addElement(new \XoopsFormText('', 'event_price', 20, 255, $event_price));
@@ -1177,32 +1177,32 @@ class EventHandler extends ExtcalPersistableObjectHandler
             $form->addElement(new \XoopsFormHidden('event_price', $event_price), false);
         }
         //----------------------------------------------------------------
-        if ($helper->getConfig('formShowOrganizer', 1) == 1) {
+        if (1 == $helper->getConfig('formShowOrganizer', 1)) {
             $form->addElement(new \XoopsFormText(\_MD_EXTCAL_ORGANISATEUR, 'event_organisateur', 80, 255, $organisateur), false);
         } else {
             $form->addElement(new \XoopsFormHidden('event_organisateur', $organisateur), false);
         }
         // Contact
-        if ($helper->getConfig('formShowContact', 1) == 1) {
+        if (1 == $helper->getConfig('formShowContact', 1)) {
             $form->addElement(new \XoopsFormText(\_MD_EXTCAL_CONTACT, 'event_contact', 80, 255, $contact), false);
         } else {
             $form->addElement(new \XoopsFormHidden('event_contact', $contact), false);
         }
         // Url
-        if ($helper->getConfig('formShowUrl', 1) == 1) {
+        if (1 == $helper->getConfig('formShowUrl', 1)) {
             $form->addElement(new \XoopsFormText(\_MD_EXTCAL_URL, 'event_url', 80, 255, $url), false);
         } else {
             $form->addElement(new \XoopsFormHidden('event_url', $url), false);
         }
         // Email
-        if ($helper->getConfig('formShowEmail', 1) == 1) {
+        if (1 == $helper->getConfig('formShowEmail', 1)) {
             $form->addElement(new \XoopsFormText(\_MD_EXTCAL_EMAIL, 'event_email', 80, 255, $email), false);
         } else {
             $form->addElement(new \XoopsFormHidden('event_email', $email), false);
         }
 
         // Address
-        if ($helper->getConfig('formShowAddress', 1) == 1) {
+        if (1 == $helper->getConfig('formShowAddress', 1)) {
             if (\class_exists('XoopsFormEditor')) {
                 $options['name']   = 'event_address';
                 $options['value']  = $event_address;
@@ -1224,11 +1224,11 @@ class EventHandler extends ExtcalPersistableObjectHandler
         }
 
         // Recurence form
-        if ($helper->getConfig('formShowRecurence', 1) == 1) {
+        if (1 == $helper->getConfig('formShowRecurence', 1)) {
             $form->addElement(new Form\FormRecurRules($reccurOptions));
         }
         // File attachement
-        if ($helper->getConfig('formShowFile', 1) == 1) {
+        if (1 == $helper->getConfig('formShowFile', 1)) {
             $fileElmtTray = new \XoopsFormElementTray(\_MD_EXTCAL_FILE_ATTACHEMENT, '<br>');
 
             // If they are attached file to this event
@@ -1248,7 +1248,7 @@ class EventHandler extends ExtcalPersistableObjectHandler
         }
         //Hack Kraven0
         ///////////////////////////////////////////////////////////////////////////////
-        if ($helper->getConfig('formShowPicture', 1) == 1) {
+        if (1 == $helper->getConfig('formShowPicture', 1)) {
             //Picture1
             $file_tray = new \XoopsFormElementTray(\sprintf(\_MD_EXTCAL_FORM_IMG, 1), '');
             if (!empty($event_picture1)) {

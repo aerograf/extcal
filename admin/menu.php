@@ -56,7 +56,7 @@ $adminmenu[] = [
     'icon'  => $pathIcon32 . '/event.png',
 ];
 
-if ($helper->getConfig('formShowLocation', 1) == 1) {
+if (1 == $helper->getConfig('formShowLocation', 1)) {
     if (isset($pathModIcon32)) {
         $adminmenu[] = [
             'title' => _MI_EXTCAL_LOCATIONS,
