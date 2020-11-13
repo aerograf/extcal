@@ -17,6 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
+use Xmf\Module\Admin;
 use Xmf\Request;
 use XoopsModules\Extcal\{Helper,
     LocationHandler
@@ -56,7 +57,7 @@ if (isset($xoopsUser) && $xoopsUser->isAdmin($helper->getModule()->getVar('mid')
 /* todo a deplacer dans le template JJD */
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 global $xoopsModule;
-$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon16 = Admin::iconUrl('', 16);
 
 $edit_delete = '';
 if (is_object($xoopsUser) && $isAdmin) {

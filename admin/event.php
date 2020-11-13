@@ -25,6 +25,7 @@ use XoopsModules\Extcal\{Helper,
     EventmemberHandler,
     LocationHandler
 };
+use Xmf\Module\Admin;
 use Xmf\Request;
 
 require_once __DIR__ . '/admin_header.php';
@@ -200,7 +201,7 @@ switch ($op) {
         // @author      Gregory Mage (Aka Mage)
         //***************************************************************************************
         //         require_once XOOPS_ROOT_PATH . "/modules/extcal/class/admin.php";
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
@@ -260,7 +261,7 @@ switch ($op) {
             // @author      Gregory Mage (Aka Mage)
             //***************************************************************************************
             //require_once XOOPS_ROOT_PATH . "/modules/extcal/class/admin.php";
-            $adminObject = \Xmf\Module\Admin::getInstance();
+            $adminObject = Admin::getInstance();
             $adminObject->displayNavigation(basename(__FILE__));
             //***************************************************************************************
 
@@ -277,7 +278,7 @@ switch ($op) {
         // @author      Gregory Mage (Aka Mage)
         //***************************************************************************************
         //require_once XOOPS_ROOT_PATH . "/modules/extcal/class/admin.php";
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
         if (isset($_POST['deleteSelection'][0])) {
@@ -331,7 +332,7 @@ switch ($op) {
         // @author      Gregory Mage (Aka Mage)
         //***************************************************************************************
 
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 

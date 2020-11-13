@@ -17,6 +17,7 @@
  * @author       XOOPS Development Team,
  */
 
+use Xmf\Module\Admin;
 use Xmf\Request;
 use XoopsModules\Extcal\{CategoryHandler,
     Form
@@ -263,7 +264,7 @@ switch ($op) {
     case 'list':
     default:
         xoops_cp_header();
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
 
         $adminObject->addItemButton('Add Category', 'cat.php?op=new', 'add', '');

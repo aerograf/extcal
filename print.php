@@ -21,6 +21,7 @@ use XoopsModules\Extcal\{Helper,
     LocationHandler,
     EventHandler
 };
+use Xmf\Request;
 
 require_once __DIR__ . '/header.php';
 require_once __DIR__ . '/include/constantes.php';
@@ -32,7 +33,7 @@ require_once XOOPS_ROOT_PATH . '/language/' . $xoopsConfig['language'] . '/calen
 /** @var Helper $helper */
 $helper = Helper::getInstance();
 
-$eventId = \Xmf\Request::getInt('event', 0, 'GET');
+$eventId = Request::getInt('event', 0, 'GET');
 
 $eventHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 $event        = $eventHandler->objectToArray($eventHandler->getEvent($eventId), ['cat_id']);

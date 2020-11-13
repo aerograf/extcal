@@ -1,7 +1,9 @@
 <?php
 
+use Xmf\Request;
+
 $step = 'default';
-if (\Xmf\Request::hasVar('step', 'POST')) {
+if (Request::hasVar('step', 'POST')) {
     $step = $_POST['step'];
 }
 

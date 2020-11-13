@@ -21,6 +21,7 @@ use XoopsModules\Extcal\{Helper,
     EventHandler,
     CategoryHandler
 };
+use Xmf\Request;
 
 require_once dirname(__DIR__) . '/include/constantes.php';
 
@@ -57,10 +58,10 @@ function bExtcalUpcomingShow($options)
 
     //-------------------
     /* ========================================================================== */
-    $year  = \Xmf\Request::getInt('year', date('Y'), 'GET');
-    $month = \Xmf\Request::getInt('month', date('n'), 'GET');
-    $day   = \Xmf\Request::getInt('day', date('j'), 'GET');
-    $cat   = \Xmf\Request::getInt('cat', 0, 'GET');
+    $year  = Request::getInt('year', date('Y'), 'GET');
+    $month = Request::getInt('month', date('n'), 'GET');
+    $day   = Request::getInt('day', date('j'), 'GET');
+    $cat   = Request::getInt('cat', 0, 'GET');
     /* ========================================================================== */
 
     // Validate the date (day, month and year)

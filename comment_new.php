@@ -16,8 +16,11 @@
  * @since
  * @author       XOOPS Development Team,
  */
+
+use Xmf\Request;
+
 require_once dirname(dirname(__DIR__)) . '/mainfile.php';
-$com_itemid = \Xmf\Request::getInt('com_itemid', 0, 'GET');
+$com_itemid = Request::getInt('com_itemid', 0, 'GET');
 /** @var \XoopsMySQLDatabase $xoopsDB */
 if ($com_itemid > 0) {
     // Get link title

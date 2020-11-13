@@ -3,6 +3,7 @@
 use XoopsModules\Extcal\{Helper,
     EventHandler
 };
+use Xmf\Request;
 
 require_once __DIR__ . '/header.php';
 require_once __DIR__ . '/include/constantes.php';
@@ -18,7 +19,7 @@ $helper = Helper::getInstance();
 /** @var EventHandler $eventHandler */
 $eventHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
-$cat = \Xmf\Request::getInt('cat', 0, 'GET');
+$cat = Request::getInt('cat', 0, 'GET');
 
 if (function_exists('mb_http_output')) {
     mb_http_output('pass');

@@ -20,6 +20,7 @@
 use XoopsModules\Extcal\{Helper,
     CategoryHandler
 };
+use Xmf\Module\Admin;
 use Xmf\Request;
 
 require_once __DIR__ . '/admin_header.php';
@@ -61,7 +62,7 @@ switch ($step) {
         xoops_cp_header();
         // @author      Gregory Mage (Aka Mage)
         //***************************************************************************************
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
