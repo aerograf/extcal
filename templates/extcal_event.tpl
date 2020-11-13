@@ -113,7 +113,7 @@
                 <br>
                 <{if $location.adresse.value}><{$location.adresse.value}><br><{/if}>
                 <{if $location.ville.value}><{$location.ville.value}><br><{/if}>
-                <{if $location.telephone.value}><{$location.telephone.value}><br><{/if}>
+                <{if $location.telephone.value|default:false}><{$location.telephone.value}><br><{/if}>
                 <{if $location.site.value}>
                     <a href="<{$location.site.value}>" target="_blank">
                         <{$smarty.const._MD_EXTCAL_VISIT_SITE}>
@@ -203,7 +203,7 @@
         <tr>
             <td colspan="3" class="even">
                 <b><{$smarty.const._MD_EXTCAL_WHOS_GOING}> (<{$eventmember.member.nbUser}>)
-                    :</b> <{foreach name=eventMemberList from=$eventmember.member.userList item=member}><{if $smarty.foreach.eventMemberList.first != 1}>, <{/if}>
+                    :</b> <{foreach name=eventMemberList from=$eventmember.member.userList|default:null item=member}><{if $smarty.foreach.eventMemberList.first != 1}>, <{/if}>
                     <a href="<{$xoops_url}>/userinfo.php?uid=<{$member.uid}>"><{$member.uname}></a><{/foreach}>
                 <{if $eventmember.member.show_button}>
                     <form style="display:inline;" method="post" action="event_member.php">
@@ -220,7 +220,7 @@
         <tr>
             <td colspan="3" class="even">
                 <b><{$smarty.const._MD_EXTCAL_WHOSNOT_GOING}> (<{$eventmember.notmember.nbUser}>)
-                    :</b> <{foreach name=eventMemberList from=$eventmember.notmember.userList item=member}><{if $smarty.foreach.eventMemberList.first != 1}>, <{/if}>
+                    :</b> <{foreach name=eventMemberList from=$eventmember.notmember.userList|default:null item=member}><{if $smarty.foreach.eventMemberList.first != 1}>, <{/if}>
                     <a href="<{$xoops_url}>/userinfo.php?uid=<{$member.uid}>"><{$member.uname}></a><{/foreach}>
                 <{if $eventmember.notmember.show_button}>
                     <form style="display:inline;" method="post" action="event_notmember.php">
@@ -246,7 +246,7 @@
 
 
     <div id="map" align="center" style="visibility: hidden;"><br>
-        <{$map}>
+        <{$map|default:''}>
     </div>
 </table>
 <{if $showFile == 1}>

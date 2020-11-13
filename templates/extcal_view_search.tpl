@@ -1,6 +1,6 @@
 <{include file="db:extcal_navbar.tpl"}>
 
-<form action="<{$navigSelectBox.action}>" method="post">
+<form action="<{$navigSelectBox.action|default:''}>" method="post">
     <{securityToken}><{*//mb*}>
     <table class="outer" style="border-top: none;">
         <tr>

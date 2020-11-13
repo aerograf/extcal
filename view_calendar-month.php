@@ -105,7 +105,10 @@ while (false !== ($weekCalObj = $monthCalObj->fetch())) {
             'number'     => $dayCalObj->thisDay(),
             'isSelected' => $dayCalObj->isSelected(),
         ];
-        if (@count($eventsArray[$dayCalObj->thisDay()]) > 0 && !$dayCalObj->isEmpty()) {
+        if (isset($eventsArray[$dayCalObj->thisDay()]) &&
+            is_array($eventsArray[$dayCalObj->thisDay()]) &&
+            count($eventsArray[$dayCalObj->thisDay()]) > 0 &&
+            !$dayCalObj->isEmpty()) {
             $tableRows[$rowId]['week'][$cellId]['events'] = $eventsArray[$dayCalObj->thisDay()];
         } else {
             $tableRows[$rowId]['week'][$cellId]['events'] = '';
