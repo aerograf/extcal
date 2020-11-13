@@ -39,13 +39,17 @@ function xoops_module_update_extcal(\XoopsModule $xoopsModule, $previousVersion 
 
     $dir = XOOPS_ROOT_PATH . '/uploads/extcal';
     if (!is_dir($dir)) {
-        mkdir($dir, 0777);
+        if (!mkdir($dir, 0777) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
         copy($indexFile, $dir . '/index.html');
     }
 
     $dir = XOOPS_ROOT_PATH . '/uploads/extcal/location';
     if (!is_dir($dir)) {
-        mkdir($dir, 0777);
+        if (!mkdir($dir, 0777) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
         copy($indexFile, $dir . '/index.html');
     }
     //------------------------------------------------------------

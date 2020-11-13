@@ -17,8 +17,12 @@ function xoops_module_install_extcal(\XoopsModule $xoopsModule)
     // Create eXtCal upload directory
     $dir = XOOPS_ROOT_PATH . '/uploads/extcal';
     if (!is_dir($dir)) {
-        mkdir($dir);
-        mkdir($dir . '/location');
+        if (!mkdir($dir) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
+        if (!mkdir($concurrentDirectory = $dir . '/location') && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
 
         // Copy index.html files on uploads folders
         $indexFile = __DIR__ . '/index.html';
