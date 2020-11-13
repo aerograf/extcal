@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/constantes.php';
+require_once dirname(__DIR__, 2) . '/include/constantes.php';
 define('_MI_EXTCAL_NAME', 'eXtCal');
 define('_MI_EXTCAL_ABOUT', 'About');
 define('_MI_EXTCAL_AFTER', 'After');
@@ -184,7 +184,7 @@ define('_MI_EXTCAL_EDITOR_USER', 'Editor to use (user):');
 define('_MI_EXTCAL_EDITOR_USER_DESC', "Select the editor to use for user side. If you have a 'simple' install (e.g you use only XOOPS core editor class, provided in the standard xoops core package), then you can just select DHTML and Compact");
 
 //Help
-define('_MI_EXTCAL_DIRNAME', basename(dirname(dirname(__DIR__))));
+define('_MI_EXTCAL_DIRNAME', basename(dirname(__DIR__, 2)));
 define('_MI_EXTCAL_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
 define('_MI_EXTCAL_BACK_2_ADMIN', 'Back to Administration of ');
 define('_MI_EXTCAL_OVERVIEW', 'Overview');

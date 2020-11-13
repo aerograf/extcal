@@ -26,13 +26,13 @@ use XoopsModules\Extcal\{Helper,
 // Include xoops admin header
 require_once __DIR__ . '/admin_header.php';
 // require_once  dirname(__DIR__) . '/class/ExtcalPersistableObjectHandler.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/kernel/module.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/tree.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopslists.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/pagenav.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsform/grouppermform.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/uploader.php';
+require_once dirname(__DIR__, 3) . '/kernel/module.php';
+require_once dirname(__DIR__, 3) . '/class/xoopsformloader.php';
+require_once dirname(__DIR__, 3) . '/class/tree.php';
+require_once dirname(__DIR__, 3) . '/class/xoopslists.php';
+require_once dirname(__DIR__, 3) . '/class/pagenav.php';
+require_once dirname(__DIR__, 3) . '/class/xoopsform/grouppermform.php';
+require_once dirname(__DIR__, 3) . '/class/uploader.php';
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 if ($xoopsUser) {

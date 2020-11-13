@@ -26,7 +26,7 @@ use XoopsModules\Extcal\{CategoryHandler,
 const CONFIRM = 'confirm';
 
 require_once __DIR__ . '/admin_header.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
+require_once dirname(__DIR__, 3) . '/class/xoopsformloader.php';
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 global $xoopsUser, $xoopsTpl;

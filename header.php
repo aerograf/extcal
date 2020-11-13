@@ -30,7 +30,7 @@ use XoopsModules\Extcal\{Helper,
 };
 
 include __DIR__ . '/preloads/autoloader.php';
-require dirname(dirname(__DIR__)) . '/mainfile.php';
+require dirname(__DIR__, 2) . '/mainfile.php';
 
 require_once XOOPS_ROOT_PATH . '/header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
