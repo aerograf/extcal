@@ -832,12 +832,12 @@ $modversion['blocks'][] = [
 ];
 
 $modversion['blocks'][] = [
-    'file'        => "spotlight_events.php",
+    'file'        => 'spotlight_events.php',
     'name'        => _MI_EXTCAL_BNAME2,
     'description' => _MI_EXTCAL_BNAME2_DESC,
-    'show_func'   => "bExtcalSpotlightShow",
-    'options'     => "0|0|0|1|0",
-    'edit_func'   => "bExtcalSpotlightEdit",
+    'show_func'   => 'bExtcalSpotlightShow',
+    'options'     => '0|0|0|1|0',
+    'edit_func'   => 'bExtcalSpotlightEdit',
     'template'    => 'extcal_block_spotlight.tpl',
 ];
 
