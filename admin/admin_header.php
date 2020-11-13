@@ -27,6 +27,13 @@ use XoopsModules\Extcal\{Helper,
     LocationHandler
 };
 use Xmf\Module\Admin;
+/** @var Helper $helper */
+/** @var CategoryHandler $categoryHandler */
+/** @var EventHandler $eventHandler */
+/** @var EventmemberHandler $eventmemberHandler */
+/** @var EventNotMemberHandler $eventNotMemberHandler */
+/** @var FileHandler $fileHandler */
+/** @var LocationHandler $locationHandler */
 
 require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
 require_once $GLOBALS['xoops']->path('www/class/xoopsformloader.php');
@@ -37,7 +44,6 @@ require_once dirname(__DIR__) . '/preloads/autoloader.php';
 $moduleDirName      = basename(dirname(__DIR__));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-/** @var Helper $helper */
 $helper = Helper::getInstance();
 /** @var Xmf\Module\Admin $adminObject */
 $adminObject = Admin::getInstance();
@@ -64,15 +70,9 @@ if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof \XoopsTpl)
     $xoopsTpl = new \XoopsTpl();
 }
 
-/** @var CategoryHandler $categoryHandler */
 $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
-/** @var EventHandler $eventHandler */
 $eventHandler = $helper->getHandler(_EXTCAL_CLN_EVENT);
-/** @var EventmemberHandler $eventmemberHandler */
 $eventmemberHandler = $helper->getHandler(_EXTCAL_CLN_MEMBER);
-/** @var EventNotMemberHandler $eventNotMemberHandler */
 $eventNotMemberHandler = $helper->getHandler(_EXTCAL_CLN_NOT_MEMBER);
-/** @var FileHandler $fileHandler */
 $fileHandler = $helper->getHandler(_EXTCAL_CLN_FILE);
-/** @var LocationHandler $locationHandler */
 $locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);
