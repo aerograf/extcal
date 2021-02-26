@@ -222,7 +222,7 @@ function bExtcalMinicalShow($options)
     ];
 
     $horloge             = [];
-    $horloge['display']  = ('' != trim($options[11]));
+    $horloge['display']  = ('' != trim($options[10]));
     $horloge['fullName'] = XOOPS_URL . _EXTCAL_PATH_HORLOGES . $options[11];
     $horloge['width']    = $options[12] . 'px';
     $horloge['height']   = $options[13] . 'px';
@@ -377,7 +377,7 @@ function bExtcalMinicalEdit($options)
     /*
               $t = [];
               //while (list($key,$val) = each($xfValue)) {
-                foreach ($xfValue as $key => $val) {
+                foreach ($xfValue as $key => $val) {
                $t[] = $val->render();
               }
              return implode("\n", $t);
