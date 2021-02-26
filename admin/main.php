@@ -5,6 +5,7 @@ use Xmf\Request;
 use XoopsModules\Extcal\{Helper,
     EventHandler,
     CategoryHandler,
+    Common\TestdataButtons,
     Time
 };
 
@@ -161,7 +162,24 @@ switch ($op) {
         //        $adminObject->addLineConfigLabel(_AM_EXTCAL_CONFIG_PHP, $xoopsModule->getInfo("min_php"), 'php');
         //        $adminObject->addLineConfigLabel(_AM_EXTCAL_CONFIG_XOOPS, $xoopsModule->getInfo("min_xoops"), 'xoops');
         $adminObject->displayNavigation(basename(__FILE__));
-        $adminObject->displayIndex();
+    //------------- Test Data Buttons ----------------------------
+    if ($helper->getConfig('displaySampleButton')) {
+        TestdataButtons::loadButtonConfig($adminObject);
+        $adminObject->displayButton('left', '');;
+    }
+    $op = Request::getString('op', 0, 'GET');
+    switch ($op) {
+        case 'hide_buttons':
+            TestdataButtons::hideButtons();
+            break;
+        case 'show_buttons':
+            TestdataButtons::showButtons();
+            break;
+    }
+    //------------- End Test Data Buttons ----------------------------
+
+
+    $adminObject->displayIndex();
         //***************************************************************************************
         $pendingEvent = $eventHandler->objectToArray($eventHandler->getPendingEvent(), ['cat_id']);
         $eventHandler->formatEventsDate($pendingEvent, 'd/m/Y');
