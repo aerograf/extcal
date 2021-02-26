@@ -784,7 +784,7 @@ $modversion['config'][] = [
 
 //modif JJD ------------------------------------------------------------
 
-// Templates
+// ------------------- Templates ------------------- //
 $modversion['templates'] = [
     ['file' => 'extcal_buttons_event.tpl', 'description' => 'buttons event'],
     ['file' => 'extcal_categorie.tpl', 'description' => 'Category'],

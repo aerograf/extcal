@@ -27,17 +27,7 @@ if ((!defined('XOOPS_ROOT_PATH')) || !($GLOBALS['xoopsUser'] instanceof \XoopsUs
     exit('Restricted access' . PHP_EOL);
 }
 
-/**
- * @param string $tablename
- *
- * @return bool
- */
-function tableExists($tablename)
-{
-    $result = $GLOBALS['xoopsDB']->queryF("SHOW TABLES LIKE '$tablename'");
 
-    return $GLOBALS['xoopsDB']->getRowsNum($result) > 0;
-}
 
 /**
  * Prepares system prior to attempting to install module
@@ -52,7 +42,9 @@ function xoops_module_pre_update_extcal(\XoopsModule $module)
     $xoopsSuccess = $utility::checkVerXoops($module);
     $phpSuccess   = $utility::checkVerPhp($module);
 
-    //mb    return $xoopsSuccess && $phpSuccess;
+    return $xoopsSuccess && $phpSuccess;
+
+    /*
 
     //    XoopsLoad::load('migrate', 'extcal');
     $configurator = new Common\Configurator();
@@ -67,6 +59,7 @@ function xoops_module_pre_update_extcal(\XoopsModule $module)
     $migrator->synchronizeSchema();
 
     return true;
+    */
 }
 
 /**

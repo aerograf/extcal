@@ -27,9 +27,10 @@ class Migrate extends \Xmf\Database\Migrate
 
     /**
      * Migrate constructor.
-     * @param \XoopsModules\Extcal\Common\Configurator $configurator
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
-    public function __construct(\XoopsModules\Extcal\Common\Configurator $configurator)
+    public function __construct()
     {
         $class = __NAMESPACE__ . '\\' . 'Configurator';
         if (!\class_exists($class)) {
@@ -38,9 +39,19 @@ class Migrate extends \Xmf\Database\Migrate
         $configurator       = new $class();
         $this->renameTables = $configurator->renameTables;
 
-        $moduleDirName = \basename(dirname(__DIR__, 2));
+        $moduleDirName = \basename(\dirname(__DIR__, 2));
         parent::__construct($moduleDirName);
     }
+
+//    public function __construct(Configurator $configurator = null)
+//    {
+//        if (null !== $configurator) {
+//            $this->renameTables = $configurator->renameTables;
+//
+//            $moduleDirName = basename(dirname(__DIR__, 2));
+//            parent::__construct($moduleDirName);
+//        }
+//    }
 
     /**
      * rename table if needed

@@ -12,6 +12,8 @@ namespace XoopsModules\Extcal;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+use Xmf\Request;
+
 /**
  * @copyright    {@link https://xoops.org/ XOOPS Project}
  * @license      {@link https://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
@@ -113,7 +115,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
         $criteria->add(new \Criteria('file_approved', 1));
         $criteria->add(new \Criteria('event_id', $eventId));
 
-        if (\Xmf\Request::hasVar('filetokeep', 'POST')) {
+        if (Request::hasVar('filetokeep', 'POST')) {
             if (\is_array($_POST['filetokeep'])) {
                 $count = \count($_POST['filetokeep']);
                 $in    = '(' . $_POST['filetokeep'][0];

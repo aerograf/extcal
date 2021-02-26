@@ -14,12 +14,13 @@
  */
 
 use Xmf\Database\TableLoad;
-use \Xmf\Request;
-use XoopsModules\Extcal\{Helper,
-    Common,
+use Xmf\Request;
+use Xmf\Yaml;
+use XoopsModules\Extcal\{
+    Helper,
+    Common\Configurator,
     Utility
 };
-use Xmf\Yaml;
 
 require_once dirname(__DIR__, 3) . '/include/cp_header.php';
 require dirname(__DIR__) . '/preloads/autoloader.php';
@@ -49,6 +50,9 @@ switch ($op) {
     case 'save':
         saveSampleData();
         break;
+    case 'clear':
+        clearSampleData();
+        break;
 }
 
 // XMF TableLoad for SAMPLE data
@@ -61,7 +65,7 @@ function loadSampleData()
     $helper             = Helper::getInstance();
 
     $utility      = new Utility();
-    $configurator = new Common\Configurator();
+    $configurator = new Configurator();
 
     $tables = \Xmf\Module\Helper::getHelper($moduleDirName)->getModule()->getInfo('tables');
 
@@ -102,8 +106,7 @@ function saveSampleData()
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
     $helper             = Helper::getInstance();
     $skipColumns        = [];
-
-    $tables = $helper->getModule()->getInfo('tables');
+    $tables             = $helper->getModule()->getInfo('tables');
 
     $languageFolder = __DIR__ . '/' . $xoopsConfig['language'];
     if (!file_exists($languageFolder . '/')) {
@@ -119,7 +122,7 @@ function saveSampleData()
 
     // save permissions
     $criteria = new \CriteriaCompo();
-    $criteria->add(new \Criteria('gperm_modid', \Xmf\Module\Helper::getHelper($moduleDirName)->getModule()->getVar('mid')));
+    $criteria->add(new \Criteria('gperm_modid', $helper->getModule()->getVar('mid')));
     $skipColumns[] = 'gperm_id';
     TableLoad::saveTableToYamlFile('group_permission', $exportFolder . 'group_permission.yml', $criteria, $skipColumns);
     unset($criteria);
@@ -197,4 +200,18 @@ function loadTableFromArrayWithReplace($table, $data, $search, $replace)
     }
 
     return $count;
+}
+
+function clearSampleData(){
+    $moduleDirName      = basename(dirname(__DIR__));
+    $moduleDirNameUpper = mb_strtoupper($moduleDirName);
+    $helper             = Helper::getInstance();
+    // Load language files
+    $helper->loadLanguage('common');
+    $tables = $helper->getModule()->getInfo('tables');
+    // truncate module tables
+    foreach ($tables as $table) {
+        \Xmf\Database\TableLoad::truncateTable($table);
+    }
+    redirect_header($helper->url('admin/index.php'), 1, constant('CO_' . $moduleDirNameUpper . '_' . 'CLEAR_SAMPLEDATA_OK'));
 }
