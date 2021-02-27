@@ -588,7 +588,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     public function objectToArrayWithoutExternalKey($object, $format = 's')
     {
         $ret = [];
-        if (null !== $object) {
+        if (!empty($object)) {
             $vars = $object->getVars();
             foreach ($vars as $k => $v) {
                 $ret[$k] = $object->getVar($k, $format);
