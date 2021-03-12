@@ -20,9 +20,14 @@ namespace XoopsModules\Extcal;
  **/
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 
-use XoopsModules\Extcal;
-use XoopsModules\Extcal\Common;
-use XoopsModules\Extcal\Constants;
+use XoopsModules\Extcal\{Helper,
+    EventHandler,
+    CategoryHandler,
+    Common,
+    Constants
+};
+
+/** @var CategoryHandler $categoryHandler */
 
 /**
  * Class Utility
@@ -30,7 +35,6 @@ use XoopsModules\Extcal\Constants;
 class Utility extends Common\SysUtility
 {
     //--------------- Custom module methods -----------------------------
-
     /**
      * @param $eventId
      *
@@ -38,7 +42,7 @@ class Utility extends Common\SysUtility
      */
     public static function getEvent($eventId)
     {
-        $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+        $eventHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_EVENT);
         $event        = $eventHandler->getEvent($eventId);
         $t            = $event->getVars();
         $data         = [];
@@ -65,20 +69,22 @@ class Utility extends Common\SysUtility
             $delimg = @$REQUEST['delimg_' . $j . ''];
             $delimg = isset($delimg) ? (int)$delimg : 0;
             if (0 == $delimg && !empty($REQUEST['xoops_upload_file'][$j])) {
-                $upload = new \XoopsMediaUploader($uploaddir_event, [
+                $upload = new \XoopsMediaUploader(
+                    $uploaddir_event, [
                     'image/gif',
                     'image/jpeg',
                     'image/pjpeg',
                     'image/x-png',
                     'image/png',
                     'image/jpg',
-                ], 3145728, null, null);
+                ], 3145728, null, null
+                );
                 if ($upload->fetchMedia($REQUEST['xoops_upload_file'][$j])) {
                     $upload->setPrefix('event_');
                     $upload->fetchMedia($REQUEST['xoops_upload_file'][$j]);
                     if (!$upload->upload()) {
                         $errors = $upload->getErrors();
-                        redirect_header('<script>javascript:history.go(-1)</script>', 3, $errors);
+                        \redirect_header('<script>javascript:history.go(-1)</script>', 3, $errors);
                     } else {
                         if (1 == $j) {
                             $event_picture1 = $upload->getSavedFileName();
@@ -100,9 +106,9 @@ class Utility extends Common\SysUtility
                 } elseif (2 == $j) {
                     $event_picture2 = '';
                 }
-                if (is_file($url_event)) {
-                    chmod($url_event, 0777);
-                    unlink($url_event);
+                if (\is_file($url_event)) {
+                    \chmod($url_event, 0777);
+                    \unlink($url_event);
                 }
             }
         }
@@ -122,7 +128,7 @@ class Utility extends Common\SysUtility
     {
         global $xoopsUser;
         // Category selectbox
-        $categoryHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+        $categoryHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_CAT);
 
         $catsList  = $categoryHandler->getAllCat($xoopsUser);
         $catSelect = new \XoopsFormSelect('', $name, $cat);
@@ -141,28 +147,28 @@ class Utility extends Common\SysUtility
      *
      ******************************************************************
      * @param string $name
-     * @param        $cat
+     * @param array|int|null $cat
      * @return array
      */
-    public static function getCheckeCategories($name = 'cat', $cat)
+    public static function getCheckeCategories($name = 'cat', $cat = null)
     {
         global $xoopsUser;
         // Category selectbox
         //<option style="background-color:#00FFFF;">VARCHAR</option>
 
-        $categoryHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-        $catsList   = $categoryHandler->getAllCat($xoopsUser);
+        $categoryHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_CAT);
+        $catsList        = $categoryHandler->getAllCat($xoopsUser);
 
         $t = [];
         foreach ($catsList as $catList) {
             $cat_id    = $catList->getVar('cat_id');
             $name      = $catList->getVar('cat_name');
             $cat_color = $catList->getVar('cat_color');
-            $checked   = in_array($cat_id, $cat) ? 'checked' : '';
+            $checked   = \in_array($cat_id, $cat) ? 'checked' : '';
             $cat       = ''
                          . "<div style='float:left; margin-left:5px;'>"
                          . "<input type='checkbox' name='{$name}[{$cat_id}]' value='1' {$checked}>"
-                         . "<div style='absolute:left;height:12px; width:6px; background-color:#{$cat_color}; border:1px solid black; float:left; margin-right:5px;' ></div>"
+                         . "<div style='absolute:left;height:12px; width:6px; background-color:#{$cat_color}; border:1px solid #000000; float:left; margin-right:5px;' ></div>"
                          . " {$name}"
                          . '</div>';
 
@@ -177,30 +183,30 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param string $name
      * @param string $caption
-     * @param        $defaut
+     * @param mixed  $default
      * @param bool   $addNone
      * @return \XoopsFormSelect
      */
-    public static function getListOrderBy($name = 'orderby', $caption = '', $defaut, $addNone = false)
+    public static function getListOrderBy($name = 'orderby', $caption = '', $default = null, $addNone = false)
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
+        $select = new \XoopsFormSelect($caption, $name, $default);
         if ($addNone) {
             $select->addOption('', '');
         }
 
-        $select->addOption('year ASC', _MD_EXTCAL_YEAR . ' ' . _MD_EXTCAL_ORDER_BY_ASC);
-        $select->addOption('year DESC', _MD_EXTCAL_YEAR . ' ' . _MD_EXTCAL_ORDER_BY_DESC);
+        $select->addOption('year ASC', \_MD_EXTCAL_YEAR . ' ' . \_MD_EXTCAL_ORDER_BY_ASC);
+        $select->addOption('year DESC', \_MD_EXTCAL_YEAR . ' ' . \_MD_EXTCAL_ORDER_BY_DESC);
 
-        $select->addOption('month ASC', _MD_EXTCAL_MONTH . ' ' . _MD_EXTCAL_ORDER_BY_ASC);
-        $select->addOption('month DESC', _MD_EXTCAL_MONTH . ' ' . _MD_EXTCAL_ORDER_BY_DESC);
+        $select->addOption('month ASC', \_MD_EXTCAL_MONTH . ' ' . \_MD_EXTCAL_ORDER_BY_ASC);
+        $select->addOption('month DESC', \_MD_EXTCAL_MONTH . ' ' . \_MD_EXTCAL_ORDER_BY_DESC);
 
-        $select->addOption('event_title ASC', _MD_EXTCAL_ALPHA . ' ' . _MD_EXTCAL_ORDER_BY_ASC);
-        $select->addOption('event_title DESC', _MD_EXTCAL_ALPHA . ' ' . _MD_EXTCAL_ORDER_BY_DESC);
+        $select->addOption('event_title ASC', \_MD_EXTCAL_ALPHA . ' ' . \_MD_EXTCAL_ORDER_BY_ASC);
+        $select->addOption('event_title DESC', \_MD_EXTCAL_ALPHA . ' ' . \_MD_EXTCAL_ORDER_BY_DESC);
 
-        $select->addOption('cat_name ASC', _MD_EXTCAL_CATEGORY . ' ' . _MD_EXTCAL_ORDER_BY_ASC);
-        $select->addOption('cat_name DESC', _MD_EXTCAL_CATEGORY . ' ' . _MD_EXTCAL_ORDER_BY_DESC);
+        $select->addOption('cat_name ASC', \_MD_EXTCAL_CATEGORY . ' ' . \_MD_EXTCAL_ORDER_BY_ASC);
+        $select->addOption('cat_name DESC', \_MD_EXTCAL_CATEGORY . ' ' . \_MD_EXTCAL_ORDER_BY_DESC);
 
         return $select;
     }
@@ -210,17 +216,17 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param string $name
      * @param string $caption
-     * @param        $defaut
+     * @param mixed  $default
      * @return \XoopsFormSelect
      */
-    public static function getListAndOr($name = 'andor', $caption = '', $defaut)
+    public static function getListAndOr($name = 'andor', $caption = '', $default = null)
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
+        $select = new \XoopsFormSelect($caption, $name, $default);
 
-        $select->addOption('AND', _MD_EXTCAL_AND);
-        $select->addOption('OR', _MD_EXTCAL_OR);
+        $select->addOption('AND', \_MD_EXTCAL_AND);
+        $select->addOption('OR', \_MD_EXTCAL_OR);
 
         return $select;
     }
@@ -230,18 +236,18 @@ class Utility extends Common\SysUtility
      ******************************************************************
      * @param        $name
      * @param        $caption
-     * @param        $defaut
+     * @param        $default
      * @param        $options
      * @param string $sep
      * @return \XoopsFormSelect
      */
-    public static function getList($name, $caption, $defaut, $options, $sep = ';')
+    public static function getList($name, $caption, $default, $options, $sep = ';')
     {
         global $xoopsUser;
 
-        $select = new \XoopsFormSelect($caption, $name, $defaut);
-        if (!is_array($options)) {
-            $options = explode($sep, $options);
+        $select = new \XoopsFormSelect($caption, $name, $default);
+        if (!\is_array($options)) {
+            $options = \explode($sep, $options);
         }
 
         foreach ($options as $h => $hValue) {
@@ -259,6 +265,8 @@ class Utility extends Common\SysUtility
      * @param        $endMonth
      * @param string $mode
      * @return \DateTime
+     * @throws \Exception
+     * @throws \Exception
      */
     public static function getDateBetweenDates($ts, $startMonth, $endMonth, $mode = 'w')
     {
@@ -330,8 +338,8 @@ class Utility extends Common\SysUtility
             echo "<hr>{$msg}<hr>";
         }
 
-        $txt = print_r($t, true);
-        echo '<pre>Number of items: ' . count($t) . "<br>{$txt}</pre>";
+        $txt = \print_r($t, true);
+        echo '<pre>Number of items: ' . \count($t) . "<br>{$txt}</pre>";
     }
 
     /*****************************************************************/
@@ -374,7 +382,7 @@ class Utility extends Common\SysUtility
             echo "<hr>{$msg}<hr>";
         }
 
-        echo 'date --->' . $tsName . ' = ' . $ts . ' - ' . date('d-m-Y H:m:s', $ts) . '<br>';
+        echo 'date --->' . $tsName . ' = ' . $ts . ' - ' . \date('d-m-Y H:m:s', $ts) . '<br>';
     }
 
     /*****************************************************************/
@@ -393,10 +401,10 @@ class Utility extends Common\SysUtility
         for ($h = 0, $count = mb_strlen($lstSep); $h < $count; ++$h) {
             $sep2replace = mb_substr($lstSep, $h, 1);
             if (mb_strpos($date, $sep2replace)) {
-                $date = str_replace($sep2replace, $sep, $date);
+                $date = \str_replace($sep2replace, $sep, $date);
             }
 
-            return strtotime($date);
+            return \strtotime($date);
         }
     }
 
@@ -412,9 +420,9 @@ class Utility extends Common\SysUtility
     {
         //$cd = strtotime($givendate);
         $cd      = $givendate;
-        $newdate = date('Y-m-d h:i:s', mktime(date('h', $cd), date('i', $cd), date('s', $cd), date('m', $cd) + $mth, date('d', $cd) + $day, date('Y', $cd) + $yr));
+        $newdate = \date('Y-m-d h:i:s', \mktime(\date('h', $cd), \date('i', $cd), \date('s', $cd), \date('m', $cd) + $mth, \date('d', $cd) + $day, \date('Y', $cd) + $yr));
 
-        return strtotime($newdate);
+        return \strtotime($newdate);
     }
 
     /**
@@ -426,7 +434,7 @@ class Utility extends Common\SysUtility
      */
     public static function addDate2($date, $number, $interval = 'd')
     {
-        $date_time_array = getdate($date);
+        $date_time_array = \getdate($date);
         $hours           = $date_time_array['hours'];
         $minutes         = $date_time_array['minutes'];
         $seconds         = $date_time_array['seconds'];
@@ -462,7 +470,7 @@ class Utility extends Common\SysUtility
                 $seconds += $number;
                 break;
         }
-        $timestamp = mktime($hours, $minutes, $seconds, $month, $day, $year);
+        $timestamp = \mktime($hours, $minutes, $seconds, $month, $day, $year);
 
         return $timestamp;
     }
@@ -495,6 +503,5 @@ class Utility extends Common\SysUtility
         //return $ct->eclaircir($color,$plancher,$plafond);
         return ColorTools::eclaircir($color, $plancher, $plafond);
     }
-
     /**************************************************************************/
 }

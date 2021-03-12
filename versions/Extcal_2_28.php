@@ -21,10 +21,9 @@
 class Extcal_2_28
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
-     * @param             $options
+     * @param              $options
      */
     public function __construct(\XoopsModule $module, $options)
     {
@@ -87,6 +86,5 @@ __sql__;
         $xoopsDB->queryF($sql);
         //---------------------------------------------------
     }
-
     //-----------------------------------------------------------------
 }   // fin de la classe

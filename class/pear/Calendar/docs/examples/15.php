@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows more on how a week can be used.
  */
@@ -45,7 +46,7 @@ if (!$Validator->isValidWeek()) {
 <h2>Week: <?php echo $Week->thisWeek() . ' ' . date('F Y', $Week->thisMonth(true)); ?></h2>
 <?php
 $Week->build();
-while ($Day = $Week->fetch()) {
+while (false !== ($Day = $Week->fetch())) {
     echo '<p>' . date('jS F', $Day->thisDay(true)) . "</p>\n";
 }
 $days = $Week->fetchAll();

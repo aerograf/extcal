@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: demonstrates a decorator used to "attach a payload" to a selection
  * to make it available when iterating over calendar children.
@@ -101,7 +102,7 @@ $Day->build($selection);
         <th>Entry</th>
     </tr>
     <?php
-    while ($Hour = $Day->fetch()) {
+    while (false !== ($Hour = $Day->fetch())) {
         $hour   = $Hour->thisHour();
         $minute = $Hour->thisMinute();
 

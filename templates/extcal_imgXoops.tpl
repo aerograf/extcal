@@ -1,4 +1,4 @@
-<script src="<{$xoops_url}>/modules/extcal/include/AC_RunActiveContent.js"
+<script src="<{$xoops_url}>/modules/extcal/assets/js/AC_RunActiveContent.js"
         type="text/javascript"></script>
 
 <script type="text/javascript">

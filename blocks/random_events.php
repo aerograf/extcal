@@ -17,23 +17,29 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    CategoryHandler,
+    EventHandler
+};
 
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 /**
  * @param $options
  *
- * @return mixed
+ * @return array|bool
  */
 function bExtcalRandomShow($options)
 {
-    //    // require_once  dirname(__DIR__) . '/class/Config.php';
+    /** @var Helper $helper */
+    if (!class_exists(Helper::class)) {
+        return false;
+    }
 
-    /** @var Extcal\Helper $helper */
-    $helper = \XoopsModules\Extcal\Helper::getInstance();
-
-    $eventHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $helper = Helper::getInstance();
+    $helper->loadLanguage('main');
+    /** @var EventHandler $eventHandler */
+    $eventHandler = $helper->getHandler(_EXTCAL_CLN_EVENT);
 
     $nbEvent     = $options[0];
     $titleLenght = $options[1];
@@ -41,7 +47,7 @@ function bExtcalRandomShow($options)
     array_shift($options);
 
     // Checking if no cat is selected
-    if (0 == $options[0] && 1 == count($options)) {
+    if (isset($options[0]) && 0 == $options[0] && 1 == count($options)) {
         $options = 0;
     }
 
@@ -61,7 +67,9 @@ function bExtcalRandomEdit($options)
 {
     global $xoopsUser;
 
-    $categoryHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $helper = Helper::getInstance();
+    /** @var CategoryHandler $categoryHandler */
+    $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $categoryHandler->getAllCat($xoopsUser, 'extcal_cat_view');
 

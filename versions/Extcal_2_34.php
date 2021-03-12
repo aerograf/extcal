@@ -21,10 +21,9 @@
 class Extcal_2_34
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
-     * @param             $options
+     * @param              $options
      */
     public function __construct(\XoopsModule $module, $options)
     {

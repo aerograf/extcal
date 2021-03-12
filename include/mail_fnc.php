@@ -20,24 +20,26 @@
  * que la classe correspondante de la table a été générées avec classGenerator
  **/
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Utility
+};
 
-require_once dirname(dirname(dirname(__DIR__))) . '/class/uploader.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/mail/phpmailer/class.phpmailer.php'; // First we require_once the PHPMailer libary in our script
+require_once dirname(__DIR__, 3) . '/class/uploader.php';
+require_once dirname(__DIR__, 3) . '/class/mail/phpmailer/class.phpmailer.php'; // First we require_once the PHPMailer libary in our script
 // require_once  dirname(__DIR__) . '/class/Utility.php';
 require_once __DIR__ . '/constantes.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/template.php';
+require_once dirname(__DIR__, 3) . '/class/template.php';
 
 /********************************************************************
  *
  *******************************************************************
  * @param $mode
- * @param $event_id
- * @param $member_uid
+ * @param $eventId
+ * @param $memberUid
  * @param $subject
  * @param $tplMessage
  */
-function sendMail2member($mode, $event_id, $member_uid, $subject, $tplMessage)
+function sendMail2member($mode, $eventId, $memberUid, $subject, $tplMessage)
 {
     //mode = 0 pas d'entete
     //mode = 1 format text
@@ -47,8 +49,8 @@ function sendMail2member($mode, $event_id, $member_uid, $subject, $tplMessage)
     // $t = print_r($xoopsConfig, true);
     // echo "<pre>{$t}</pre>";
     /*
-    $member_uid = 1;
-    $event_id = 393;
+    $memberUid = 1;
+    $eventId = 393;
     $message = "Bonne journée à tous";
     $newStatus = 1;
     $oldStatus = 0;
@@ -66,13 +68,13 @@ function sendMail2member($mode, $event_id, $member_uid, $subject, $tplMessage)
     //--------------------------------------------------------------
     //Recuperation des données event,user et member
     //Recuperation des données de l'evennement
-    $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
-    $obj          = $eventHandler->getEvent($event_id);
+    $eventHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $obj          = $eventHandler->getEvent($eventId);
     $event        = $eventHandler->objectToArray($obj);
     $eventHandler->formatEventDate($event, _MD_EXTCAL_FORMAT_DATE);
 
     $submiter_uid = $event['event_submitter'];
-    // Extcal\Utility::echoArray($event,'event');
+    // Utility::echoArray($event,'event');
     //--------------------------------------------------------------
     //Recuperation des données du user createur de l'evennement
     $sql = <<<__sql__
@@ -84,19 +86,19 @@ __sql__;
     $rst      = $xoopsDB->query($sql);
     $submiter = $xoopsDB->fetchArray($rst);
     // echo "{$sql}<br>";
-    // Extcal\Utility::echoArray($submiter,'submiter');
+    // Utility::echoArray($submiter,'submiter');
     //--------------------------------------------------------------
     //Recuperation des données du membre inscrit
     $sql = <<<__sql__
   SELECT if(tu.name='', tu.uname, tu.name) AS name,     tu.uname,   tu.email
   FROM {$tblUsers} tu
-  WHERE tu.uid = {$member_uid};
+  WHERE tu.uid = {$memberUid};
 __sql__;
 
     $rst    = $xoopsDB->query($sql);
     $acteur = $xoopsDB->fetchArray($rst);
     //echo "{$sql}<br>";
-    // Extcal\Utility::echoArray($acteur,'acteur');
+    // Utility::echoArray($acteur,'acteur');
     //--------------------------------------------------------------
     //Recuperation des données des membres présents
     $sql = <<<__sql__
@@ -105,7 +107,7 @@ SELECT tu.uid, if(tu.name='', tu.uname, tu.name) AS name,   tu.uname,   tu.email
 FROM {$tblMember} tm,
      {$tblUsers}  tu
 WHERE tm.uid = tu.uid
-  AND tm.event_id = {$event_id}
+  AND tm.event_id = {$eventId}
 __sql__;
 
     $rst     = $xoopsDB->query($sql);
@@ -123,7 +125,7 @@ SELECT tu.uid, if(tu.name='', tu.uname, tu.name) AS name,   tu.uname,   tu.email
 FROM {$tblNotMember} tm,
      {$tblUsers}  tu
 WHERE tm.uid = tu.uid
-  AND tm.event_id = {$event_id}
+  AND tm.event_id = {$eventId}
 __sql__;
 
     $rst = $xoopsDB->query($sql);
@@ -132,7 +134,7 @@ __sql__;
         $members[$row['uid']] = $row;
     }
 
-    // Extcal\Utility::echoArray($members,'members');
+    // Utility::echoArray($members,'members');
     // exit;
 
     //--------------------------------------------------------------
@@ -167,7 +169,7 @@ __sql__;
         $destinataires[$row['email']] = $row['email'];
     }
 
-    // Extcal\Utility::echoArray($destinataires);
+    // Utility::echoArray($destinataires);
     // exit;
 
     $mail_fromName  = $xoopsConfig['sitename'];
@@ -210,8 +212,8 @@ function extcal_SendMail(
     $mail_body,
     $bEcho = false,
     $mode = 0,
-    $sep = '|')
-{
+    $sep = '|'
+) {
     global $ModName, $signature, $mail_admin, $xoopsConfig, $xoopsDB, $xoopsModule;
 
     //$bEcho=false;
@@ -247,12 +249,12 @@ function extcal_SendMail(
     }
 
     $xoopsMailer->multimailer->isHTML(true);
-    $xoopsMailer->setFromName($myts->oopsStripSlashesGPC($mail_fromname));
+    $xoopsMailer->setFromName(($mail_fromname));
 
-    $xoopsMailer->setFromEmail($myts->oopsStripSlashesGPC($mail_fromemail));
+    $xoopsMailer->setFromEmail(($mail_fromemail));
 
-    $xoopsMailer->setSubject($myts->oopsStripSlashesGPC($mail_subject));
-    $xoopsMailer->setBody($myts->oopsStripSlashesGPC($mail_body));
+    $xoopsMailer->setSubject(($mail_subject));
+    $xoopsMailer->setBody(($mail_body));
     //$xoopsMailer->encodeBody($mail_body);
 
     $xoopsMailer->useMail();
@@ -261,8 +263,8 @@ function extcal_SendMail(
     $xoopsMailer->send($bEcho);
 
     if ($bEcho) {
-        Extcal\Utility::extEcho($xoopsMailer->getSuccess());
-        Extcal\Utility::extEcho($xoopsMailer->getErrors());
+        Utility::extEcho($xoopsMailer->getSuccess());
+        Utility::extEcho($xoopsMailer->getErrors());
     }
     /*
 
@@ -270,9 +272,8 @@ function extcal_SendMail(
           ."mail_fromemail : {$mail_fromemail}<br>"
           ."mail_subject : {$mail_subject}<br>"
           ."mail_body : {$mail_body}<br><hr>";
-    */
-    //---------------------------
-    /*
+     //---------------------------
+
 
       $adresse = "jjd@kiolo.com";
       $bolOk = mail($adresse, "test envoi mail", "test envoi envoi mail via php");

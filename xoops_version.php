@@ -17,9 +17,9 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
-
-// defined('XOOPS_ROOT_PATH') || die('XOOPS Root Path not defined');
+use XoopsModules\Extcal\{Helper,
+    CategoryHandler
+};
 
 require_once __DIR__ . '/preloads/autoloader.php';
 
@@ -35,8 +35,8 @@ setlocale(LC_TIME, $xoopsConfig['language']);
 
 //***************************************************************************************
 $modversion['version']          = '2.40';
-$modversion['module_status']    = 'RC 1';
-$modversion['release_date']     = '2020/03/11';
+$modversion['module_status']    = 'RC 3';
+$modversion['release_date']     = '2020/07/09';
 $modversion['name']             = _MI_EXTCAL_NAME;
 $modversion['description']      = _MI_EXTCAL_DESC;
 $modversion['credits']          = 'Zoullou';
@@ -49,8 +49,6 @@ $modversion['official']         = 0;
 $modversion['image']            = 'assets/images/logoModule.png';
 $modversion['dirname']          = basename(__DIR__);
 $modversion['sqlfile']['mysql'] = 'sql/mysql.sql';
-//$modversion['onInstall']        = 'include/install_function.php';
-//$modversion['onUpdate']         = 'include/update_function.php';
 $modversion['system_menu']      = 1;
 $modversion['help']             = 'page=help';
 $modversion['modicons16']       = 'assets/images/icons/16';
@@ -58,7 +56,7 @@ $modversion['modicons32']       = 'assets/images/icons/32';
 //about
 $modversion['module_website_url']  = 'www.xoops.org/';
 $modversion['module_website_name'] = 'XOOPS';
-$modversion['min_php']             = '5.6';
+$modversion['min_php']             = '7.2';
 $modversion['min_xoops']           = '2.5.10';
 $modversion['min_admin']           = '1.2';
 $modversion['min_db']              = ['mysql' => '5.5'];
@@ -67,10 +65,9 @@ $modversion['hasAdmin']   = 1;
 $modversion['adminindex'] = 'admin/index.php';
 $modversion['adminmenu']  = 'admin/menu.php';
 
-
 //Install/Uninstall Functions
-$modversion['onInstall']   = 'include/oninstall.php';
-$modversion['onUpdate']    = 'include/onupdate.php';
+$modversion['onInstall'] = 'include/oninstall.php';
+$modversion['onUpdate']  = 'include/onupdate.php';
 //$modversion['onUninstall'] = 'include/onuninstall.php';
 
 // Menu
@@ -81,9 +78,8 @@ $i                     = 0;
 
 if (isset($GLOBALS['xoopsModule']) && is_object($GLOBALS['xoopsModule'])
     && 'extcal' === $GLOBALS['xoopsModule']->getVar('dirname')) {
-    $user = isset($GLOBALS['xoopsUser']) ? $GLOBALS['xoopsUser'] : null;
-    //    $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-    $categoryHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    $user            = $GLOBALS['xoopsUser'] ?? null;
+    $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
     if ($categoryHandler->haveSubmitRight($user)) {
         $modversion['sub'][0]['name'] = _MI_EXTCAL_SUBMIT_EVENT;
         $modversion['sub'][0]['url']  = _EXTCAL_FILE_NEW_EVENT;
@@ -578,6 +574,113 @@ $modversion['config'][] = [
     'default'     => 5,
 
 ];
+$modversion['config'][] = [
+    'name'        => 'break',
+    'title'       => '_MI_EXTCAL_SHOW_FORMOPTIONS',
+    'description' => '',
+    'formtype'    => 'line_break',
+    'valuetype'   => 'textbox',
+    'default'     => 'head',
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowIcon',
+    'title'       => '_MI_EXTCAL_FORMSHOW_ICON',
+    'description' => '_MI_EXTCAL_FORMSHOW_ICON_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowLocation',
+    'title'       => '_MI_EXTCAL_FORMSHOW_LOCATION',
+    'description' => '_MI_EXTCAL_FORMSHOW_LOCATION_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowPrice',
+    'title'       => '_MI_EXTCAL_FORMSHOW_PRICE',
+    'description' => '_MI_EXTCAL_FORMSHOW_PRICE_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowOrganizer',
+    'title'       => '_MI_EXTCAL_FORMSHOW_ORGANIZER',
+    'description' => '_MI_EXTCAL_FORMSHOW_ORGANIZER_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowContact',
+    'title'       => '_MI_EXTCAL_FORMSHOW_CONTACT',
+    'description' => '_MI_EXTCAL_FORMSHOW_CONTACT_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowUrl',
+    'title'       => '_MI_EXTCAL_FORMSHOW_URL',
+    'description' => '_MI_EXTCAL_FORMSHOW_URL_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowEmail',
+    'title'       => '_MI_EXTCAL_FORMSHOW_EMAIL',
+    'description' => '_MI_EXTCAL_FORMSHOW_EMAIL_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowAddress',
+    'title'       => '_MI_EXTCAL_FORMSHOW_ADDRESS',
+    'description' => '_MI_EXTCAL_FORMSHOW_ADDRESS_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowRecurence',
+    'title'       => '_MI_EXTCAL_FORMSHOW_RECURENCE',
+    'description' => '_MI_EXTCAL_FORMSHOW_RECURENCE_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowFile',
+    'title'       => '_MI_EXTCAL_FORMSHOW_FILE',
+    'description' => '_MI_EXTCAL_FORMSHOW_FILE_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
+
+$modversion['config'][] = [
+    'name'        => 'formShowPicture',
+    'title'       => '_MI_EXTCAL_FORMSHOW_PICTURE',
+    'description' => '_MI_EXTCAL_FORMSHOW_PICTURE_DESC',
+    'formtype'    => 'yesno',
+    'valuetype'   => 'int',
+    'default'     => 1,
+];
 
 $modversion['config'][] = [
     'name'        => 'break' . $i,
@@ -681,160 +784,112 @@ $modversion['config'][] = [
 
 //modif JJD ------------------------------------------------------------
 
-// Templates
-$i                                          = 1;
-$modversion['templates'][$i]['file']        = 'extcal_view_year.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_month.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_week.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_day.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_calendar-month.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_calendar-week.tpl';
-$modversion['templates'][$i]['description'] = '';
-//modif JJD
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_agenda-day.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_agenda-week.tpl';
-$modversion['templates'][$i]['description'] = '';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_search.tpl';
-$modversion['templates'][$i]['description'] = 'recherche evenements';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_view_new-event.tpl';
-$modversion['templates'][$i]['description'] = 'Nouvel evenement';
-//------------------------------------------------------------
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_event_list1.tpl';
-$modversion['templates'][$i]['description'] = 'Liste des evennements';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_event_nav_btn.tpl';
-$modversion['templates'][$i]['description'] = 'boutons de navigation';
-//------------------------------------------------------------
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_event.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_post.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_rss.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_navbar.tpl';
-$modversion['templates'][$i]['description'] = '';
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_location.tpl';
-$modversion['templates'][$i]['description'] = 'location';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_info_bulle.tpl';
-$modversion['templates'][$i]['description'] = 'Info bulle';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_categorie.tpl';
-$modversion['templates'][$i]['description'] = 'Categorie';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_horloge.tpl';
-$modversion['templates'][$i]['description'] = 'Horloge';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_imgXoops.tpl';
-$modversion['templates'][$i]['description'] = 'Images Xoops';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_buttons_event.tpl';
-$modversion['templates'][$i]['description'] = 'buttons event';
-
-//-------------------------------------------------------------
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_mail_member_text.tpl';
-$modversion['templates'][$i]['description'] = 'Mail text member inscription/desinscription';
-
-++$i;
-$modversion['templates'][$i]['file']        = 'extcal_mail_member_html.tpl';
-$modversion['templates'][$i]['description'] = 'Mail html member inscription/desinscription';
-//-------------------------------------------------------------
-//template de l'admin
-//-------------------------------------------------------------
-++$i;
-$modversion['templates'][$i]['file']        = 'admin/extcal_admin_cat_list.tpl';
-$modversion['templates'][$i]['description'] = 'Category list';
+// ------------------- Templates ------------------- //
+$modversion['templates'] = [
+    ['file' => 'extcal_buttons_event.tpl', 'description' => 'buttons event'],
+    ['file' => 'extcal_categorie.tpl', 'description' => 'Category'],
+    ['file' => 'extcal_event.tpl', 'description' => ''],
+    ['file' => 'extcal_event_list1.tpl', 'description' => 'Events list'],
+    ['file' => 'extcal_event_nav_btn.tpl', 'description' => 'navigation buttonsn'],
+    ['file' => 'extcal_horloge.tpl', 'description' => 'Time'],
+    ['file' => 'extcal_imgXoops.tpl', 'description' => 'Images Xoops'],
+    ['file' => 'extcal_info_bulle.tpl', 'description' => 'Info bulle'],
+    ['file' => 'extcal_location.tpl', 'description' => 'location'],
+    ['file' => 'extcal_navbar.tpl', 'description' => ''],
+    ['file' => 'extcal_post.tpl', 'description' => ''],
+    ['file' => 'extcal_rss.tpl', 'description' => ''],
+    ['file' => 'extcal_view_agenda-day.tpl', 'description' => ''],
+    ['file' => 'extcal_view_agenda-week.tpl', 'description' => ''],
+    ['file' => 'extcal_view_calendar-month.tpl', 'description' => ''],
+    ['file' => 'extcal_view_calendar-week.tpl', 'description' => ''],
+    ['file' => 'extcal_view_day.tpl', 'description' => ''],
+    ['file' => 'extcal_view_month.tpl', 'description' => ''],
+    ['file' => 'extcal_view_new-event.tpl', 'description' => 'New event'],
+    ['file' => 'extcal_view_search.tpl', 'description' => 'search events'],
+    ['file' => 'extcal_view_week.tpl', 'description' => ''],
+    ['file' => 'extcal_view_year.tpl', 'description' => ''],
+    //-------------------------------------------------------------
+    ['file' => 'extcal_mail_member_text.tpl', 'description' => 'Mail text member inscription/desinscription'],
+    ['file' => 'extcal_mail_member_html.tpl', 'description' => 'Mail html member inscription/desinscription'],
+    //-------------------------------------------------------------
+    //template de l'admin
+    //-------------------------------------------------------------
+    ['file' => 'admin/extcal_admin_cat_list.tpl', 'description' => 'Category list'],
+];
 
 //-------------------------------------------------------------
 
 // Blocs
-$i                                       = 1;
-$modversion['blocks'][$i]['file']        = 'minical.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME1;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME1_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalMinicalShow';
-$modversion['blocks'][$i]['options']     = '0|0|150|225|1|3|10|0|1|1,2,3,4,5|| |120|120';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalMinicalEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_minical.tpl';
-//++$i;
-//$modversion['blocks'][$i]['file'] = "spotlight_events.php";
-//$modversion['blocks'][$i]['name'] = _MI_EXTCAL_BNAME2;
-//$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME2_DESC;
-//$modversion['blocks'][$i]['show_func'] = "bExtcalSpotlightShow";
-//$modversion['blocks'][$i]['options'] = "0|0|0|1|0";
-//$modversion['blocks'][$i]['edit_func'] = "bExtcalSpotlightEdit";
-//$modversion['blocks'][$i]['template'] = 'extcal_block_spotlight.tpl';
-++$i;
-$modversion['blocks'][$i]['file']        = 'upcoming.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME3;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME3_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalUpcomingShow';
-$modversion['blocks'][$i]['options']     = '5|25|30|0';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalUpcomingEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_upcoming.tpl';
-++$i;
-$modversion['blocks'][$i]['file']        = 'day_events.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME4;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME4_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalDayShow';
-$modversion['blocks'][$i]['options']     = '5|25|0';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalDayEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_day.tpl';
-++$i;
-$modversion['blocks'][$i]['file']        = 'new_events.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME5;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME5_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalNewShow';
-$modversion['blocks'][$i]['options']     = '5|25|0';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalNewEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_new.tpl';
-++$i;
-$modversion['blocks'][$i]['file']        = 'random_events.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME6;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME6_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalRandomShow';
-$modversion['blocks'][$i]['options']     = '5|25|0';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalRandomEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_random.tpl';
-++$i;
-$modversion['blocks'][$i]['file']        = 'category_events.php';
-$modversion['blocks'][$i]['name']        = _MI_EXTCAL_BNAME7;
-$modversion['blocks'][$i]['description'] = _MI_EXTCAL_BNAME7_DESC;
-$modversion['blocks'][$i]['show_func']   = 'bExtcalUpcomingByCategoryShow';
-$modversion['blocks'][$i]['options']     = '5|25|0';
-$modversion['blocks'][$i]['edit_func']   = 'bExtcalUpcomingByCategoryEdit';
-$modversion['blocks'][$i]['template']    = 'extcal_block_upcomingByCategory.tpl';
+
+$modversion['blocks'][] = [
+    'file'        => 'minical.php',
+    'name'        => _MI_EXTCAL_BNAME1,
+    'description' => _MI_EXTCAL_BNAME1_DESC,
+    'show_func'   => 'bExtcalMinicalShow',
+    'options'     => '0|0|150|225|1|3|10|0|1|1,2,3,4,5|| |120|120',
+    'edit_func'   => 'bExtcalMinicalEdit',
+    'template'    => 'extcal_block_minical.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'spotlight_events.php',
+    'name'        => _MI_EXTCAL_BNAME2,
+    'description' => _MI_EXTCAL_BNAME2_DESC,
+    'show_func'   => 'bExtcalSpotlightShow',
+    'options'     => '0|0|0|1|0',
+    'edit_func'   => 'bExtcalSpotlightEdit',
+    'template'    => 'extcal_block_spotlight.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'upcoming.php',
+    'name'        => _MI_EXTCAL_BNAME3,
+    'description' => _MI_EXTCAL_BNAME3_DESC,
+    'show_func'   => 'bExtcalUpcomingShow',
+    'options'     => '5|25|30|0',
+    'edit_func'   => 'bExtcalUpcomingEdit',
+    'template'    => 'extcal_block_upcoming.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'day_events.php',
+    'name'        => _MI_EXTCAL_BNAME4,
+    'description' => _MI_EXTCAL_BNAME4_DESC,
+    'show_func'   => 'bExtcalDayShow',
+    'options'     => '5|25|0',
+    'edit_func'   => 'bExtcalDayEdit',
+    'template'    => 'extcal_block_day.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'new_events.php',
+    'name'        => _MI_EXTCAL_BNAME5,
+    'description' => _MI_EXTCAL_BNAME5_DESC,
+    'show_func'   => 'bExtcalNewShow',
+    'options'     => '5|25|0',
+    'edit_func'   => 'bExtcalNewEdit',
+    'template'    => 'extcal_block_new.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'random_events.php',
+    'name'        => _MI_EXTCAL_BNAME6,
+    'description' => _MI_EXTCAL_BNAME6_DESC,
+    'show_func'   => 'bExtcalRandomShow',
+    'options'     => '5|25|0',
+    'edit_func'   => 'bExtcalRandomEdit',
+    'template'    => 'extcal_block_random.tpl',
+];
+
+$modversion['blocks'][] = [
+    'file'        => 'category_events.php',
+    'name'        => _MI_EXTCAL_BNAME7,
+    'description' => _MI_EXTCAL_BNAME7_DESC,
+    'show_func'   => 'bExtcalUpcomingByCategoryShow',
+    'options'     => '5|25|0',
+    'edit_func'   => 'bExtcalUpcomingByCategoryEdit',
+    'template'    => 'extcal_block_upcomingByCategory.tpl',
+];
 
 //---------------------------------------------------------
 // Notifications
@@ -842,49 +897,61 @@ $modversion['hasNotification']             = 1;
 $modversion['notification']['lookup_file'] = 'include/notification.inc.php';
 $modversion['notification']['lookup_func'] = 'extcal_notify_iteminfo';
 
-$modversion['notification']['category'][1]['name']           = 'global';
-$modversion['notification']['category'][1]['title']          = _MI_EXTCAL_GLOBAL_NOTIFY;
-$modversion['notification']['category'][1]['description']    = _MI_EXTCAL_GLOBAL_NOTIFYDSC;
-$modversion['notification']['category'][1]['subscribe_from'] = '*';
-$modversion['notification']['category'][1]['item_name']      = '';
+$modversion['notification']['category'][] = [
+    'name'           => 'global',
+    'title'          => _MI_EXTCAL_GLOBAL_NOTIFY,
+    'description'    => _MI_EXTCAL_GLOBAL_NOTIFYDSC,
+    'subscribe_from' => '*',
+    'item_name'      => '',
+];
 
-$modversion['notification']['category'][2]['name']           = 'cat';
-$modversion['notification']['category'][2]['title']          = _MI_EXTCAL_CAT_NOTIFY;
-$modversion['notification']['category'][2]['description']    = _MI_EXTCAL_CAT_NOTIFYDSC;
-$modversion['notification']['category'][2]['subscribe_from'] = ['calendar.php', 'year.php', 'day.php'];
-$modversion['notification']['category'][2]['item_name']      = 'cat';
+$modversion['notification']['category'][] = [
+    'name'           => 'cat',
+    'title'          => _MI_EXTCAL_CAT_NOTIFY,
+    'description'    => _MI_EXTCAL_CAT_NOTIFYDSC,
+    'subscribe_from' => ['calendar.php', 'year.php', 'day.php'],
+    'item_name'      => 'cat',
+];
 
-$modversion['notification']['category'][3]['name']           = 'event';
-$modversion['notification']['category'][3]['title']          = _MI_EXTCAL_EVENT_NOTIFY;
-$modversion['notification']['category'][3]['description']    = _MI_EXTCAL_EVENT_NOTIFYDSC;
-$modversion['notification']['category'][3]['subscribe_from'] = 'event.php';
-$modversion['notification']['category'][3]['item_name']      = 'event';
-$modversion['notification']['category'][3]['allow_bookmark'] = 1;
+$modversion['notification']['category'][] = [
+    'name'           => 'event',
+    'title'          => _MI_EXTCAL_EVENT_NOTIFY,
+    'description'    => _MI_EXTCAL_EVENT_NOTIFYDSC,
+    'subscribe_from' => 'event.php',
+    'item_name'      => 'event',
+    'allow_bookmark' => 1,
+];
 
-$modversion['notification']['event'][1]['name']          = 'new_event';
-$modversion['notification']['event'][1]['category']      = 'global';
-$modversion['notification']['event'][1]['title']         = _MI_EXTCAL_NEW_EVENT_NOTIFY;
-$modversion['notification']['event'][1]['caption']       = _MI_EXTCAL_NEW_EVENT_NOTIFYCAP;
-$modversion['notification']['event'][1]['description']   = _MI_EXTCAL_NEW_EVENT_NOTIFYDSC;
-$modversion['notification']['event'][1]['mail_template'] = 'global_new_event';
-$modversion['notification']['event'][1]['mail_subject']  = _MI_EXTCAL_NEW_EVENT_NOTIFYSBJ;
+$modversion['notification']['event'][] = [
+    'name'          => 'new_event',
+    'category'      => 'global',
+    'title'         => _MI_EXTCAL_NEW_EVENT_NOTIFY,
+    'caption'       => _MI_EXTCAL_NEW_EVENT_NOTIFYCAP,
+    'description'   => _MI_EXTCAL_NEW_EVENT_NOTIFYDSC,
+    'mail_template' => 'global_new_event',
+    'mail_subject'  => _MI_EXTCAL_NEW_EVENT_NOTIFYSBJ,
+];
 
-$modversion['notification']['event'][2]['name']          = 'new_event_pending';
-$modversion['notification']['event'][2]['category']      = 'global';
-$modversion['notification']['event'][2]['title']         = _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFY;
-$modversion['notification']['event'][2]['caption']       = _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYCAP;
-$modversion['notification']['event'][2]['description']   = _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYDSC;
-$modversion['notification']['event'][2]['mail_template'] = 'global_new_event_pending';
-$modversion['notification']['event'][2]['mail_subject']  = _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYSBJ;
-$modversion['notification']['event'][2]['admin_only']    = 1;
+$modversion['notification']['event'][] = [
+    'name'          => 'new_event_pending',
+    'category'      => 'global',
+    'title'         => _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFY,
+    'caption'       => _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYCAP,
+    'description'   => _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYDSC,
+    'mail_template' => 'global_new_event_pending',
+    'mail_subject'  => _MI_EXTCAL_NEW_EVENT_PENDING_NOTIFYSBJ,
+    'admin_only'    => 1,
+];
 
-$modversion['notification']['event'][3]['name']          = 'new_event_cat';
-$modversion['notification']['event'][3]['category']      = 'cat';
-$modversion['notification']['event'][3]['title']         = _MI_EXTCAL_NEW_EVENT_CAT_NOTIFY;
-$modversion['notification']['event'][3]['caption']       = _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYCAP;
-$modversion['notification']['event'][3]['description']   = _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYDSC;
-$modversion['notification']['event'][3]['mail_template'] = 'cat_new_event';
-$modversion['notification']['event'][3]['mail_subject']  = _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYSBJ;
+$modversion['notification']['event'][] = [
+    'name'          => 'new_event_cat',
+    'category'      => 'cat',
+    'title'         => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFY,
+    'caption'       => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYCAP,
+    'description'   => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYDSC,
+    'mail_template' => 'cat_new_event',
+    'mail_subject'  => _MI_EXTCAL_NEW_EVENT_CAT_NOTIFYSBJ,
+];
 
 // XoopsInfo
 $modversion['developer_website_url']  = 'http://www.zoullou.net/';

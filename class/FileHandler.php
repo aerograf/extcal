@@ -12,6 +12,8 @@ namespace XoopsModules\Extcal;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+use Xmf\Request;
+
 /**
  * @copyright    {@link https://xoops.org/ XOOPS Project}
  * @license      {@link https://www.gnu.org/licenses/gpl-2.0.html GNU GPL 2 or later}
@@ -19,8 +21,6 @@ namespace XoopsModules\Extcal;
  * @since
  * @author       XOOPS Development Team,
  */
-
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 // // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
@@ -35,6 +35,9 @@ class FileHandler extends ExtcalPersistableObjectHandler
      */
     public function __construct(\XoopsDatabase $db = null)
     {
+        if (null === $db) {
+            $db = \XoopsDatabaseFactory::getDatabaseConnection();
+        }
         parent::__construct($db, 'extcal_file', File::class, 'file_id');
     }
 
@@ -68,7 +71,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
             'file_nicename' => $uploader->getMediaName(),
             'file_mimetype' => $uploader->getMediaType(),
             'file_size'     => $_FILES['event_file']['size'],
-            'file_date'     => time(),
+            'file_date'     => \time(),
             'file_approved' => 1,
             'event_id'      => $eventId,
             'uid'           => $userId,
@@ -112,11 +115,11 @@ class FileHandler extends ExtcalPersistableObjectHandler
         $criteria->add(new \Criteria('file_approved', 1));
         $criteria->add(new \Criteria('event_id', $eventId));
 
-        if (\Xmf\Request::hasVar('filetokeep', 'POST')) {
-            if (is_array($_POST['filetokeep'])) {
-                $count = count($_POST['filetokeep']);
+        if (Request::hasVar('filetokeep', 'POST')) {
+            if (\is_array($_POST['filetokeep'])) {
+                $count = \count($_POST['filetokeep']);
                 $in    = '(' . $_POST['filetokeep'][0];
-                array_shift($_POST['filetokeep']);
+                \array_shift($_POST['filetokeep']);
                 foreach ($_POST['filetokeep'] as $elmt) {
                     $in .= ',' . $elmt;
                 }
@@ -159,7 +162,7 @@ class FileHandler extends ExtcalPersistableObjectHandler
     public function formatFileSize(&$file)
     {
         if ($file['file_size'] > 1000) {
-            $file['formated_file_size'] = round($file['file_size'] / 1000) . 'kb';
+            $file['formated_file_size'] = \round($file['file_size'] / 1000) . 'kb';
         } else {
             $file['formated_file_size'] = '1kb';
         }
@@ -170,8 +173,8 @@ class FileHandler extends ExtcalPersistableObjectHandler
      */
     public function _deleteFile($file)
     {
-        if (file_exists(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'))) {
-            unlink(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'));
+        if (\is_file(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'))) {
+            \unlink(XOOPS_ROOT_PATH . '/uploads/extcal/' . $file->getVar('file_name'));
         }
     }
 }

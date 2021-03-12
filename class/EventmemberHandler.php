@@ -20,9 +20,8 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
-
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
+use XoopsModules\Extcal\{Helper
+};
 
 // // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 
@@ -36,6 +35,9 @@ class EventmemberHandler extends ExtcalPersistableObjectHandler
      */
     public function __construct(\XoopsDatabase $db = null)
     {
+        if (null === $db) {
+            $db = \XoopsDatabaseFactory::getDatabaseConnection();
+        }
         parent::__construct($db, 'extcal_eventmember', Eventmember::class, ['event_id', 'uid']);
     }
 
@@ -47,7 +49,7 @@ class EventmemberHandler extends ExtcalPersistableObjectHandler
         $eventmember = $this->create();
         $eventmember->setVars($varArr);
         if ($this->insert($eventmember, true)) {
-            $eventNotMemberHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_NOT_MEMBER);
+            $eventNotMemberHandler = Helper::getInstance()->getHandler(\_EXTCAL_CLN_NOT_MEMBER);
             $eventNotMemberHandler->deleteById([$varArr['event_id'], $varArr['uid']]);
         }
     }
@@ -69,12 +71,13 @@ class EventmemberHandler extends ExtcalPersistableObjectHandler
      */
     public function getMembers($eventId)
     {
-        $memberHandler = xoops_getHandler('member');
+        /** @var \XoopsMemberHandler $memberHandler */
+        $memberHandler = \xoops_getHandler('member');
         $eventMember   = $this->getObjects(new \Criteria('event_id', $eventId));
-        $count         = count($eventMember);
+        $count         = \count($eventMember);
         if ($count > 0) {
             $in = '(' . $eventMember[0]->getVar('uid');
-            array_shift($eventMember);
+            \array_shift($eventMember);
             foreach ($eventMember as $member) {
                 $in .= ',' . $member->getVar('uid');
             }
@@ -90,7 +93,7 @@ class EventmemberHandler extends ExtcalPersistableObjectHandler
     /**
      * @param $eventId
      *
-     * @return int
+     * @return int|array
      */
     public function getNbMember($eventId)
     {

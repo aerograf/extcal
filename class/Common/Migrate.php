@@ -21,32 +21,42 @@ namespace XoopsModules\Extcal\Common;
  * @license   GNU GPL 2 or later (https://www.gnu.org/licenses/gpl-2.0.html)
  * @link      https://xoops.org
  */
-//use XoopsModules\Extcal\Common;
-
 class Migrate extends \Xmf\Database\Migrate
 {
     private $renameTables;
 
     /**
      * Migrate constructor.
-     * @param Configurator $configurator
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function __construct(Configurator $configurator = null)
+    public function __construct()
     {
-        if (null !== $configurator) {
-            $this->renameTables = $configurator->renameTables;
-
-            $moduleDirName = basename(dirname(dirname(__DIR__)));
-            parent::__construct($moduleDirName);
+        $class = __NAMESPACE__ . '\\' . 'Configurator';
+        if (!\class_exists($class)) {
+            throw new \RuntimeException("Class '$class' not found");
         }
+        $configurator       = new $class();
+        $this->renameTables = $configurator->renameTables;
+
+        $moduleDirName = \basename(\dirname(__DIR__, 2));
+        parent::__construct($moduleDirName);
     }
 
+//    public function __construct(Configurator $configurator = null)
+//    {
+//        if (null !== $configurator) {
+//            $this->renameTables = $configurator->renameTables;
+//
+//            $moduleDirName = basename(dirname(__DIR__, 2));
+//            parent::__construct($moduleDirName);
+//        }
+//    }
+
     /**
-     * change table prefix if needed
+     * rename table if needed
      */
-    private function changePrefix()
+    private function renameTable()
     {
         foreach ($this->renameTables as $oldName => $newName) {
             if ($this->tableHandler->useTable($oldName) && !$this->tableHandler->useTable($newName)) {
@@ -55,11 +65,16 @@ class Migrate extends \Xmf\Database\Migrate
         }
     }
 
-    private function renameColumns($tableName, $columnName, $newName)
+    /**
+     * @param $tableName
+     * @param $columnName
+     * @param $newName
+     */
+    private function renameColumn($tableName, $columnName, $newName)
     {
         if ($this->tableHandler->useTable($tableName)) {
             $attributes = $this->tableHandler->getColumnAttributes($tableName, $columnName);
-            if (false !== strpos($attributes, ' int(')) {
+            if (false !== \strpos($attributes, ' int(')) {
                 $this->tableHandler->alterColumn($tableName, $columnName, $attributes, $newName);
             }
         }
@@ -74,11 +89,10 @@ class Migrate extends \Xmf\Database\Migrate
      */
     protected function preSyncActions()
     {
-        // change table prefix
-        if ($this->renameTables && is_array($this->renameTables)) {
-            $this->changePrefix();
+        // rename table
+        if ($this->renameTables && \is_array($this->renameTables)) {
+            $this->renameTable();
         }
-        $this->renameColumns('extcal_event', 'event_etablissement', 'event_location');
+        $this->renameColumn('extcal_event', 'event_etablissement', 'event_location');
     }
-
 }

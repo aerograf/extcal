@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: shows how to perform validation with PEAR::Calendar.
  */
@@ -43,7 +44,7 @@ if ($Unit->isValid()) {
 } else {
     $V = &$Unit->getValidator();
     echo ' is invalid:</p>';
-    while ($error = $V->fetch()) {
+    while (false !== ($error = $V->fetch())) {
         echo $error->toString() . '<br>';
     }
 }

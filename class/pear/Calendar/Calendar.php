@@ -385,7 +385,11 @@ class Calendar
      */
     public function fetch()
     {
-        $child = each($this->children);
+//        $child = each($this->children);
+        $key   = key($this->children);
+        $child = (null === $key) ? false : [$key, current($this->children), 'key' => $key, 'value' => current($this->children)];
+        next($this->children);
+
         if ($child) {
             return $child['value'];
         }
@@ -459,10 +463,10 @@ class Calendar
      *
      * @param int $firstDay first day of the week (0=sunday, 1=monday, ...)
      *
+     * @return int
      * @throws E_USER_WARNING this method throws a WARNING if the
      *                        CALENDAR_FIRST_DAY_OF_WEEK constant is already defined and
      *                        the $firstDay parameter is set to a different value
-     * @return int
      */
     public function defineFirstDayOfWeek($firstDay = null)
     {

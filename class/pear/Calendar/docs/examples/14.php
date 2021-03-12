@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: same as 3.php, but using the PEAR::Date engine
  * Note: make sure PEAR::Date is a stable release!!!
@@ -114,7 +115,7 @@ $thisDate = new Date($month->thisMonth('timestamp'));
         <th>S</th>
     </tr>
     <?php
-    while ($day = $month->fetch()) {
+    while (false !== ($day = $month->fetch())) {
         // Build a link string for each day
         $link = $_SERVER['SCRIPT_NAME'] . '?y=' . $day->thisYear() . '&m=' . $day->thisMonth() . '&d=' . $day->thisDay();
 

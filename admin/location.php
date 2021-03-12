@@ -17,24 +17,23 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use Xmf\Request;
+use Xmf\Module\Admin;
+use XoopsModules\Extcal\{Helper,
+    LocationHandler
+};
 
 // Include xoops admin header
-require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
-// require_once  dirname(__DIR__) . '/class/ExtcalPersistableObjectHandler.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/kernel/module.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/tree.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopslists.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/pagenav.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsform/grouppermform.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/uploader.php';
-require_once dirname(__DIR__) . '/include/constantes.php';
-
 require_once __DIR__ . '/admin_header.php';
-
-//require("functions.php");
-//require("../include/functions.php");
+// require_once  dirname(__DIR__) . '/class/ExtcalPersistableObjectHandler.php';
+require_once dirname(__DIR__, 3) . '/kernel/module.php';
+require_once dirname(__DIR__, 3) . '/class/xoopsformloader.php';
+require_once dirname(__DIR__, 3) . '/class/tree.php';
+require_once dirname(__DIR__, 3) . '/class/xoopslists.php';
+require_once dirname(__DIR__, 3) . '/class/pagenav.php';
+require_once dirname(__DIR__, 3) . '/class/xoopsform/grouppermform.php';
+require_once dirname(__DIR__, 3) . '/class/uploader.php';
+require_once dirname(__DIR__) . '/include/constantes.php';
 
 if ($xoopsUser) {
     $xoopsModule = \XoopsModule::getByDirname('extcal');
@@ -47,17 +46,17 @@ if ($xoopsUser) {
 
 // Include language file
 xoops_loadLanguage('admin', 'system');
-Extcal\Helper::getInstance()->loadLanguage('admin');
-Extcal\Helper::getInstance()->loadLanguage('modinfo');
+Helper::getInstance()->loadLanguage('admin');
+Helper::getInstance()->loadLanguage('modinfo');
 $myts = \MyTextSanitizer::getInstance();
 
 //appel des class
-$locationHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_LOCATION);
+$locationHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_LOCATION);
 
 xoops_cp_header();
 
 $op = 'liste';
-if (\Xmf\Request::hasVar('op', 'REQUEST')) {
+if (Request::hasVar('op', 'REQUEST')) {
     $op = $_REQUEST['op'];
 }
 
@@ -75,19 +74,19 @@ switch ($op) {
     case 'liste':
         // @author   JJDAI
         //***************************************************************************************
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
         $criteria = new \CriteriaCompo();
-        if (\Xmf\Request::hasVar('limit', 'REQUEST')) {
+        if (Request::hasVar('limit', 'REQUEST')) {
             $criteria->setLimit($_REQUEST['limit']);
             $limit = $_REQUEST['limit'];
         } else {
             $criteria->setLimit(10);
             $limit = 10;
         }
-        if (\Xmf\Request::hasVar('start', 'REQUEST')) {
+        if (Request::hasVar('start', 'REQUEST')) {
             $criteria->setStart($_REQUEST['start']);
             $start = $_REQUEST['start'];
         } else {
@@ -145,8 +144,8 @@ switch ($op) {
         break;
     // permet de suprimmer le rapport de téléchargment brisé
     case 'delete_location':
-        $obj = $locationHandler->get($_REQUEST['location_id']);
-        if (\Xmf\Request::hasVar('ok', 'REQUEST') && 1 == $_REQUEST['ok']) {
+        $obj = $locationHandler->get(Request::getInt('location_id', 0));
+        if (Request::hasVar('ok', 'REQUEST') && 1 == $_REQUEST['ok']) {
             if (!$GLOBALS['xoopsSecurity']->check()) {
                 redirect_header('location.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
             }
@@ -154,29 +153,33 @@ switch ($op) {
                 redirect_header('location.php', 1, _AM_EXTCAL_REDIRECT_DELOK);
             }
         } else {
-            xoops_confirm([
-                              'ok'          => 1,
-                              'location_id' => $_REQUEST['location_id'],
-                              'op'          => 'delete_location',
-                          ], $_SERVER['REQUEST_URI'], _AM_EXTCAL_LOCATION_SURDEL . '<br>');
+            xoops_confirm(
+                [
+                    'ok'          => 1,
+                    'location_id' => Request::getInt('location_id', 0),
+                    'op'          => 'delete_location',
+                ],
+                $_SERVER['REQUEST_URI'],
+                _AM_EXTCAL_LOCATION_SURDEL . '<br>'
+            );
         }
         break;
     case 'edit_location':
         // @author   JJDAI
         //***************************************************************************************
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
-        //Affichage du formulaire de création des téléchargements
-        $obj  = $locationHandler->get($_REQUEST['location_id']);
+        //Adisplay of the download creation form
+        $obj  = $locationHandler->get(Request::getInt('location_id', 0));
         $form = $obj->getForm(false);
         break;
     case 'save_location':
         if (!$GLOBALS['xoopsSecurity']->check()) {
             redirect_header('location.php', 3, implode(',', $GLOBALS['xoopsSecurity']->getErrors()));
         }
-        if (\Xmf\Request::hasVar('location_id', 'REQUEST')) {
-            $obj = $locationHandler->get($_REQUEST['location_id']);
+        if (Request::hasVar('location_id', 'REQUEST')) {
+            $obj = $locationHandler->get(Request::getInt('location_id', 0));
         } else {
             $obj = $locationHandler->create();
         }
@@ -204,13 +207,15 @@ switch ($op) {
         $delimg = @$_REQUEST['delimg'];
         $delimg = isset($delimg) ? (int)$delimg : 0;
         if (0 == $delimg && !empty($_REQUEST['xoops_upload_file'][0])) {
-            $upload = new \XoopsMediaUploader($uploaddir_location, [
+            $upload = new \XoopsMediaUploader(
+                $uploaddir_location, [
                 'image/gif',
                 'image/jpeg',
                 'image/pjpeg',
                 'image/x-png',
                 'image/png',
-            ], 3145728, null, null);
+            ], 3145728, null, null
+            );
             if ($upload->fetchMedia($_REQUEST['xoops_upload_file'][0])) {
                 $upload->setPrefix('location_');
                 $upload->fetchMedia($_REQUEST['xoops_upload_file'][0]);
@@ -221,11 +226,11 @@ switch ($op) {
                     $logo = $upload->getSavedFileName();
                 }
             } elseif (!empty($_REQUEST['file'])) {
-                $logo = $_REQUEST['file'];
+                $logo = Request::getString('file', '');
             }
         } else {
             $logo         = '';
-            $url_location = XOOPS_ROOT_PATH . '/uploads/extcal/location/' . $_REQUEST['file'];
+            $url_location = XOOPS_ROOT_PATH . '/uploads/extcal/location/' . Request::getString('file', '');
             if (is_file($url_location)) {
                 chmod($url_location, 0777);
                 unlink($url_location);

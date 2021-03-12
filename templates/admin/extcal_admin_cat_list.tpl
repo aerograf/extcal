@@ -1,4 +1,4 @@
-<table class="width90 outer floatcenter0" summary="<{$smarty.const._MI_EXTCAL_MANAGER_CATS}>">
+<table class="width90 outer floatcenter0" summary="<{$smarty.const._AM_EXTCAL_MANAGER_CATS}>">
     <thead>
 
     <tr>
@@ -38,16 +38,8 @@
             </td>
 
             <td class="txtcenter">
-                <a class="tooltip" href="<{$smarty.const._EXTCAL_PATH_BO}>cat.php?op=edit&cat_id=<{$cat.cat_id}>"
-                   title="<{$smarty.const._EDIT}>">
-                    <img src="<{$smarty.const._EXTCAL_PATH_ICONS16}>edit.png" alt="">
-                </a>
-
-                <a class="tooltip" class="tooltip"
-                   href="<{$smarty.const._EXTCAL_PATH_BO}>cat.php?op=delete&cat_id=<{$cat.cat_id}>"
-                   title="<{$smarty.const._DELETE}>">
-                    <img src="<{$smarty.const._EXTCAL_PATH_ICONS16}>delete.png" alt="">
-                </a>
+                <a class="tooltip" href="<{$smarty.const._EXTCAL_PATH_BO}>cat.php?op=edit&cat_id=<{$cat.cat_id}>" title="<{$smarty.const._EDIT}>"><img src="<{$smarty.const._EXTCAL_PATH_ICONS16}>edit.png" alt=""></a>
+				<a class="tooltip" class="tooltip" href="<{$smarty.const._EXTCAL_PATH_BO}>cat.php?op=delete&cat_id=<{$cat.cat_id}>" title="<{$smarty.const._DELETE}>"><img src="<{$smarty.const._EXTCAL_PATH_ICONS16}>delete.png" alt=""></a>
             </td>
 
 

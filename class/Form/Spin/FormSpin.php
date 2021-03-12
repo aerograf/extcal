@@ -21,9 +21,8 @@ namespace XoopsModules\Extcal\Form\Spin;
  *
  * @version         FormSpin v 1.2
  */
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
-xoops_load('XoopsFormElement');
+\xoops_load('XoopsFormElement');
 
 /**
  * A select field.
@@ -43,84 +42,72 @@ class FormSpin extends \XoopsFormElement
      * @var int
      */
     protected $_value = 0;
-
     /**
      * Value minimum.
      *
      * @var int
      */
     protected $_min = 0;
-
     /**
      * Value maximum.
      *
      * @var int
      */
     protected $_max = 100;
-
     /**
      * Small increment.
      *
      * @var int
      */
     protected $_smallIncrement = 1;
-
     /**
      * Large increment.
      *
      * @var int
      */
     protected $_largeIncrement = 10;
-
     /**
      *  unite for information on value.
      *
      * @var string
      */
     protected $_unite = '';
-
     /**
      * Folder of arrow image.
      *
      * @var string
      */
     protected $_imgFolder = 'default';
-
     /**
      * size of input text in nb car.
      *
      * @var int
      */
     protected $_size = 2;
-
     /**
      *  minMaxVisible show buttons to go minimum and maximum.
      *
-     * @var int
+     * @var bool|int
      */
     protected $_minMaxVisible = true;
-
     /**
      *  tyleBordure ;  style CSS of frame control.
      *
      * @var string
      */
     protected $_styleBordure = 'color: #FFFFFF; background-color: #CCCCCC; line-height: 100%;border-width:1px; border-style: solid; border-color: #000000; margin-top: 0; margin-bottom: 0; padding: 0';
-
     /**
      *  tyleText : style CSS of input text.
      *
      * @var string
      */
     protected $_styleText = 'color: #000000; text-align: right; margin-left: 1; margin-right: 2; padding-right: 8';
-
     /**
      * Allow loading of javascript.
      *
      * @var bool
      */
     protected $_loadJS = true;
-
     /*---------------------------------------------------------------*/
 
     /**
@@ -153,8 +140,8 @@ class FormSpin extends \XoopsFormElement
         $imgFolder = 'default',
         $styleText = '',
         $styleBordure = '',
-        $minMaxVisible = true)
-    {
+        $minMaxVisible = true
+    ) {
         $this->setName($name);
         $this->setCaption($caption);
         $this->setValue($value);
@@ -492,7 +479,7 @@ class FormSpin extends \XoopsFormElement
         $t[] = '</table>' . "\n";
         $t[] = '</div>';
         //-------------------------------------------
-        $html = implode("\n", $t);
+        $html = \implode("\n", $t);
 
         return $html;
     }
@@ -531,8 +518,7 @@ class FormSpin extends \XoopsFormElement
             return $r;
         }
 
-        /*-----------------------------------------------*/
-        /*---          fin de la classe               ---*/
+        /*-----------------------------------------------*/ /*---          fin de la classe               ---*/
         /*-----------------------------------------------*/
     }
 }

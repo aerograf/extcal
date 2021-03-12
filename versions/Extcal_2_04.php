@@ -21,10 +21,9 @@
 class Extcal_2_04
 {
     //----------------------------------------------------
-
     /**
      * @param \XoopsModule $module
-     * @param             $options
+     * @param              $options
      */
     public function __construct(\XoopsModule $module, $options)
     {
@@ -33,6 +32,5 @@ class Extcal_2_04
         $sql = 'ALTER TABLE `' . $xoopsDB->prefix('extcal_event') . "` ADD `event_nbmember` TINYINT(4) NOT NULL DEFAULT '0' AFTER `event_submitdate` ;";
         $xoopsDB->query($sql);
     }
-
     //-----------------------------------------------------------------
 }   // fin de la classe

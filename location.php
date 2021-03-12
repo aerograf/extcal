@@ -17,17 +17,23 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use Xmf\Module\Admin;
+use Xmf\Request;
+use XoopsModules\Extcal\{Helper,
+    LocationHandler
+};
 
-require_once dirname(dirname(__DIR__)) . '/mainfile.php';
 require_once __DIR__ . '/include/constantes.php';
 $GLOBALS['xoopsOption']['template_main'] = 'extcal_location.tpl';
 require_once __DIR__ . '/header.php';
 
-$locationHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_LOCATION);
+global $xoopsTpl;
+
+$helper          = Helper::getInstance();
+$locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);
 //require_once XOOPS_ROOT_PATH.'/header.php';
 
-$location_id = \Xmf\Request::getInt('location_id', 0, 'REQUEST');
+$location_id = Request::getInt('location_id', 0, 'REQUEST');
 
 global $xoopsUser, $xoopsModuleConfig, $xoopsModule, $xoopsDB;
 
@@ -44,14 +50,14 @@ $view_location = $locationHandler->getLocation($location_id, true);
 $location      = $locationHandler->objectToArray($view_location);
 
 $isAdmin = false;
-if (isset($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->getVar('mid'))) {
+if (isset($xoopsUser) && $xoopsUser->isAdmin($helper->getModule()->getVar('mid'))) {
     $isAdmin = true;
 }
 
 /* todo a deplacer dans le template JJD */
 $uid = $xoopsUser ? $xoopsUser->getVar('uid') : 0;
 global $xoopsModule;
-$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
+$pathIcon16 = Admin::iconUrl('', 16);
 
 $edit_delete = '';
 if (is_object($xoopsUser) && $isAdmin) {
@@ -86,13 +92,16 @@ while (false !== ($donnees = $xoopsDB->fetchArray($requete))) {
     } else {
         $event_desc = mb_substr($donnees['event_desc'], 0, 210) . '...';
     }
-    $xoopsTpl->append('events', [
-        'event_picture1' => $donnees['event_picture1'],
-        'event_id'       => $donnees['event_id'],
-        'event_title'    => $donnees['event_title'],
-        'event_desc'     => $event_desc,
-        'event_start'    => date('Y-m-d', $donnees['event_start']),
-    ]);
+    $xoopsTpl->append(
+        'events',
+        [
+            'event_picture1' => $donnees['event_picture1'],
+            'event_id'       => $donnees['event_id'],
+            'event_title'    => $donnees['event_title'],
+            'event_desc'     => $event_desc,
+            'event_start'    => date('Y-m-d', $donnees['event_start']),
+        ]
+    );
 }
 /** @var xos_opal_Theme $xoTheme */
 $xoTheme->addScript('browse.php?modules/extcal/assets/js/highslide.js');

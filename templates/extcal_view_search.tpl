@@ -1,6 +1,6 @@
 <{include file="db:extcal_navbar.tpl"}>
 
-<form action="<{$navigSelectBox.action}>" method="post">
+<form action="<{$navigSelectBox.action|default:''}>" method="post">
     <{securityToken}><{*//mb*}>
     <table class="outer" style="border-top: none;">
         <tr>
@@ -74,10 +74,7 @@
 </form>
 
 <{if $num_tries > 0}>
-
     <{include file="db:extcal_event_list1.tpl"}>
-
-
     <{include file="db:extcal_categorie.tpl"}>
 <{/if}>
 

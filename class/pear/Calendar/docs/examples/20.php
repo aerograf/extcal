@@ -241,7 +241,7 @@ $MonthDecorator->build($events);
         <th>Sunday</th>
     </tr>
     <?php
-    while ($Day = $MonthDecorator->fetch()) {
+    while (false !== ($Day = $MonthDecorator->fetch())) {
         if ($Day->isFirst()) {
             echo "<tr>\n";
         }

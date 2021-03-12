@@ -17,15 +17,30 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
-use XoopsModules\Extcal\Common;
+use XoopsModules\Extcal\{Helper,
+    Common,
+    Common\TestdataButtons,
+    Utility
+};
+use Xmf\Request;
+use Xmf\Yaml;
+
+/** @var Xmf\Module\Admin $adminObject */
+/** @var Utility $utility */
+/** @var Helper $helper */
 
 require_once __DIR__ . '/admin_header.php';
 // Display Admin header
 xoops_cp_header();
-/** @var Extcal\Utility $utility */
 
+$helper       = Helper::getInstance();
 $configurator = new Common\Configurator();
+
+//foreach (array_keys($configurator['uploadFolders']) as $i) {
+//    $utility::createFolder($configurator['uploadFolders'][$i]);
+//    $adminObject->addConfigBoxLine($configurator['uploadFolders'][$i], 'folder');
+//    //    $adminObject->addConfigBoxLine(array($configurator['uploadFolders'][$i], '777'), 'chmod');
+//}
 
 //count "total categories"
 /** @var \XoopsPersistableObjectHandler $categoryHandler */
@@ -34,8 +49,8 @@ $countCategory = $categoryHandler->getCount();
 /** @var \XoopsPersistableObjectHandler $eventHandler */
 $countEvent = $eventHandler->getCount();
 //count "total eventmembers"
-/** @var \XoopsPersistableObjectHandler $eventMemberHandler */
-$countEventmember = $eventMemberHandler->getCount();
+/** @var \XoopsPersistableObjectHandler $eventmemberHandler */
+$countEventmember = $eventmemberHandler->getCount();
 //count "total eventnotmembers"
 /** @var \XoopsPersistableObjectHandler $eventNotMemberHandler */
 $countEventnotmember = $eventNotMemberHandler->getCount();
@@ -74,74 +89,69 @@ $adminObject->displayNavigation(basename(__FILE__));
 //    $adminObject->addItemButton($newRelease[0], $newRelease[1], 'download', 'style="color : Red"');
 //}
 
-//------------- Test Data ----------------------------
 
-if ($helper->getConfig('displaySampleButton')) {
-    $yamlFile            = dirname(__DIR__) . '/config/admin.yml';
-    $config              = loadAdminConfig($yamlFile);
-    $displaySampleButton = $config['displaySampleButton'];
+//***************************************************************************************
+$pendingEvent = $eventHandler->objectToArray($eventHandler->getPendingEvent(), ['cat_id']);
+$eventHandler->formatEventsDate($pendingEvent, _SHORTDATESTRING);
 
-    if (1 == $displaySampleButton) {
-        xoops_loadLanguage('admin/modulesadmin', 'system');
-    require_once dirname(__DIR__) . '/testdata/index.php';
+echo '<fieldset><legend style="font-weight:bold; color:#990000;">' . _AM_EXTCAL_PENDING_EVENT . '</legend>';
+echo '<fieldset><legend style="font-weight:bold; color:#0A3760;">' . _AM_EXTCAL_INFORMATION . '</legend>';
+echo '<img src=' . $pathIcon16 . '/on.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_APPROVE_PENDING_EVENT . '<br>';
+echo '<img src=' . $pathIcon16 . '/edit.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_EDIT_PENDING_EVENT . '<br>';
+echo '<img src=' . $pathIcon16 . '/delete.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_DELETE_PENDING_EVENT . '<br>';
+echo '</fieldset><br>';
 
-        $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'ADD_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=load', 'add');
-        $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'SAVE_SAMPLEDATA'), '__DIR__ . /../../testdata/index.php?op=save', 'add');
-        //    $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'EXPORT_SCHEMA'), '__DIR__ . /../../testdata/index.php?op=exportschema', 'add');
-        $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'HIDE_SAMPLEDATA_BUTTONS'), '?op=hide_buttons', 'delete');
-    } else {
-        $adminObject->addItemButton(constant('CO_' . $moduleDirNameUpper . '_' . 'SHOW_SAMPLEDATA_BUTTONS'), '?op=show_buttons', 'add');
-        $displaySampleButton = $config['displaySampleButton'];
+echo '<table class="outer" style="width:100%;">';
+echo '<tr style="text-align:center;">';
+echo '<th>' . _AM_EXTCAL_CATEGORY . '</th>';
+echo '<th>' . _AM_EXTCAL_TITLE . '</th>';
+echo '<th>' . _AM_EXTCAL_START_DATE . '</th>';
+echo '<th>' . _AM_EXTCAL_ACTION . '</th>';
+echo '</tr>';
+
+if (count($pendingEvent) > 0) {
+    $i = 0;
+    foreach ($pendingEvent as $event) {
+        $class = (0 == ++$i % 2) ? 'even' : 'odd';
+        echo '<tr style="text-align:center;" class="' . $class . '">';
+        echo '<td>' . $event['cat']['cat_name'] . '</td>';
+        echo '<td>' . $event['event_title'] . '</td>';
+        echo '<td>' . $event['formated_event_start'] . '</td>';
+        echo '<td style="width:10%; text-align:center;">';
+        echo '<a href="event.php?op=modify&amp;event_id=' . $event['event_id'] . '"><img src=' . $pathIcon16 . '/on.png></a>&nbsp;&nbsp;';
+        echo '<a href="event.php?op=modify&amp;event_id=' . $event['event_id'] . '"><img src=' . $pathIcon16 . '/edit.png></a>&nbsp;&nbsp;';
+        echo '<a href="event.php?op=delete&amp;event_id=' . $event['event_id'] . '"><img src=' . $pathIcon16 . '/delete.png></a>';
+        echo '</td>';
+        echo '</tr>';
     }
-    $adminObject->displayButton('left', '');
+} else {
+    echo '<tr><td colspan="4">' . _AM_EXTCAL_NO_PENDING_EVENT . '</td></tr>';
 }
 
-//------------- End Test Data ----------------------------
+echo '</table></fieldset><br>';
 
-$adminObject->displayIndex();
 
-/**
- * @param $yamlFile
- * @return array|bool
- */
-function loadAdminConfig($yamlFile)
-{
-    $config = \Xmf\Yaml::readWrapped($yamlFile); // work with phpmyadmin YAML dumps
-    return $config;
+//------------- Test Data Buttons ----------------------------
+if ($helper->getConfig('displaySampleButton')) {
+    TestdataButtons::loadButtonConfig($adminObject);
+    $adminObject->displayButton('left', '');;
 }
-
-/**
- * @param $yamlFile
- */
-function hideButtons($yamlFile)
-{
-    $app['displaySampleButton'] = 0;
-    \Xmf\Yaml::save($app, $yamlFile);
-    redirect_header('index.php', 0, '');
-}
-
-/**
- * @param $yamlFile
- */
-function showButtons($yamlFile)
-{
-    $app['displaySampleButton'] = 1;
-    \Xmf\Yaml::save($app, $yamlFile);
-    redirect_header('index.php', 0, '');
-}
-
-$op = \Xmf\Request::getString('op', 0, 'GET');
-
+$op = Request::getString('op', 0, 'GET');
 switch ($op) {
     case 'hide_buttons':
-        hideButtons($yamlFile);
+        TestdataButtons::hideButtons();
         break;
     case 'show_buttons':
-        showButtons($yamlFile);
+        TestdataButtons::showButtons();
         break;
 }
+//------------- End Test Data Buttons ----------------------------
 
+
+$adminObject->displayIndex();
 echo $utility::getServerStats();
 
+//codeDump(__FILE__);
 require __DIR__ . '/admin_footer.php';
+
 

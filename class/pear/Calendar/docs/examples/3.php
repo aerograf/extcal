@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: Performs same behaviour as 2.php but uses Month::buildWeekDays()
  * and is faster.
@@ -107,7 +108,7 @@ $Month->build($selectedDays);
         <th>S</th>
     </tr>
     <?php
-    while ($Day = $Month->fetch()) {
+    while (false !== ($Day = $Month->fetch())) {
         // Build a link string for each day
         $link = $_SERVER['SCRIPT_NAME'] . '?y=' . $Day->thisYear() . '&m=' . $Day->thisMonth() . '&d=' . $Day->thisDay();
 

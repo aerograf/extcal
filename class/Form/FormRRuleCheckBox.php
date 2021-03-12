@@ -26,9 +26,9 @@ namespace XoopsModules\Extcal\Form;
 class FormRRuleCheckBox extends \XoopsFormCheckBox
 {
     /**
-     * @param      $caption
-     * @param      $name
-     * @param null $value
+     * @param string            $caption
+     * @param string            $name
+     * @param null|string|array $value
      */
     public function __construct($caption, $name, $value = null)
     {
@@ -44,7 +44,7 @@ class FormRRuleCheckBox extends \XoopsFormCheckBox
     {
         $ret = '<table><tr>';
         $i   = 0;
-        if (count($this->getOptions()) > 1 && '[]' !== mb_substr($this->getName(), -2, 2)) {
+        if (\count($this->getOptions()) > 1 && '[]' !== mb_substr($this->getName(), -2, 2)) {
             $newname = $this->getName() . '[]';
             $this->setName($newname);
         }
@@ -53,7 +53,7 @@ class FormRRuleCheckBox extends \XoopsFormCheckBox
                 $ret .= '</tr><tr>';
             }
             $ret .= "<td><input type='checkbox' name='" . $this->getName() . "' value='" . $value . "'";
-            if (count($this->getValue()) > 0 && in_array($value, $this->getValue())) {
+            if (\count($this->getValue()) > 0 && \in_array($value, $this->getValue())) {
                 $ret .= ' checked';
             }
             $ret .= $this->getExtra() . '>' . $name . "</td>\n";

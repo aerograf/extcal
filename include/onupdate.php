@@ -17,12 +17,17 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Utility,
+    Common
+};
 
 if ((!defined('XOOPS_ROOT_PATH')) || !($GLOBALS['xoopsUser'] instanceof \XoopsUser)
-    || !$GLOBALS['xoopsUser']->IsAdmin()) {
+    || !$GLOBALS['xoopsUser']->isAdmin()) {
     exit('Restricted access' . PHP_EOL);
 }
+
+
 
 /**
  * Prepares system prior to attempting to install module
@@ -32,24 +37,29 @@ if ((!defined('XOOPS_ROOT_PATH')) || !($GLOBALS['xoopsUser'] instanceof \XoopsUs
  */
 function xoops_module_pre_update_extcal(\XoopsModule $module)
 {
-    /** @var Extcal\Helper $helper */
-    /** @var Extcal\Utility $utility */
-    $helper  = Extcal\Helper::getInstance();
-    $utility = new Extcal\Utility();
+    $utility = new Utility();
 
     $xoopsSuccess = $utility::checkVerXoops($module);
     $phpSuccess   = $utility::checkVerPhp($module);
 
-    //mb    return $xoopsSuccess && $phpSuccess;
+    return $xoopsSuccess && $phpSuccess;
+
+    /*
 
     //    XoopsLoad::load('migrate', 'extcal');
-    /** @var \XoopsModules\Extcal\Common\Configurator $configurator */
-    $configurator = new \XoopsModules\Extcal\Common\Configurator();
+    $configurator = new Common\Configurator();
 
-    $migrator = new \XoopsModules\Extcal\Common\Migrate($configurator);
+    //create upload folders
+    $uploadFolders = $configurator->uploadFolders;
+    foreach ($uploadFolders as $value) {
+        $utility::prepareFolder($value);
+    }
+
+    $migrator = new Common\Migrate($configurator);
     $migrator->synchronizeSchema();
 
     return true;
+    */
 }
 
 /**
@@ -100,16 +110,15 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
 
     $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-    /** @var Extcal\Helper $helper */ /** @var Extcal\Utility $utility */
-    /** @var Extcal\Common\Configurator $configurator */
-    $helper       = Extcal\Helper::getInstance();
-    $utility      = new Extcal\Utility();
-    $configurator = new Extcal\Common\Configurator();
+    /** @var Utility $utility */
+    /** @var Common\Configurator $configurator */
+    $utility      = new Utility();
+    $configurator = new Common\Configurator();
 
-    $migrator = new \XoopsModules\Extcal\Common\Migrate($configurator);
+    $migrator = new Common\Migrate($configurator);
     $migrator->synchronizeSchema();
 
-    if ($previousVersion < 240) {
+    if ($previousVersion < 241) {
         //delete old HTML templates
         if (count($configurator->templateFolders) > 0) {
             foreach ($configurator->templateFolders as $folder) {
@@ -117,9 +126,9 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
                 if (is_dir($templateFolder)) {
                     $templateList = array_diff(scandir($templateFolder, SCANDIR_SORT_NONE), ['..', '.']);
                     foreach ($templateList as $k => $v) {
-                        $fileInfo = new SplFileInfo($templateFolder . $v);
+                        $fileInfo = new \SplFileInfo($templateFolder . $v);
                         if ('html' === $fileInfo->getExtension() && 'index.html' !== $fileInfo->getFilename()) {
-                            if (file_exists($templateFolder . $v)) {
+                            if (is_file($templateFolder . $v)) {
                                 unlink($templateFolder . $v);
                             }
                         }
@@ -130,7 +139,7 @@ function xoops_module_update_extcal(\XoopsModule $module, $previousVersion = nul
 
         //  ---  COPY blank.png FILES ---------------
         if (count($configurator->copyBlankFiles) > 0) {
-            $file = __DIR__ . '/../assets/images/blank.png';
+            $file = dirname(__DIR__) . '/assets/images/blank.png';
             foreach (array_keys($configurator->copyBlankFiles) as $i) {
                 $dest = $configurator->copyBlankFiles[$i] . '/blank.png';
                 $utility::copyFile($file, $dest);

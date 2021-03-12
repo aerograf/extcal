@@ -1,20 +1,31 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/mainfile.php';
+use Xmf\Request;
+use XoopsModules\Extcal\{Helper,
+    Utility,
+    EventHandler,
+    Perm
+};
+
 require_once __DIR__ . '/include/constantes.php';
 $params                                  = ['view' => _EXTCAL_NAV_NEW_EVENT, 'file' => _EXTCAL_FILE_NEW_EVENT];
 $GLOBALS['xoopsOption']['template_main'] = "extcal_view_{$params['view']}.tpl";
 require_once __DIR__ . '/header.php';
 
+global $xoopsUser, $xoopsTpl;
+/** @var EventHandler $eventHandler */
+/** @var Perm $permHandler */
+
 /* ========================================================================== */
 //Extcal\Utility::echoArray($_GET);
 
-$eventId = (isset($_GET['event']) ? $_GET['event'] : 0);
-$action  = (isset($_GET['action']) ? $_GET['action'] : 'edit');
+$eventId = ($_GET['event'] ?? 0);
+$action  = ($_GET['action'] ?? 'edit');
 
 //------------------------------------------------------------------------------
 
 //exit;
+/** @var Perm $permHandler */
 if (count($permHandler->getAuthorizedCat($xoopsUser, 'extcal_cat_submit')) > 0) {
     require_once XOOPS_ROOT_PATH . '/header.php';
 
@@ -54,6 +65,7 @@ if (count($permHandler->getAuthorizedCat($xoopsUser, 'extcal_cat_submit')) > 0) 
         'search'     => _MD_EXTCAL_NAV_SEARCH,
         'newevent'   => _MD_EXTCAL_NAV_NEW_EVENT,
     ];
+
     // Assigning language data to the template
     $xoopsTpl->assign('lang', $lang);
     $xoopsTpl->assign('view', 'newevent');

@@ -17,7 +17,9 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper
+};
+use Xmf\Module\Admin;
 
 // require_once  dirname(__DIR__) . '/class/Helper.php';
 //require_once  dirname(__DIR__) . '/include/common.php';
@@ -27,10 +29,11 @@ require_once dirname(__DIR__) . '/preloads/autoloader.php';
 $moduleDirName      = basename(dirname(__DIR__));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-$helper = Extcal\Helper::getInstance();
+$helper = Helper::getInstance();
 $helper->loadLanguage('common');
+$helper->loadLanguage('feedback');
 
-$pathIcon32 = \Xmf\Module\Admin::menuIconPath('');
+$pathIcon32 = Admin::menuIconPath('');
 if (is_object($helper->getModule())) {
     $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 }
@@ -53,13 +56,14 @@ $adminmenu[] = [
     'icon'  => $pathIcon32 . '/event.png',
 ];
 
-
-if (isset($pathModIcon32)) {
-    $adminmenu[] = [
-        'title' => _MI_EXTCAL_LOCATIONS,
-        'link'  => 'admin/location.php',
-        'icon'  => $pathModIcon32 . '/location.png',
-    ];
+if (1 == $helper->getConfig('formShowLocation', 1)) {
+    if (isset($pathModIcon32)) {
+        $adminmenu[] = [
+            'title' => _MI_EXTCAL_LOCATIONS,
+            'link'  => 'admin/location.php',
+            'icon'  => $pathModIcon32 . '/location.png',
+        ];
+    }
 }
 
 $adminmenu[] = [

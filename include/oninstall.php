@@ -17,7 +17,10 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Utility,
+    Common
+};
 
 /**
  * Prepares system prior to attempting to install module
@@ -29,8 +32,8 @@ function xoops_module_pre_install_extcal(\XoopsModule $module)
 {
     include __DIR__ . '/common.php';
 
-    /** @var \XoopsModules\Extcal\Utility $utility */
-    $utility = new \XoopsModules\Extcal\Utility();
+    /** @var Utility $utility */
+    $utility = new Utility();
     //check for minimum XOOPS version
     $xoopsSuccess = $utility::checkVerXoops($module);
 
@@ -49,8 +52,7 @@ function xoops_module_pre_install_extcal(\XoopsModule $module)
 
 /**
  * Performs tasks required during installation of the module
- * @param \XoopsModule $module {@link XoopsModule}
- *
+ * @param \XoopsModule $xoopsModule
  * @return bool true if installation successful, false if not
  */
 function xoops_module_install_extcal(\XoopsModule $xoopsModule)
@@ -59,38 +61,36 @@ function xoops_module_install_extcal(\XoopsModule $xoopsModule)
 
     $moduleDirName = basename(dirname(__DIR__));
 
-    /** @var \XoopsModules\Extcal\Helper $helper */ /** @var \XoopsModules\Extcal\Utility $utility */
-    /** @var \XoopsModules\Extcal\Common\Configurator $configurator */
-    $helper       = \XoopsModules\Extcal\Helper::getInstance();
-    $utility      = new \XoopsModules\Extcal\Utility();
-    $configurator = new \XoopsModules\Extcal\Common\Configurator();
+    /** @var Helper $helper */ /** @var Utility $utility */
+    /** @var Common\Configurator $configurator */
+    $helper       = Helper::getInstance();
+    $utility      = new Utility();
+    $configurator = new Common\Configurator();
     // Load language files
     $helper->loadLanguage('admin');
     $helper->loadLanguage('modinfo');
 
     $moduleId = $xoopsModule->getVar('mid');
-    /** @var \XoopsGroupPermHandler $groupPermissionHandler */
-    $groupPermissionHandler = xoops_getHandler('groupperm');
-    /** @var \XoopsModuleHandler $moduleHandler */
-    $configHandler = xoops_getHandler('config');
+    /** @var \XoopsGroupPermHandler $grouppermHandler */
+    $grouppermHandler = xoops_getHandler('groupperm');
 
     /*
      * Default public category permission mask
      */
 
     // Access right
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_ADMIN, $moduleId);
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_USERS, $moduleId);
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_ANONYMOUS, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_ADMIN, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_USERS, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 1, XOOPS_GROUP_ANONYMOUS, $moduleId);
 
     // Can submit
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 2, XOOPS_GROUP_ADMIN, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 2, XOOPS_GROUP_ADMIN, $moduleId);
 
     // Auto approve
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 4, XOOPS_GROUP_ADMIN, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 4, XOOPS_GROUP_ADMIN, $moduleId);
 
     // Can Edit
-    $groupPermissionHandler->addRight($moduleDirName . '_perm_mask', 8, XOOPS_GROUP_ADMIN, $moduleId);
+    $grouppermHandler->addRight($moduleDirName . '_perm_mask', 8, XOOPS_GROUP_ADMIN, $moduleId);
 
     //  ---  CREATE FOLDERS ---------------
     if (count($configurator->uploadFolders) > 0) {

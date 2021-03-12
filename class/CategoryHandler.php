@@ -20,27 +20,27 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
-
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-
-// // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
-//require_once __DIR__ . '/perm.php';
-//require_once __DIR__ . '/time.php';
+use XoopsModules\Extcal\{Helper,
+    Perm,
+    Time
+};
 
 /**
  * Class CategoryHandler.
  */
 class CategoryHandler extends ExtcalPersistableObjectHandler
 {
-    public $_extcalPerm;
+    public $extcalPerm;
 
     /**
      * @param \XoopsDatabase|null $db
      */
     public function __construct(\XoopsDatabase $db = null)
     {
-        $this->_extcalPerm = Extcal\Perm::getHandler();
+        if (null === $db) {
+            $db = \XoopsDatabaseFactory::getDatabaseConnection();
+        }
+        $this->extcalPerm = Perm::getHandler();
         //        parent::__construct($db, 'extcal_cat', _EXTCAL_CLN_CAT, 'cat_id');
         parent::__construct($db, 'extcal_cat', Category::class, 'cat_id');
     }
@@ -50,7 +50,7 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
      *
      * @return bool
      */
-    public function createCat($data)
+    public function createCategory($data)
     {
         $cat = $this->create();
         $cat->setVars($data);
@@ -59,32 +59,33 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
         $catId = $this->getInsertId();
 
         // Retriving permission mask
-        /** @var \XoopsGroupPermHandler $groupPermissionHandler */
-        $groupPermissionHandler = xoops_getHandler('groupperm');
-        $moduleId               = $GLOBALS['xoopsModule']->getVar('mid');
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
+        $grouppermHandler = \xoops_getHandler('groupperm');
+        $moduleId         = $GLOBALS['xoopsModule']->getVar('mid');
 
         $criteria = new \CriteriaCompo();
         $criteria->add(new \Criteria('gperm_name', 'extcal_perm_mask'));
         $criteria->add(new \Criteria('gperm_modid', $moduleId));
-        $permMask = $groupPermissionHandler->getObjects($criteria);
+        $permMask = $grouppermHandler->getObjects($criteria);
 
         // Retriving group list
-        $memberHandler = xoops_getHandler('member');
+        /** @var \XoopsMemberHandler $memberHandler */
+        $memberHandler = \xoops_getHandler('member');
         $glist         = $memberHandler->getGroupList();
 
         // Applying permission mask
         foreach ($permMask as $perm) {
             if (1 == $perm->getVar('gperm_itemid')) {
-                $groupPermissionHandler->addRight('extcal_cat_view', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
+                $grouppermHandler->addRight('extcal_cat_view', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
             }
             if (2 == $perm->getVar('gperm_itemid')) {
-                $groupPermissionHandler->addRight('extcal_cat_submit', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
+                $grouppermHandler->addRight('extcal_cat_submit', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
             }
             if (4 == $perm->getVar('gperm_itemid')) {
-                $groupPermissionHandler->addRight('extcal_cat_autoapprove', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
+                $grouppermHandler->addRight('extcal_cat_autoapprove', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
             }
             if (8 == $perm->getVar('gperm_itemid')) {
-                $groupPermissionHandler->addRight('extcal_cat_edit', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
+                $grouppermHandler->addRight('extcal_cat_edit', $cat->getVar('cat_id'), $perm->getVar('gperm_groupid'), $moduleId);
             }
         }
 
@@ -108,7 +109,7 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
     /**
      * @param $catId
      */
-    public function deleteCat($catId)
+    public function deleteCategory($catId)
     {
         /* TODO :
            - Delete all events in this category
@@ -132,11 +133,7 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
             $this->addCatPermCriteria($criteriaCompo, $GLOBALS['xoopsUser']);
         }
         $ret = $this->getObjects($criteriaCompo);
-        if (isset($ret[0])) {
-            return $ret[0];
-        }
-
-        return false;
+        return $ret[0] ?? false;
     }
 
     /**
@@ -179,17 +176,17 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
     }
 
     /**
-     * @param   \CriteriaElement $criteria
+     * @param \CriteriaCompo     $criteria
      * @param                    $user
      * @param string             $perm
      */
-    public function addCatPermCriteria(\CriteriaElement $criteria, $user, $perm = 'extcal_cat_view')
+    public function addCatPermCriteria(\CriteriaCompo $criteria, $user, $perm = 'extcal_cat_view')
     {
-        $authorizedAccessCats = $this->_extcalPerm->getAuthorizedCat($user, 'extcal_cat_view');
-        $count                = count($authorizedAccessCats);
+        $authorizedAccessCats = $this->extcalPerm->getAuthorizedCat($user, 'extcal_cat_view');
+        $count                = \count($authorizedAccessCats);
         if ($count > 0) {
             $in = '(' . $authorizedAccessCats[0];
-            array_shift($authorizedAccessCats);
+            \array_shift($authorizedAccessCats);
             foreach ($authorizedAccessCats as $authorizedAccessCat) {
                 $in .= ',' . $authorizedAccessCat;
             }
@@ -207,6 +204,6 @@ class CategoryHandler extends ExtcalPersistableObjectHandler
      */
     public function haveSubmitRight($xoopsUser)
     {
-        return count($this->_extcalPerm->getAuthorizedCat($xoopsUser, 'extcal_cat_submit')) > 0;
+        return \count($this->extcalPerm->getAuthorizedCat($xoopsUser, 'extcal_cat_submit')) > 0;
     }
 }

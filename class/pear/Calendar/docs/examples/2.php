@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: Demonstrates building a calendar for a month using the Week class
  * Uses UnixTs engine.
@@ -117,11 +118,11 @@ $next   = $_SERVER['SCRIPT_NAME'] . '?y=' . $NMonth->thisYear() . '&m=' . $NMont
         <th>S</th>
     </tr>
     <?php
-    while ($Week = $Month->fetch()) {
+    while (false !== ($Week = $Month->fetch())) {
         echo "<tr>\n";
         // Build the days in the week, passing the selected days
         $Week->build($selectedDays);
-        while ($Day = $Week->fetch()) {
+        while (false !== ($Day = $Week->fetch())) {
             // Build a link string for each day
             $link = $_SERVER['SCRIPT_NAME'] . '?y=' . $Day->thisYear() . '&m=' . $Day->thisMonth() . '&d=' . $Day->thisDay();
 

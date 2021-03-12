@@ -17,24 +17,33 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Category,
+    CategoryHandler,
+    EventHandler
+};
 
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 /**
  * @param $options
  *
- * @return mixed
+ * @return array|bool
  */
 function bExtcalDayShow($options)
 {
     //    // require_once  dirname(__DIR__) . '/class/Config.php';
 
-    /** @var Extcal\Helper $helper */
-    $helper = \XoopsModules\Extcal\Helper::getInstance();
+    /** @var Helper $helper */
+    if (!class_exists(Helper::class)) {
+        return false;
+    }
 
-    /** @var Extcal\EventHandler $eventHandler */
-    $eventHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $helper = Helper::getInstance();
+    $helper->loadLanguage('main');
+
+    /** @var EventHandler $eventHandler */
+    $eventHandler = $helper->getHandler(_EXTCAL_CLN_EVENT);
 
     $nbEvent     = $options[0];
     $titleLenght = $options[1];
@@ -42,7 +51,7 @@ function bExtcalDayShow($options)
     array_shift($options);
 
     // Checking if no cat is selected
-    if (0 == $options[0] && 1 == count($options)) {
+    if (isset($options[0]) && 0 == $options[0] && 1 == count($options)) {
         $options = 0;
     }
 
@@ -63,8 +72,8 @@ function bExtcalDayEdit($options)
     global $xoopsUser;
 
     //    $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-    /** @var Extcal\CategoryHandler $categoryHandler */
-    $categoryHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    /** @var CategoryHandler $categoryHandler */
+    $categoryHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $categoryHandler->getAllCat($xoopsUser, 'extcal_cat_view');
 
@@ -79,7 +88,7 @@ function bExtcalDayEdit($options)
     } else {
         $form .= '<option value="0" selected="selected">' . _MB_EXTCAL_ALL_CAT . '</option>';
     }
-    /** @var Extcal\Category $cat */
+    /** @var Category $cat */
     foreach ($cats as $cat) {
         if (false === array_search($cat->getVar('cat_id'), $options, true)) {
             $form .= '<option value="' . $cat->getVar('cat_id') . '">' . $cat->getVar('cat_name') . '</option>';

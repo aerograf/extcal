@@ -17,23 +17,31 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    EventHandler,
+    CategoryHandler
+};
+use Xmf\Request;
 
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 /**
  * @param $options
  *
- * @return array
+ * @return array|bool
  */
 function bExtcalUpcomingShow($options)
 {
-    //    // require_once  dirname(__DIR__) . '/class/Config.php';
+    /** @var Helper $helper */
+    if (!class_exists(Helper::class)) {
+        return false;
+    }
 
-    /** @var Extcal\Helper $helper */
-    $helper = \XoopsModules\Extcal\Helper::getInstance();
-
-    $eventHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $helper = Helper::getInstance();
+    $helper->loadLanguage('main');
+    $helper->loadLanguage('blocks');
+    /** @var EventHandler $eventHandler */
+    $eventHandler = $helper->getHandler(_EXTCAL_CLN_EVENT);
 
     $nbEvent     = $options[0];
     $titleLenght = $options[1];
@@ -44,18 +52,16 @@ function bExtcalUpcomingShow($options)
     array_shift($options);
 
     // Checking if no cat is selected
-    if (0 == $options[0] && 1 == count($options)) {
+    if (isset($options[0]) && 0 == $options[0] && 1 == count($options)) {
         $options = 0;
     }
 
     //-------------------
-    //mb $events = $eventHandler->objectToArray($eventHandler->getUpcommingEvent($nbEvent, $options));
-
     /* ========================================================================== */
-    $year  = \Xmf\Request::getInt('year', date('Y'), 'GET');
-    $month = \Xmf\Request::getInt('month', date('n'), 'GET');
-    $day   = \Xmf\Request::getInt('day', date('j'), 'GET');
-    $cat   = \Xmf\Request::getInt('cat', 0, 'GET');
+    $year  = Request::getInt('year', date('Y'), 'GET');
+    $month = Request::getInt('month', date('n'), 'GET');
+    $day   = Request::getInt('day', date('j'), 'GET');
+    $cat   = Request::getInt('cat', 0, 'GET');
     /* ========================================================================== */
 
     // Validate the date (day, month and year)
@@ -111,7 +117,16 @@ function bExtcalUpcomingEdit($options)
 {
     global $xoopsUser;
 
-    $categoryHandler = \XoopsModules\Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
+    /** @var Helper $helper */
+    if (!class_exists(Helper::class)) {
+        return false;
+    }
+
+    $helper = Helper::getInstance();
+    $helper->loadLanguage('main');
+    $helper->loadLanguage('blocks');
+    /** @var CategoryHandler $categoryHandler */
+    $categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
 
     $cats = $categoryHandler->getAllCat($xoopsUser, 'extcal_cat_view');
 

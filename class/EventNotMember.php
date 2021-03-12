@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 
 /**
@@ -34,8 +32,8 @@ class EventNotMember extends \XoopsObject
      */
     public function __construct()
     {
-        $this->initVar('eventnotmember_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('event_id', XOBJ_DTYPE_INT, null, true);
-        $this->initVar('uid', XOBJ_DTYPE_INT, null, true);
+        $this->initVar('eventnotmember_id', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('event_id', \XOBJ_DTYPE_INT, null, true);
+        $this->initVar('uid', \XOBJ_DTYPE_INT, null, true);
     }
 }

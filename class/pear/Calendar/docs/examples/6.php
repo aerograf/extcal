@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description: A "personal planner" with some WML for fun
  * Note this is done the stupid way - a giant if/else for WML or HTML
@@ -55,7 +56,7 @@ if (isset($_GET['mime']) && 'wml' === $_GET['mime']) {
             <table>
                 <?php
                 $Day->build();
-                while ($Hour = $Day->fetch()) {
+                while (false !== ($Hour = $Day->fetch())) {
                     echo "<tr>\n";
                     echo '<td>' . date('g a', $Hour->getTimestamp()) . "</td><td>Free time!</td>\n";
                     echo "</tr>\n";
@@ -77,7 +78,7 @@ if (isset($_GET['mime']) && 'wml' === $_GET['mime']) {
                 </tr>
                 <?php
                 $Month->build($selection);
-                while ($Day = $Month->fetch()) {
+                while (false !== ($Day = $Month->fetch())) {
                     if ($Day->isFirst()) {
                         echo "<tr>\n";
                     }
@@ -147,7 +148,7 @@ if (isset($_GET['mime']) && 'wml' === $_GET['mime']) {
         <table>
             <?php
             $Day->build();
-            while ($Hour = $Day->fetch()) {
+            while (false !== ($Hour = $Day->fetch())) {
                 echo "<tr>\n";
                 echo '<td>' . date('g a', $Hour->getTimestamp()) . "</td><td>Free time!</td>\n";
                 echo "</tr>\n";
@@ -169,7 +170,7 @@ if (isset($_GET['mime']) && 'wml' === $_GET['mime']) {
             </tr>
             <?php
             $Month->build($selection);
-            while ($Day = $Month->fetch()) {
+            while (false !== ($Day = $Month->fetch())) {
                 if ($Day->isFirst()) {
                     echo "<tr>\n";
                 }

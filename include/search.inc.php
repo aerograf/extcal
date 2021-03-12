@@ -1,8 +1,8 @@
 <?php
 
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    EventHandler
+};
 
 /**
  * @param $queryarray
@@ -17,7 +17,7 @@ function extcal_search($queryarray, $andor, $limit, $offset, $userid)
 {
     global $xoopsUser;
 
-    $eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
+    $eventHandler = Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
 
     return $eventHandler->getSearchEvent3($queryarray, $andor, $limit, $offset, $userid, $xoopsUser);
 }

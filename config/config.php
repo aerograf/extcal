@@ -17,9 +17,11 @@
  * @author       XOOPS Development Team
  */
 
+use Xmf\Module\Admin;
+
 $moduleDirName      = basename(dirname(__DIR__));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
-require_once dirname(__DIR__) . '/include/common.php';
+xoops_loadLanguage('common', $moduleDirName);
 
 return (object)[
     'name'           => $moduleDirNameUpper . ' Module Configurator',
@@ -33,14 +35,17 @@ return (object)[
     ],
     'uploadFolders'  => [
         XOOPS_UPLOAD_PATH . '/' . $moduleDirName,
-        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/attachments',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/category',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/event',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/screenshots',
         XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/location',
         //XOOPS_UPLOAD_PATH . '/flags'
     ],
     'copyBlankFiles' => [
         XOOPS_UPLOAD_PATH . '/' . $moduleDirName,
-//        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/category',
-//        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/screenshots',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/category',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/event',
+        XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/screenshots',
         XOOPS_UPLOAD_PATH . '/' . $moduleDirName . '/location',
         //XOOPS_UPLOAD_PATH . '/flags'
     ],
@@ -67,7 +72,7 @@ return (object)[
         '/class/utilities.php',
         '/class/util.php',
         '/include/config.php',
-        // '/include/functions.php',
+        //            '/include/functions.php',
         '/ajaxrating.txt',
     ],
     'oldFolders'      => [
@@ -78,7 +83,7 @@ return (object)[
     ],
 
     'renameTables' => [
-        'extcal_etablissement'     => 'extcal_location',
+        'extcal_etablissement' => 'extcal_location',
     ],
     'moduleStats'  => [
         //            'totalcategories' => $helper->getHandler('Category')->getCategoriesCount(-1),
@@ -86,6 +91,6 @@ return (object)[
         //            'totalsubmitted'  => $helper->getHandler('Item')->getItemsCount(-1, [Constants::PUBLISHER_STATUS_SUBMITTED]),
     ],
     'modCopyright' => "<a href='https://xoops.org' title='XOOPS Project' target='_blank'>
-                     <img src='" . constant($moduleDirNameUpper . '_AUTHOR_LOGOIMG') . "' alt='XOOPS Project'></a>",
+                     <img src='" . Admin::iconUrl('xoopsmicrobutton.gif') . "' alt='XOOPS Project'></a>",
 ];
 

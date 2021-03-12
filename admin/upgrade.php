@@ -1,12 +1,16 @@
 <?php
 
+use Xmf\Request;
+
 $step = 'default';
-if (\Xmf\Request::hasVar('step', 'POST')) {
+if (Request::hasVar('step', 'POST')) {
     $step = $_POST['step'];
 }
 
 require_once __DIR__ . '/admin_header.php';
 require_once __DIR__ . '/function.php';
+
+global $xoopsConfig;
 
 // Change this variable if you use a cloned version of eXtGallery
 $localModuleDir = 'extcal';

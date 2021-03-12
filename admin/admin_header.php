@@ -17,29 +17,44 @@
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Utility,
+    CategoryHandler,
+    EventHandler,
+    EventmemberHandler,
+    EventNotMemberHandler,
+    FileHandler,
+    LocationHandler
+};
+use Xmf\Module\Admin;
+/** @var Helper $helper */
+/** @var CategoryHandler $categoryHandler */
+/** @var EventHandler $eventHandler */
+/** @var EventmemberHandler $eventmemberHandler */
+/** @var EventNotMemberHandler $eventNotMemberHandler */
+/** @var FileHandler $fileHandler */
+/** @var LocationHandler $locationHandler */
 
-require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+require_once dirname(__DIR__, 3) . '/include/cp_header.php';
 require_once $GLOBALS['xoops']->path('www/class/xoopsformloader.php');
 require_once dirname(__DIR__) . '/include/constantes.php';
 
 require_once dirname(__DIR__) . '/preloads/autoloader.php';
 
-$moduleDirName = basename(dirname(__DIR__));
+$moduleDirName      = basename(dirname(__DIR__));
+$moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
+$helper = Helper::getInstance();
 /** @var Xmf\Module\Admin $adminObject */
-$adminObject = \Xmf\Module\Admin::getInstance();
-$utility     = new Extcal\Utility();
+$adminObject = Admin::getInstance();
+$utility     = new Utility();
 
-// require_once  dirname(__DIR__) . '/class/Utility.php';
 require_once dirname(__DIR__) . '/include/common.php';
 
-$adminObject = \Xmf\Module\Admin::getInstance();
+$adminObject = Admin::getInstance();
 
-$pathIcon16    = \Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon32    = \Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon16    = Admin::iconUrl('', 16);
+$pathIcon32    = Admin::iconUrl('', 32);
 $pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 
 // Load language files
@@ -50,23 +65,14 @@ $helper->loadLanguage('common');
 
 $myts = \MyTextSanitizer::getInstance();
 
-if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof XoopsTpl)) {
+if (!isset($GLOBALS['xoopsTpl']) || !($GLOBALS['xoopsTpl'] instanceof \XoopsTpl)) {
     require_once $GLOBALS['xoops']->path('class/template.php');
     $xoopsTpl = new \XoopsTpl();
 }
 
-/** @var Extcal\CategoryHandler $categoryHandler */
-//$categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
-$categoryHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_CAT);
-/** @var Extcal\EventHandler $eventHandler */
-$eventHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_EVENT);
-/** @var Extcal\EventmemberHandler $eventMemberHandler */
-$eventMemberHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_MEMBER);
-/** @var Extcal\EventNotMemberHandler $eventNotMemberHandler */
-$eventNotMemberHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_NOT_MEMBER);
-/** @var Extcal\FileHandler $fileHandler */
-$fileHandler     = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_FILE);
-/** @var Extcal\LocationHandler $locationHandler */
-$locationHandler = Extcal\Helper::getInstance()->getHandler(_EXTCAL_CLN_LOCATION);
-
-//xoops_cp_header();
+$categoryHandler = $helper->getHandler(_EXTCAL_CLN_CAT);
+$eventHandler = $helper->getHandler(_EXTCAL_CLN_EVENT);
+$eventmemberHandler = $helper->getHandler(_EXTCAL_CLN_MEMBER);
+$eventNotMemberHandler = $helper->getHandler(_EXTCAL_CLN_NOT_MEMBER);
+$fileHandler = $helper->getHandler(_EXTCAL_CLN_FILE);
+$locationHandler = $helper->getHandler(_EXTCAL_CLN_LOCATION);

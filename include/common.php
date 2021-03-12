@@ -17,7 +17,11 @@
  * @author       XOOPS Development Team
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper,
+    Utility,
+    Common
+};
+use Xmf\Module\Admin;
 
 require_once dirname(__DIR__) . '/preloads/autoloader.php';
 
@@ -25,12 +29,12 @@ $moduleDirName      = basename(dirname(__DIR__));
 $moduleDirNameUpper = mb_strtoupper($moduleDirName);
 
 /** @var \XoopsDatabase $db */
-/** @var Extcal\Helper $helper */
-/** @var Extcal\Utility $utility */
+/** @var Helper $helper */
+/** @var Utility $utility */
 $db      = \XoopsDatabaseFactory::getDatabaseConnection();
-$helper  = Extcal\Helper::getInstance();
-$utility = new Extcal\Utility();
-//$configurator = new Extcal\Common\Configurator();
+$helper  = Helper::getInstance();
+$utility = new Utility();
+//$configurator = new Common\Configurator();
 
 $helper->loadLanguage('common');
 
@@ -57,8 +61,8 @@ if (!defined($moduleDirNameUpper . '_CONSTANTS_DEFINED')) {
     define($moduleDirNameUpper . '_CONSTANTS_DEFINED', 1);
 }
 
-$pathIcon16 = \Xmf\Module\Admin::iconUrl('', 16);
-$pathIcon32 = \Xmf\Module\Admin::iconUrl('', 32);
+$pathIcon16 = Admin::iconUrl('', 16);
+$pathIcon32 = Admin::iconUrl('', 32);
 //$pathModIcon16 = $helper->getModule()->getInfo('modicons16');
 //$pathModIcon32 = $helper->getModule()->getInfo('modicons32');
 

@@ -1,9 +1,15 @@
 <?php
 
-use XoopsModules\Extcal;
+use Xmf\Module;
+use Xmf\Request;
+use XoopsModules\Extcal\{Helper,
+    EventHandler,
+    CategoryHandler,
+    Common\TestdataButtons,
+    Time
+};
 
 require_once __DIR__ . '/admin_header.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/class/xoopsformloader.php';
 
 function extcalLastVersion()
 {
@@ -20,11 +26,16 @@ function isUpToDate()
     return $GLOBALS['xoopsModule']->getVar('version') >= $version;
 }
 
-/** @var Extcal\Helper $helper */
-$helper = Extcal\Helper::getInstance();
+global $xoopsUser, $xoopsConfig;
 
-$op  = \Xmf\Request::getCmd('op', 'default');
-$fct = \Xmf\Request::getString('fct', 'default', 'GET');
+/** @var CategoryHandler $categoryHandler */
+/** @var EventHandler $eventHandler */
+/** @var EventmemberHandler $eventmemberHandler */
+/** @var Helper $helper */
+$helper = Helper::getInstance();
+
+$op  = Request::getCmd('op', 'default');
+$fct = Request::getString('fct', 'default', 'GET');
 
 switch ($op) {
     case 'notification':
@@ -40,22 +51,21 @@ switch ($op) {
                 $xoopsMailer = xoops_getMailer();
                 //                $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
                 //                $eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
-                //                $eventMemberHandler = xoops_getModuleHandler(_EXTCAL_CLS_MEMBER, _EXTCAL_MODULE);
-                $extcalTime   = Extcal\Time::getHandler();
-                $extcalConfig = Extcal\Config::getHandler();
+                //                $eventmemberHandler = xoops_getModuleHandler(_EXTCAL_CLS_MEMBER, _EXTCAL_MODULE);
+                $extcalTime = Time::getHandler();
 
-                $event = $eventHandler->getEvent($_POST['event_id'], $xoopsUser, true);
+                $event = $eventHandler->getEvent(Request::getInt('event_id', 0, 'POST'), $xoopsUser, true);
                 $cat   = $categoryHandler->getCat($event->getVar('cat_id'), $xoopsUser, 'all');
 
-                $xoopsMailer->setToUsers($eventMemberHandler->getMembers($_POST['event_id']));
-                $xoopsMailer->setFromName($myts->oopsStripSlashesGPC($_POST['mail_fromname']));
-                $xoopsMailer->setFromEmail($myts->oopsStripSlashesGPC($_POST['mail_fromemail']));
-                $xoopsMailer->setSubject($myts->oopsStripSlashesGPC($_POST['mail_subject']));
-                $xoopsMailer->setBody($myts->oopsStripSlashesGPC($_POST['mail_body']));
-                if (in_array('mail', $_POST['mail_send_to'])) {
+                $xoopsMailer->setToUsers($eventmemberHandler->getMembers(Request::getInt('event_id', 0, 'POST')));
+                $xoopsMailer->setFromName((Request::getString('mail_fromname', '', 'POST')));
+                $xoopsMailer->setFromEmail((Request::getString('mail_fromemail', '', 'POST')));
+                $xoopsMailer->setSubject((Request::getString('mail_subject', '', 'POST')));
+                $xoopsMailer->setBody((Request::getString('mail_body', '', 'POST')));
+                if (in_array('mail', Request::getString('mail_send_to', '', 'POST'))) {
                     $xoopsMailer->useMail();
                 }
-                if (empty($_POST['mail_inactive']) && in_array('pm', $_POST['mail_send_to'])) {
+                if (empty($_POST['mail_inactive']) && in_array('pm', Request::getString('mail_send_to', '', 'POST'))) {
                     $xoopsMailer->usePM();
                 }
                 $tag = [
@@ -114,7 +124,7 @@ switch ($op) {
                 $form->addElement(new \XoopsFormText($subjectCaption, 'mail_subject', 50, 255, _AM_EXTCAL_SEND_NOTIFICATION_SUBJECT), true);
                 $form->addElement(new \XoopsFormTextArea($bodyCaption, 'mail_body', _AM_EXTCAL_SEND_NOTIFICATION_BODY, 10), true);
                 $form->addElement($toCheckBox, true);
-                $form->addElement(new \XoopsFormHidden('event_id', \Xmf\Request::getInt('event_id', 0, 'GET'), false));
+                $form->addElement(new \XoopsFormHidden('event_id', Request::getInt('event_id', 0, 'GET'), false));
                 $form->addElement(new \XoopsFormButton('', 'mail_submit', _SUBMIT, 'submit'));
                 $form->display();
                 echo '</fieldset>';
@@ -132,7 +142,7 @@ switch ($op) {
         //        require_once XOOPS_ROOT_PATH . "/modules/extcal/class/admin.php";
         //        $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
         //        $eventHandler = xoops_getModuleHandler(_EXTCAL_CLS_EVENT, _EXTCAL_MODULE);
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Module\Admin::getInstance();
         $adminObject->addInfoBox(_MI_EXTCAL_DASHBOARD);
         $adminObject->addInfoBoxLine(sprintf('<infolabel>' . _AM_EXTCAL_INDEX_CATEGORIES . '</infolabel>', $categoryHandler->getCount()), '', 'Green');
         $adminObject->addInfoBoxLine(sprintf('<infolabel>' . _AM_EXTCAL_INDEX_EVENT . '</infolabel>', $eventHandler->getCount(new \Criteria('event_approved', 1))), '', 'Green');
@@ -152,14 +162,31 @@ switch ($op) {
         //        $adminObject->addLineConfigLabel(_AM_EXTCAL_CONFIG_PHP, $xoopsModule->getInfo("min_php"), 'php');
         //        $adminObject->addLineConfigLabel(_AM_EXTCAL_CONFIG_XOOPS, $xoopsModule->getInfo("min_xoops"), 'xoops');
         $adminObject->displayNavigation(basename(__FILE__));
-        $adminObject->displayIndex();
+    //------------- Test Data Buttons ----------------------------
+    if ($helper->getConfig('displaySampleButton')) {
+        TestdataButtons::loadButtonConfig($adminObject);
+        $adminObject->displayButton('left', '');;
+    }
+    $op = Request::getString('op', 0, 'GET');
+    switch ($op) {
+        case 'hide_buttons':
+            TestdataButtons::hideButtons();
+            break;
+        case 'show_buttons':
+            TestdataButtons::showButtons();
+            break;
+    }
+    //------------- End Test Data Buttons ----------------------------
+
+
+    $adminObject->displayIndex();
         //***************************************************************************************
         $pendingEvent = $eventHandler->objectToArray($eventHandler->getPendingEvent(), ['cat_id']);
         $eventHandler->formatEventsDate($pendingEvent, 'd/m/Y');
 
         echo '<fieldset><legend style="font-weight:bold; color:#990000;">' . _AM_EXTCAL_PENDING_EVENT . '</legend>';
         echo '<fieldset><legend style="font-weight:bold; color:#0A3760;">' . _AM_EXTCAL_INFORMATION . '</legend>';
-        //        echo '<img src="../assets/images/icons/on.png" >&nbsp;&nbsp;'._AM_EXTCAL_INFO_APPROVE_PENDING_EVENT.'<br>';
+        echo '<img src=' . $pathIcon16 . '/on.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_APPROVE_PENDING_EVENT . '<br>';
         echo '<img src=' . $pathIcon16 . '/edit.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_EDIT_PENDING_EVENT . '<br>';
         echo '<img src=' . $pathIcon16 . '/delete.png>&nbsp;&nbsp;' . _AM_EXTCAL_INFO_DELETE_PENDING_EVENT . '<br>';
         echo '</fieldset><br>';

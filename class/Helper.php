@@ -19,7 +19,6 @@ namespace XoopsModules\Extcal;
  * @since
  * @author       XOOPS Development Team
  */
-defined('XOOPS_ROOT_PATH') || exit('Restricted access');
 
 /**
  * Class Helper
@@ -34,7 +33,7 @@ class Helper extends \Xmf\Module\Helper
     public function __construct($debug = false)
     {
         $this->debug   = $debug;
-        $moduleDirName = basename(dirname(__DIR__));
+        $moduleDirName = \basename(\dirname(__DIR__));
         parent::__construct($moduleDirName);
     }
 
@@ -47,7 +46,7 @@ class Helper extends \Xmf\Module\Helper
     {
         static $instance;
         if (null === $instance) {
-            $instance = new static($debug);
+            $instance = new self($debug);
         }
 
         return $instance;
@@ -70,10 +69,10 @@ class Helper extends \Xmf\Module\Helper
      */
     public function getHandler($name)
     {
-        $ret   = false;
+        $ret = false;
 
-        $class = __NAMESPACE__ . '\\' . ucfirst($name) . 'Handler';
-        if (!class_exists($class)) {
+        $class = __NAMESPACE__ . '\\' . \ucfirst($name) . 'Handler';
+        if (!\class_exists($class)) {
             throw new \RuntimeException("Class '$class' not found");
         }
         /** @var \XoopsMySQLDatabase $db */
@@ -82,5 +81,13 @@ class Helper extends \Xmf\Module\Helper
         $ret    = new $class($db, $helper);
         $this->addLog("Getting handler '{$name}'");
         return $ret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMyNameSpace()
+    {
+        return __NAMESPACE__;
     }
 }

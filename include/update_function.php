@@ -15,19 +15,20 @@
  * @package      extcal
  * @since
  * @author       XOOPS Development Team,
- *
- * @param null|mixed $previousVersion
  */
+
+use XoopsModules\Extcal\Helper;
 
 /**
  * @param \XoopsModule $xoopsModule
- * @param null        $previousVersion
+ * @param null         $previousVersion
  *
  * @return bool
  */
 function xoops_module_update_extcal(\XoopsModule $xoopsModule, $previousVersion = null)
 {
-    $newVersion = $xoopsModule->getVar('version') * 100;
+    $helper     = Helper::getInstance();
+    $newVersion = $helper->getModule()->getVar('version') * 100;
     if ($newVersion == $previousVersion) {
         return true;
     }
@@ -38,18 +39,22 @@ function xoops_module_update_extcal(\XoopsModule $xoopsModule, $previousVersion 
 
     $dir = XOOPS_ROOT_PATH . '/uploads/extcal';
     if (!is_dir($dir)) {
-        mkdir($dir, 0777);
+        if (!mkdir($dir, 0777) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
         copy($indexFile, $dir . '/index.html');
     }
 
     $dir = XOOPS_ROOT_PATH . '/uploads/extcal/location';
     if (!is_dir($dir)) {
-        mkdir($dir, 0777);
+        if (!mkdir($dir, 0777) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
         copy($indexFile, $dir . '/index.html');
     }
     //------------------------------------------------------------
 
-    $fld = XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->getVar('dirname') . '/versions/';
+    $fld = XOOPS_ROOT_PATH . '/modules/' . $helper->getModule()->getVar('dirname') . '/versions/';
     $cls = 'extcal_%1$s';
 
     $version = [
@@ -71,7 +76,7 @@ function xoops_module_update_extcal(\XoopsModule $xoopsModule, $previousVersion 
             $f    = $fld . $name . '.php';
             //ext_echo ("<hr>{$f}<hr>");
             if (is_readable($f)) {
-                echo "Update to version : {$key} = {$val}<br>";
+                echo "_AM_EXTCAL_UPDATE_VERSION {$key} = {$val}<br>";
                 require_once $f;
                 $cl = new $name($xoopsModule, ['previousVersion' => $previousVersion]);
             }

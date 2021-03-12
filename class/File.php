@@ -20,8 +20,6 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-// defined('XOOPS_ROOT_PATH') || exit('Restricted access');
-
 // require_once __DIR__ . '/ExtcalPersistableObjectHandler.php';
 require_once XOOPS_ROOT_PATH . '/class/uploader.php';
 
@@ -35,15 +33,15 @@ class File extends \XoopsObject
      */
     public function __construct()
     {
-        $this->initVar('file_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('file_name', XOBJ_DTYPE_TXTBOX, null, false, 255);
-        $this->initVar('file_nicename', XOBJ_DTYPE_TXTBOX, null, false, 255);
-        $this->initVar('file_mimetype', XOBJ_DTYPE_TXTBOX, null, false, 255);
-        $this->initVar('file_size', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('file_download', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('file_date', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('file_approved', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('event_id', XOBJ_DTYPE_INT, null, false);
-        $this->initVar('uid', XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_id', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_name', \XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_nicename', \XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_mimetype', \XOBJ_DTYPE_TXTBOX, null, false, 255);
+        $this->initVar('file_size', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_download', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_date', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('file_approved', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('event_id', \XOBJ_DTYPE_INT, null, false);
+        $this->initVar('uid', \XOBJ_DTYPE_INT, null, false);
     }
 }

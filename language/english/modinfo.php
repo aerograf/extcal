@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/constantes.php';
+require_once dirname(__DIR__, 2) . '/include/constantes.php';
 define('_MI_EXTCAL_NAME', 'eXtCal');
 define('_MI_EXTCAL_ABOUT', 'About');
 define('_MI_EXTCAL_AFTER', 'After');
@@ -152,6 +152,29 @@ define('_MI_EXTCAL_DAY_FRIDAY', 'Friday');
 define('_MI_EXTCAL_DAY_SATURDAY', 'Saturday');
 define('_MI_EXTCAL_DAY_SUNDAY', 'Sunday');
 define('_MI_EXTCAL_SHOW_OTHEROPTIONS', 'Other Options');
+define('_MI_EXTCAL_SHOW_FORMOPTIONS', 'Form Options');
+define('_MI_EXTCAL_FORMSHOW_ICON', 'Display the icon field in the form?');
+define('_MI_EXTCAL_FORMSHOW_ICON_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_LOCATION', 'Display the location field in the form?');
+define('_MI_EXTCAL_FORMSHOW_LOCATION_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_PRICE', 'Display the price field in the form?');
+define('_MI_EXTCAL_FORMSHOW_PRICE_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_ORGANIZER', 'Display the organizer field in the form?');
+define('_MI_EXTCAL_FORMSHOW_ORGANIZER_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_CONTACT', 'Display the contact field in the form?');
+define('_MI_EXTCAL_FORMSHOW_CONTACT_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_URL', 'Display the url field in the form?');
+define('_MI_EXTCAL_FORMSHOW_URL_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_EMAIL', 'Display the email field in the form?');
+define('_MI_EXTCAL_FORMSHOW_EMAIL_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_ADDRESS', 'Display the address field in the form?');
+define('_MI_EXTCAL_FORMSHOW_ADDRESS_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_RECURENCE', 'Display the recurence field in the form?');
+define('_MI_EXTCAL_FORMSHOW_RECURENCE_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_FILE', 'Display the file field in the form?');
+define('_MI_EXTCAL_FORMSHOW_FILE_DESC', '');
+define('_MI_EXTCAL_FORMSHOW_PICTURE', 'Display pictures fields in the form?');
+define('_MI_EXTCAL_FORMSHOW_PICTURE_DESC', '');
 
 // 2.38
 
@@ -161,7 +184,7 @@ define('_MI_EXTCAL_EDITOR_USER', 'Editor to use (user):');
 define('_MI_EXTCAL_EDITOR_USER_DESC', "Select the editor to use for user side. If you have a 'simple' install (e.g you use only XOOPS core editor class, provided in the standard xoops core package), then you can just select DHTML and Compact");
 
 //Help
-define('_MI_EXTCAL_DIRNAME', basename(dirname(dirname(__DIR__))));
+define('_MI_EXTCAL_DIRNAME', basename(dirname(__DIR__, 2)));
 define('_MI_EXTCAL_HELP_HEADER', __DIR__ . '/help/helpheader.tpl');
 define('_MI_EXTCAL_BACK_2_ADMIN', 'Back to Administration of ');
 define('_MI_EXTCAL_OVERVIEW', 'Overview');
@@ -179,3 +202,4 @@ define('_MI_EXTCAL_BLOCKS_ADMIN', 'Blocks Admin');
 
 define('_MI_EXTCAL_SHOW_DEV_TOOLS', 'Show Development Tools Button?');
 define('_MI_EXTCAL_SHOW_DEV_TOOLS_DESC', 'If yes, the "Migrate" Tab and other Development tools will be visible to the Admin.');
+

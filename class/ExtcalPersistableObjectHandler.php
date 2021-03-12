@@ -20,7 +20,8 @@ namespace XoopsModules\Extcal;
  * @author       XOOPS Development Team,
  */
 
-use XoopsModules\Extcal;
+use XoopsModules\Extcal\{Helper
+};
 
 /**
  * Persistable Object Handler class.
@@ -94,9 +95,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * retrieve an object.
      *
-     * @param mixed $id ID of the object - or array of ids for joint keys. Joint keys MUST be given in the same order as in the constructor
-     * @param null  $fields
-     * @param bool  $as_object
+     * @param mixed      $id ID of the object - or array of ids for joint keys. Joint keys MUST be given in the same order as in the constructor
+     * @param null|array $fields
+     * @param bool       $as_object
      *
      * @return mixed reference to the object, FALSE if failed
      *
@@ -104,9 +105,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
      */
     public function get($id = null, $fields = null, $as_object = true) //get($id, $as_object = true)
     {
-        if (is_array($this->keyName)) {
+        if (\is_array($this->keyName)) {
             $criteria = new \CriteriaCompo();
-            for ($i = 0, $iMax = count($this->keyName); $i < $iMax; ++$i) {
+            for ($i = 0, $iMax = \count($this->keyName); $i < $iMax; ++$i) {
                 $criteria->add(new \Criteria($this->keyName[$i], (int)$id[$i]));
             }
         } else {
@@ -114,7 +115,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
         }
         $criteria->setLimit(1);
         $objectArray = $this->getObjects($criteria, false, true);
-        if (1 != count($objectArray)) {
+        if (1 != \count($objectArray)) {
             return $this->create();
         }
 
@@ -124,9 +125,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * retrieve objects from the database.
      *
-     * @param \CriteriaElement $criteria {@link CriteriaElement} conditions to be met
-     * @param bool             $idAsKey  use the ID as key for the array?
-     * @param bool             $asObject return an array of objects?
+     * @param \CriteriaElement|null $criteria {@link CriteriaElement} conditions to be met
+     * @param bool                  $idAsKey  use the ID as key for the array?
+     * @param bool                  $asObject return an array of objects?
      *
      * @return array
      */
@@ -135,7 +136,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
         $ret   = [];
         $limit = $start = 0;
         $sql   = 'SELECT * FROM ' . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -156,7 +157,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * Convert a database resultset to a returnable array.
      *
-     * @param \XoopsObject $result  database resultset
+     * @param \mysqli_result $result  database resultset
      * @param bool         $idAsKey - should NOT be used with joint keys
      * @param bool         $asObject
      *
@@ -174,7 +175,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
                 } else {
                     $row  = [];
                     $vars = &$obj->getVars();
-                    foreach (array_keys($vars) as $i) {
+                    foreach (\array_keys($vars) as $i) {
                         $row[$i] = $obj->getVar($i);
                     }
                     $ret[] = $row;
@@ -185,7 +186,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
                 } else {
                     $row  = [];
                     $vars = &$obj->getVars();
-                    foreach (array_keys($vars) as $i) {
+                    foreach (\array_keys($vars) as $i) {
                         $row[$i] = $obj->getVar($i);
                     }
                     $ret[$myrow[$this->keyName]] = $row;
@@ -200,9 +201,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * Retrieve a list of objects as arrays - DON'T USE WITH JOINT KEYS.
      *
-     * @param \CriteriaElement $criteria {@link CriteriaElement} conditions to be met
-     * @param int              $limit    Max number of objects to fetch
-     * @param int              $start    Which record to start at
+     * @param \CriteriaCompo|\CriteriaElement|null $criteria {@link CriteriaCompo|\CriteriaElement} conditions to be met
+     * @param int                                  $limit    Max number of objects to fetch
+     * @param int                                  $start    Which record to start at
      *
      * @return array
      */
@@ -222,7 +223,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
             $sql .= ', ' . $this->identifierName;
         }
         $sql .= ' FROM ' . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->getSort()) {
                 $sql .= ' ORDER BY ' . $criteria->getSort() . ' ' . $criteria->getOrder();
@@ -231,23 +232,19 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
             $start = $criteria->getStart();
         }
         $result = $this->db->query($sql, $limit, $start);
-        if (!$result) {
-            return $ret;
+        if ($result) {
+            while (false !== ($myrow = $this->db->fetchArray($result))) {
+                //identifiers should be textboxes, so sanitize them like that
+                $ret[$myrow[$this->keyName]] = empty($this->identifierName) ? 1 : htmlspecialchars($myrow[$this->identifierName]);
+            }
         }
-
-        $myts = \MyTextSanitizer::getInstance();
-        while (false !== ($myrow = $this->db->fetchArray($result))) {
-            //identifiers should be textboxes, so sanitize them like that
-            $ret[$myrow[$this->keyName]] = empty($this->identifierName) ? 1 : $myts->htmlSpecialChars($myrow[$this->identifierName]);
-        }
-
         return $ret;
     }
 
     /**
      * count objects matching a condition.
      *
-     * @param \CriteriaElement $criteria {@link CriteriaElement} to match
+     * @param \CriteriaElement|null $criteria {@link \CriteriaCompo|\CriteriaElement} to match
      *
      * @return int|array count of objects
      */
@@ -255,14 +252,14 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     {
         $field   = '';
         $groupby = false;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (isset($criteria) && null !== $criteria) {
             if ('' != $criteria->groupby) {
                 $groupby = true;
                 $field   = $criteria->groupby . ', '; //Not entirely secure unless you KNOW that no criteria's groupby clause is going to be mis-used
             }
         }
         $sql = 'SELECT ' . $field . 'COUNT(*) FROM ' . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
                 $sql .= $criteria->getGroupby();
@@ -273,7 +270,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
             return 0;
         }
         if (false === $groupby) {
-            list($count) = $this->db->fetchRow($result);
+            [$count] = $this->db->fetchRow($result);
 
             return $count;
         }
@@ -295,12 +292,12 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
      */
     public function deleteById($id, $force = false) //delete(\XoopsObject $object, $force = false)
     {
-        if (is_array($this->keyName)) {
+        if (\is_array($this->keyName)) {
             $clause = [];
-            for ($i = 0, $iMax = count($this->keyName); $i < $iMax; ++$i) {
+            for ($i = 0, $iMax = \count($this->keyName); $i < $iMax; ++$i) {
                 $clause[] = $this->keyName[$i] . ' = ' . $id[$i];
             }
-            $whereclause = implode(' AND ', $clause);
+            $whereclause = \implode(' AND ', $clause);
         } else {
             $whereclause = $this->keyName . ' = ' . $id;
         }
@@ -329,13 +326,13 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     public function insert(\XoopsObject $obj, $force = false, $checkObject = true)
     {
         if (false !== $checkObject) {
-            if (!is_object($obj)) {
+            if (!\is_object($obj)) {
                 //                var_dump($obj);
                 return false;
             }
 
-            if (!($obj instanceof $this->className && class_exists($this->className))) {
-                $obj->setErrors(get_class($obj) . ' Differs from ' . $this->className);
+            if (!($obj instanceof $this->className && \class_exists($this->className))) {
+                $obj->setErrors(\get_class($obj) . ' Differs from ' . $this->className);
 
                 return false;
             }
@@ -345,27 +342,27 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
         }
 
         foreach ($obj->cleanVars as $k => $v) {
-            if (XOBJ_DTYPE_INT == $obj->vars[$k]['data_type']) {
+            if (\XOBJ_DTYPE_INT == $obj->vars[$k]['data_type']) {
                 $cleanvars[$k] = (int)$v;
-            } elseif (is_array($v)) {
-                $cleanvars[$k] = $this->db->quoteString(implode(',', $v));
+            } elseif (\is_array($v)) {
+                $cleanvars[$k] = $this->db->quoteString(\implode(',', $v));
             } else {
                 $cleanvars[$k] = $this->db->quoteString($v);
             }
         }
         if ($obj->isNew()) {
-            if (!is_array($this->keyName)) {
+            if (!\is_array($this->keyName)) {
                 if ($cleanvars[$this->keyName] < 1) {
                     $cleanvars[$this->keyName] = $this->db->genId($this->table . '_' . $this->keyName . '_seq');
                 }
             }
-            $sql = 'INSERT INTO ' . $this->table . ' (' . implode(',', array_keys($cleanvars)) . ') VALUES (' . implode(',', array_values($cleanvars)) . ')';
+            $sql = 'INSERT INTO ' . $this->table . ' (' . \implode(',', \array_keys($cleanvars)) . ') VALUES (' . \implode(',', $cleanvars) . ')';
         } else {
             $sql = 'UPDATE ' . $this->table . ' SET';
             foreach ($cleanvars as $key => $value) {
-                if ((!is_array($this->keyName) && $key == $this->keyName)
-                    || (is_array($this->keyName)
-                        && in_array($key, $this->keyName))) {
+                if ((!\is_array($this->keyName) && $key == $this->keyName)
+                    || (\is_array($this->keyName)
+                        && \in_array($key, $this->keyName))) {
                     continue;
                 }
                 if (isset($notfirst)) {
@@ -374,9 +371,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
                 $sql      .= ' ' . $key . ' = ' . $value;
                 $notfirst = true;
             }
-            if (is_array($this->keyName)) {
+            if (\is_array($this->keyName)) {
                 $whereclause = '';
-                for ($i = 0, $iMax = count($this->keyName); $i < $iMax; ++$i) {
+                for ($i = 0, $iMax = \count($this->keyName); $i < $iMax; ++$i) {
                     if ($i > 0) {
                         $whereclause .= ' AND ';
                     }
@@ -395,7 +392,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
         if (!$result) {
             return false;
         }
-        if (!is_array($this->keyName) && $obj->isNew()) {
+        if (!\is_array($this->keyName) && $obj->isNew()) {
             $obj->assignVar($this->keyName, $this->db->getInsertId());
         }
 
@@ -405,25 +402,25 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * Change a value for objects with a certain criteria.
      *
-     * @param string           $fieldname  Name of the field
-     * @param string|array     $fieldvalue Value to write
-     * @param \CriteriaElement $criteria   {@link CriteriaElement}
-     * @param bool             $force
+     * @param string                $fieldname  Name of the field
+     * @param string|array          $fieldvalue Value to write
+     * @param \CriteriaElement|null $criteria   {@link CriteriaElement}
+     * @param bool                  $force
      *
      * @return bool
      */
     public function updateAll($fieldname, $fieldvalue, \CriteriaElement $criteria = null, $force = false)
     {
         $setClause = $fieldname . ' = ';
-        if (is_numeric($fieldvalue)) {
+        if (\is_numeric($fieldvalue)) {
             $setClause .= $fieldvalue;
-        } elseif (is_array($fieldvalue)) {
-            $setClause .= $this->db->quoteString(implode(',', $fieldvalue));
+        } elseif (\is_array($fieldvalue)) {
+            $setClause .= $this->db->quoteString(\implode(',', $fieldvalue));
         } else {
             $setClause .= $this->db->quoteString($fieldvalue);
         }
         $sql = 'UPDATE ' . $this->table . ' SET ' . $setClause;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (false !== $force) {
@@ -449,7 +446,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     public function updateFieldValue($fieldname, $fieldvalue, $criteria = null, $force = true)
     {
         $sql = 'UPDATE ' . $this->table . ' SET ' . $fieldname . ' = ' . $fieldvalue;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         if (false !== $force) {
@@ -467,16 +464,15 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * delete all objects meeting the conditions.
      *
-     * @param \CriteriaElement $criteria       {@link CriteriaElement}
+     * @param \CriteriaElement|null $criteria  {@link \CriteriaCompo|\CriteriaElement}
      *                                         with conditions to meet
-     * @param bool             $force
-     * @param bool             $asObject
-     *
+     * @param bool                  $force
+     * @param bool                  $asObject
      * @return bool
      */
     public function deleteAll(\CriteriaElement $criteria = null, $force = true, $asObject = false)
     {
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql = 'DELETE FROM ' . $this->table;
             $sql .= ' ' . $criteria->renderWhere();
             if (!$this->db->query($sql)) {
@@ -493,11 +489,11 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     /**
      * @param $data
      *
-     * @return array
+     * @return array|\XoopsObject
      */
     public function _toObject($data)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $ret = [];
             foreach ($data as $v) {
                 $object = new $this->className();
@@ -523,12 +519,12 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     public function objectToArray($objects, $externalKeys = [], $format = 's')
     {
         static $cache;
-        if (!is_array($externalKeys)) {
+        if (!\is_array($externalKeys)) {
             $externalKeys = [$externalKeys];
         } //JJD
 
         $ret = [];
-        if (is_array($objects)) {
+        if (\is_array($objects)) {
             $i = 0;
             foreach ($objects as $object) {
                 $vars = $object->getVars();
@@ -542,9 +538,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
                         // Retrieving data if isn't cached
                         if (!isset($cached[$externalKey['keyName']][$ret[$i][$key]])) {
                             if ($externalKey['core']) {
-                                $handler = xoops_getHandler($externalKey['className']);
+                                $handler = \xoops_getHandler($externalKey['className']);
                             } else {
-                                $handler = Extcal\Helper::getInstance()->getHandler($externalKey['className']);
+                                $handler = Helper::getInstance()->getHandler($externalKey['className']);
                             }
                             $getMethod                                       = $externalKey['getMethodeName'];
                             $cached[$externalKey['keyName']][$ret[$i][$key]] = $this->objectToArrayWithoutExternalKey($handler->$getMethod($ret[$i][$key], true), $format);
@@ -567,9 +563,9 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
                     // Retriving data if isn't cached
                     if (!isset($cached[$externalKey['keyName']][$ret[$key]])) {
                         if ($externalKey['core']) {
-                            $handler = xoops_getHandler($externalKey['className']);
+                            $handler = \xoops_getHandler($externalKey['className']);
                         } else {
-                            $handler = Extcal\Helper::getInstance()->getHandler($externalKey['className']);
+                            $handler = Helper::getInstance()->getHandler($externalKey['className']);
                         }
                         $getMethod                                   = $externalKey['getMethodeName'];
                         $cached[$externalKey['keyName']][$ret[$key]] = $this->objectToArrayWithoutExternalKey($handler->$getMethod($ret[$key], true), $format);
@@ -592,7 +588,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     public function objectToArrayWithoutExternalKey($object, $format = 's')
     {
         $ret = [];
-        if (null !== $object) {
+        if (!empty($object)) {
             $vars = $object->getVars();
             foreach ($vars as $k => $v) {
                 $ret[$k] = $object->getVar($k, $format);
@@ -622,23 +618,23 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param \CriteriaElement $criteria
-     * @param string           $sum
+     * @param \CriteriaCompo|null $criteria
+     * @param string              $sum
      *
      * @return array|string
      */
-    public function getSum(\CriteriaElement $criteria = null, $sum = '*')
+    public function getSum(\CriteriaCompo $criteria = null, $sum = '*')
     {
         $field   = '';
         $groupby = false;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (isset($criteria) && null !== $criteria) {
             if ('' != $criteria->groupby) {
                 $groupby = true;
                 $field   = $criteria->groupby . ', '; //Not entirely secure unless you KNOW that no criteria's groupby clause is going to be mis-used
             }
         }
         $sql = 'SELECT ' . $field . "SUM($sum) FROM " . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
                 $sql .= $criteria->getGroupby();
@@ -649,7 +645,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
             return 0;
         }
         if (false === $groupby) {
-            list($sum) = $this->db->fetchRow($result);
+            [$sum] = $this->db->fetchRow($result);
 
             return $sum;
         }
@@ -662,23 +658,23 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param \CriteriaElement $criteria
-     * @param string           $max
+     * @param \CriteriaCompo|null $criteria
+     * @param string              $max
      *
      * @return array|string
      */
-    public function getMax(\CriteriaElement $criteria = null, $max = '*')
+    public function getMax(\CriteriaCompo $criteria = null, $max = '*')
     {
         $field   = '';
         $groupby = false;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (isset($criteria) && null !== $criteria) {
             if ('' != $criteria->groupby) {
                 $groupby = true;
                 $field   = $criteria->groupby . ', '; //Not entirely secure unless you KNOW that no criteria's groupby clause is going to be mis-used
             }
         }
         $sql = 'SELECT ' . $field . "MAX($max) FROM " . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
             if ('' != $criteria->groupby) {
                 $sql .= $criteria->getGroupby();
@@ -689,7 +685,7 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
             return 0;
         }
         if (false === $groupby) {
-            list($max) = $this->db->fetchRow($result);
+            [$max] = $this->db->fetchRow($result);
 
             return $max;
         }
@@ -702,24 +698,24 @@ class ExtcalPersistableObjectHandler extends \XoopsPersistableObjectHandler //Xo
     }
 
     /**
-     * @param null   $criteria
-     * @param string $avg
+     * @param null|\CriteriaCompo $criteria
+     * @param string              $avg
      *
      * @return int
      */
-    public function getAvg($criteria = null, $avg = '*')
+    public function getAvg(\CriteriaCompo $criteria = null, $avg = '*')
     {
         $field = '';
 
         $sql = 'SELECT ' . $field . "AVG($avg) FROM " . $this->table;
-        if (isset($criteria) && $criteria instanceof \CriteriaElement) {
+        if (\is_object($criteria) && is_subclass_of($criteria,  \CriteriaElement::class)) {
             $sql .= ' ' . $criteria->renderWhere();
         }
         $result = $this->db->query($sql);
         if (!$result) {
             return 0;
         }
-        list($sum) = $this->db->fetchRow($result);
+        [$sum] = $this->db->fetchRow($result);
 
         return $sum;
     }

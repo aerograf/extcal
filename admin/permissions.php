@@ -17,31 +17,39 @@
  * @author       XOOPS Development Team,
  */
 
+use XoopsModules\Extcal\{Helper,
+    CategoryHandler
+};
+use Xmf\Module\Admin;
+use Xmf\Request;
+
 require_once __DIR__ . '/admin_header.php';
 require_once XOOPS_ROOT_PATH . '/class/xoopsform/grouppermform.php';
 
+global $xoopsUser;
 
-$step = 'default';
-if (\Xmf\Request::hasVar('step', 'POST')) {
-    $step = $_POST['step'];
-}
+/** @var Helper $helper */
+/** @var CategoryHandler $categoryHandler */
 
-$moduleId = $xoopsModule->getVar('mid');
+$step = Request::getString('step', 'default');
+
+$moduleId = $helper->getModule()->getVar('mid');
 
 switch ($step) {
     case 'enreg':
 
-        $groupPermissionHandler = xoops_getHandler('groupperm');
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
+        $grouppermHandler = xoops_getHandler('groupperm');
 
         // Delete old public mask
         $criteria = new \CriteriaCompo();
         $criteria->add(new \Criteria('gperm_name', 'extcal_perm_mask'));
         $criteria->add(new \Criteria('gperm_modid', $moduleId));
-        $groupPermissionHandler->deleteAll($criteria);
+        $grouppermHandler->deleteAll($criteria);
 
         foreach ($_POST['perms']['extcal_perm_mask']['group'] as $groupId => $perms) {
             foreach (array_keys($perms) as $perm) {
-                $groupPermissionHandler->addRight('extcal_perm_mask', $perm, $groupId, $moduleId);
+                $grouppermHandler->addRight('extcal_perm_mask', $perm, $groupId, $moduleId);
             }
         }
 
@@ -54,21 +62,23 @@ switch ($step) {
         xoops_cp_header();
         // @author      Gregory Mage (Aka Mage)
         //***************************************************************************************
-        $adminObject = \Xmf\Module\Admin::getInstance();
+        $adminObject = Admin::getInstance();
         $adminObject->displayNavigation(basename(__FILE__));
         //***************************************************************************************
 
-        $memberHandler          = xoops_getHandler('member');
-        $groupPermissionHandler = xoops_getHandler('groupperm');
+        /** @var \XoopsMemberHandler $memberHandler */
+        $memberHandler = xoops_getHandler('member');
+        /** @var \XoopsGroupPermHandler $grouppermHandler */
+        $grouppermHandler = xoops_getHandler('groupperm');
 
         // Retriving the group list
         $glist = $memberHandler->getGroupList();
 
         // Retriving Public category permission mask
-        $viewGroup        = $groupPermissionHandler->getGroupIds('extcal_perm_mask', 1, $moduleId);
-        $submitGroup      = $groupPermissionHandler->getGroupIds('extcal_perm_mask', 2, $moduleId);
-        $autoApproveGroup = $groupPermissionHandler->getGroupIds('extcal_perm_mask', 4, $moduleId);
-        $editGroup        = $groupPermissionHandler->getGroupIds('extcal_perm_mask', 8, $moduleId);
+        $viewGroup        = $grouppermHandler->getGroupIds('extcal_perm_mask', 1, $moduleId);
+        $submitGroup      = $grouppermHandler->getGroupIds('extcal_perm_mask', 2, $moduleId);
+        $autoApproveGroup = $grouppermHandler->getGroupIds('extcal_perm_mask', 4, $moduleId);
+        $editGroup        = $grouppermHandler->getGroupIds('extcal_perm_mask', 8, $moduleId);
 
         /**
          * @param $array
@@ -85,7 +95,7 @@ switch ($step) {
             return '';
         }
 
-        echo '<script type="text/javascript" src="../include/admin.js"></script>';
+        echo '<script type="text/javascript" src="../assets/js/admin.js"></script>';
 
         /*
          * Public category permission mask
@@ -127,7 +137,6 @@ switch ($step) {
         echo '</div></fieldset><br>';
 
         // Retriving category list for Group perm form
-        // $categoryHandler = xoops_getModuleHandler(_EXTCAL_CLS_CAT, _EXTCAL_MODULE);
         $cats = $categoryHandler->getAllCat($xoopsUser, 'all');
 
         /*

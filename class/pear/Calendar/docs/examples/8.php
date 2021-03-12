@@ -1,14 +1,17 @@
 <?php
+
 /**
  * Description: client for the SOAP Calendar Server.
  */
 if (version_compare(PHP_VERSION, '5.0.0', '>')) {
-    die('PHP 5 has problems with PEAR::SOAP Client (8.0RC3)
-        - remove @ before include below to see why');
+    exit(
+    'PHP 5 has problems with PEAR::SOAP Client (8.0RC3)
+        - remove @ before include below to see why'
+    );
 }
 
 if (!@require_once __DIR__ . '/SOAP/Client.php') {
-    die('You must have PEAR::SOAP installed');
+    exit('You must have PEAR::SOAP installed');
 }
 
 // Just to save manaul modification...
@@ -33,7 +36,7 @@ $calendarClient = $wsdl->getProxy();
 $month = $calendarClient->getMonth((int)$_GET['y'], (int)$_GET['m']);
 
 if (PEAR::isError($month)) {
-    die($month->toString());
+    exit($month->toString());
 }
 ?>
 <!DOCTYPE html>
